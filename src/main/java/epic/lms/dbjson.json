@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "epic-learning",
+  "private_key_id": "6cf63377addf0979c9d9aa2923ed69ecbc182a68",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDWKqSqUPQMhfkm\n/tzNP+5dKYRZiLJ1Wc+cLzngD5bRcUNZg61GGUeqgFsuRVq59/UrlCbxdNy6IA2A\n8m+64pLytP6ub5tNK5FpjY33n6RB9F2e3EemNghj/SVtuspDYG5m0nR1CMnl8zHx\nnProl2BKMy6t11xIEjtRHkxAazREXGsKUAWvPwWIMf1Fno9QR8SsgSZI+WHpjq6Q\nJpcEozej7zT2ypTdlhBty3DjwpSnWtjI2OwcPO1+UqIANxy/W74xkDfUkrDfhu+F\nIVQhgf2VHxiqbw1q+Wqo7NL4WKcYwvjrWBDa1zoEdMYo4imsZdIXH+rA58inl9+A\npCtH5hjLAgMBAAECggEAB4kkliGXFMG6DJc3KbmwJ3MIhyX6MYrhdTtsK+gghGoZ\n1pJ9jFPjY6p0iuJB2P1SkR/7Zs+X3Ky4DOt65vaF+ShJNdYTftmjmjUy452oZ/Gz\nQZ26n6yTCwGjSYMjDs/b0p5hHqUahY7TGQ9O/NQmvTWj1NYZFygdEjOgtzuOcUFG\nukCarXErP8Vsu1N3P2Z+a5fPihNNkaMecjU4ldWGbL18R6a+dyXeFVhdpYQ98NO8\nYlX4d6F1t5UEaSeALdFsD5LbbvaembtAD0CF4hZ5g/QYRPpuHL0ex2uWpRPGaox9\nJVXJiPa8Xgf8EA6VxsW0rjPW2qs3RPbW6pzp5/9qcQKBgQD3TCSUx9X3tVFh5DaE\nTHhgoVS3ed/B2lmHPq3qJaIu+XMJmdMh/2SjwvSqpKw13mOdo6reTYW+CX3gYT0x\nZLwEYQokK6uiiTV9jpUyZKAhRjOyZ1fjKkB8SiBRcWsvYDZNQcsL5ZAKZPq3N/uE\nj4VA9fWS16eq3G3mnWwE7nwfhQKBgQDdtAfQJkMCni57xNqL6vi1S/sEP1p/URLz\nqPzqs0CBa6kgzTMpY1+xI8uQFZSLEn5QAg9TH/yH7jMeod9ZjmatfgyDzfnBQQUX\nGOW0p05BSL74BC2w5RwCg9ZEnfjY7xF6ZCyP3X2oUmS7rONVQOdJ3kbeLrznYFsN\n0bKnBnNADwKBgQDwz5rHrpkzL8Nh+eMEjZqjLjbau7kigkewJV8hpSf7ajmVXc91\nScdsmIm8KcLwafDDLv9SnlbgKUoEV2xJTvivovdHJadrDQWjkFbEzawI+t2Ymn3A\n3gIRhfVWmYVwitYWAT2CBjdvh8mE5OTtvvxZt6k9JvdEsIXsjdsEKl+AKQKBgDt1\n8naAHI7SL/NgC6FlJskxFKTB/RqSevvAwfyMkOtlHZo/js416c9Po2QEda+LCTea\nJdQMiyVF3I4FqiqRx7YWTXL4RljvgFb+hXUbPiDCSv2n2T1NZWLDSy9iEwDTtaNW\nxKDdLbt8RaoUJ3CRFLc6F1W1wVJpBGLDcB/d2gE/AoGBAL+fJ2sJNJ4cHWlEracp\n69NpJzmviJYvjgQ5KVvJYyR5J/pPXmEhMw3Uh6ctOmrRYrXXGedRaCarPuYOoLcC\nrai0m+AOGyNK/q6j6QzPL4wyzYzmEEUai7T2+hJfw/gshRFf7aNoV5MUqHUWterP\nSAqRKUpgnrEMfXIIrjg1b1hN\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-uilom@epic-learning.iam.gserviceaccount.com",
+  "client_id": "116778973232103041020",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-uilom%40epic-learning.iam.gserviceaccount.com"
+}

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -14,7 +15,7 @@ public class DBController {
     FirebaseService firebaseService;
 
     @GetMapping("/getUser")
-    public User getUserDetails() throws InterruptedException, ExecutionException, IOException {
-        return firebaseService.getUser("George");
+    public List<User> getUserDetails() throws InterruptedException, ExecutionException, IOException {
+        return firebaseService.getUser();
     }
 }

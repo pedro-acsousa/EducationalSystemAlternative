@@ -1,24 +1,25 @@
 package epic.lms;
 
 public class User {
-    private int id;
-    private String name;
+    private String firstname;
+    private String password;
     private String role;
+    private String username ;
 
-    public int getId() {
-        return id;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {
@@ -29,5 +30,11 @@ public class User {
         this.role = role;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

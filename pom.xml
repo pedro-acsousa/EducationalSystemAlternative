@@ -12,7 +12,7 @@
     <artifactId>lms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>lms</name>
-    <description>A Learning Managment System</description>
+    <description>A Learning Management System</description>
 
     <properties>
         <java.version>15</java.version>
@@ -29,6 +29,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

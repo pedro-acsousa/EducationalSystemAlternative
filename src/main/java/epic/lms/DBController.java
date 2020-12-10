@@ -18,4 +18,5 @@ public class DBController {
     public List<User> getUserDetails() throws InterruptedException, ExecutionException, IOException {
         return firebaseService.getUser();
     }
+    
 }

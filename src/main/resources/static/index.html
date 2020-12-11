@@ -1,18 +1,28 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>EPiC</title>
+    <title>You first Spring application</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="indexStyle.css">
 </head>
-<body class="page">
+<body>
+<p><a href="/hello">Greet the world!</a></p>
 
-
-    <div class="sidebar">
-        <a href="login.html">Log In</a>
+<form action="/hello" method="GET" id="nameForm">
+    <div>
+        <label for="nameField">How should the app call you?</label>
+        <input name="myName" id="nameField">
+        <button>Greet me!</button>
     </div>
+</form>
 
 
+<form action="/login" method="GET" id="getUsers">
+    <button type="submit">GET</button>
+</form>
 
+
+<br>
+<a href="login.html">Log In</a>
+<a href="CreateAccount.html">Sign up</a>
 </body>
 </html>

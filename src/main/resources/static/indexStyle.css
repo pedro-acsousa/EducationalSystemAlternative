@@ -1,0 +1,40 @@
+body{
+    background-color: #4CAF50;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background: #9053c7;
+    background: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: -o-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: -moz-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: linear-gradient(-135deg, #c850c0, #4158d0);
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #bbbbbb;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+.titlebox{
+    position: absolute;
+    overflow: hidden;
+    top: 10%;
+    left: 50px;
+    right: 300px;
+    border: 5px dotted #bbb;
+}
+
+.logo{
+    position: relative;
+    left: 50%;
+}
+.title{
+    position: relative;
+    left: 50%;
+}

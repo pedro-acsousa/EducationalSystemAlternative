@@ -44,41 +44,42 @@
     font-size: 60px;
 }
 .assignments{
-    position: absolute;
+    position: relative;
     padding: 4em;
+    float: left;
     border-radius: 25px;
     background: rgba(244, 244, 244, 0.9);
-    top: 40%;
-    right: 70%;
     box-shadow: 10px 10px 8px 10px #888888;
+    margin: 2%;
 }
 .contacts{
 
-    position: absolute;
+    position: relative;
     padding: 4em;
+    float: left;
     border-radius: 25px;
     background: rgba(244, 244, 244, 0.8);
-    top: 40%;
-    right: 50%;
     box-shadow: 10px 10px 8px 10px #888888;
+    margin: 2%;
 }
 
 .notifications{
 
-    position: absolute;
-    padding: 2em;
+    position: relative;
+    float: left;
+    padding: 4em;
     border-radius: 25px;
     background: rgba(244, 244, 244, 0.8);
-    top: 40%;
-    right: 20%;
     box-shadow: 10px 10px 8px 10px #888888;
+    margin: 2%;
 }
 .dashboardwrap{
     position: absolute;
-    border-color: #0d0d0d;
-    top: 50%;
-    left: 10%;
-    right: 10%;
+    overflow: hidden;
+    width: 69%;
+    top: 40%;
+    left: 13%;
     padding: 2em;
+    border: 5px dotted #bbb;
 }
 

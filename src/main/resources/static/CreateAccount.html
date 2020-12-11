@@ -36,6 +36,11 @@
                 <p>Please fill in this form to create an account.</p>
                 <hr>
 
+                <label for="firstname"><b>Firstname</b></label>
+                <input type="text" placeholder="Enter Firstname" name="firstname" id="firstname" required>
+
+                <label for="lastname"><b>Lastname</b></label>
+                <input type="text" placeholder="Enter Firstname" name="lastname" id="lastname" required>
 
                 <label for="username"><b>Username</b></label>
                 <input type="text" placeholder="Enter Username" name="username" id="username" required>
@@ -49,17 +54,14 @@
                 <label for="psw-repeat"><b>Repeat Password</b></label>
                 <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
 
+                <input type="hidden" name="role" value="Public" id ="role"/>
 
                 <div class="clearfix">
-                <button type="button" class="cancelbtn">Cancel</button>
-                <button type="submit" class="signupbtn">Sign Up</button>
-
-
-            </div>
-
+                    <button type="button" class="cancelbtn">Cancel</button>
+                    <button type="submit" class="signupbtn">Sign Up</button>
+                </div>
             </div>
         </div>
-
     </form>
 
 

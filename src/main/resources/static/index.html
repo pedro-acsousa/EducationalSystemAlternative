@@ -1,28 +1,35 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>You first Spring application</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="indexStyle.css">
 </head>
+
+
 <body>
-<p><a href="/hello">Greet the world!</a></p>
 
-<form action="/hello" method="GET" id="nameForm">
-    <div>
-        <label for="nameField">How should the app call you?</label>
-        <input name="myName" id="nameField">
-        <button>Greet me!</button>
+<header class="header">
+    <div class="overlay"></div>
+    <div class="titlebox">
+        <img class="logo" src="https://firebasestorage.googleapis.com/v0/b/epic-learning.appspot.com/o/Epic.png?alt=media&token=31626cb0-43aa-4587-bd7b-31543191204f" width="200px" height="200px">
+        <h2 class="title">EPiC Learning Environment</h2>
     </div>
-</form>
+    <div class="sidebar">
+        <h2>Getting Started</h2>
+
+        <a href="login.html">Log In</a>
+        <br>
+        <a href="CreateAccount.html">Sign Up</a>
+    </div>
+<h1> WIP DONT JUDGE THIS AWFUL DESIGN YET</h1>
+
+</header>
 
 
-<form action="/login" method="GET" id="getUsers">
-    <button type="submit">GET</button>
-</form>
-
-
-<br>
-<a href="login.html">Log In</a>
-<a href="CreateAccount.html">Sign up</a>
 </body>
 </html>

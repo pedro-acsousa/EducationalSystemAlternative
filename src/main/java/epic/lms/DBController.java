@@ -1,19 +1,11 @@
 package epic.lms;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
@@ -57,13 +49,13 @@ public class DBController {
     }
 
     @PostMapping(value = "/createAccount")
-    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException {
+    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException {
         User newUser = new User();
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("login.html"); //CHANGE URL
-        newUser.setFirstname("");
-        newUser.setLastname("");
-        newUser.setRole(""); //CHANGE TO RECEIVE ATTRIBUTE FROM HIDDEN LABEL FROM HTML
+        mv.setViewName("userAccountPage.html"); //CHANGE URL
+        newUser.setFirstname(firstname);
+        newUser.setLastname(lastname);
+        newUser.setRole(role);
         newUser.setPassword(password);
         newUser.setUsername(username);
         newUser.setEmail(email);

@@ -30,12 +30,12 @@
 }
 .dashboard{
     position: absolute;
-    right: 38%;
+    right: 45%;
     top: 10%;
-    margin: auto;
-    padding: 2em;
+    padding: 4em;
     box-shadow: 5px 5px 8px 5px #888888;
     background: rgba(244, 244, 244, 1);
+    margin: auto
 
 
 }
@@ -45,9 +45,9 @@
 }
 .assignments{
     position: absolute;
-    padding: 2em;
+    padding: 4em;
     border-radius: 25px;
-    background: rgba(244, 244, 244, 0.8);
+    background: rgba(244, 244, 244, 0.9);
     top: 40%;
     right: 70%;
     box-shadow: 10px 10px 8px 10px #888888;
@@ -55,7 +55,7 @@
 .contacts{
 
     position: absolute;
-    padding: 2em;
+    padding: 4em;
     border-radius: 25px;
     background: rgba(244, 244, 244, 0.8);
     top: 40%;
@@ -73,5 +73,12 @@
     right: 20%;
     box-shadow: 10px 10px 8px 10px #888888;
 }
-
+.dashboardwrap{
+    position: absolute;
+    border-color: #0d0d0d;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    padding: 2em;
+}
 

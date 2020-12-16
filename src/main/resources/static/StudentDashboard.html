@@ -68,12 +68,12 @@
         </section>
         <section class="sec-4">
             <div class="notifications">
-                <h1>Notifications</h1>
-                <ul>
-                    <li>You have been assigned to class x</li>
-                    <li>New message from 'Jason Steggles'</li>
-                    <li>You have 2 new assignments</li>
-                </ul>
+                <form th:action="/getNotifications" method="get">
+                    <h1>Notifications</h1>
+                    <ul th:each="notification : ${notifications}">
+                        <li th:text="${notification.content}}"></li>>
+                    </ul>
+                </form>
             </div>
         </section>
     </div>

@@ -13,7 +13,7 @@
 
 <body>
 
-<!-- navbar -->
+
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" href="#">Student Dashboard</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,23 +32,21 @@
         <li class="nav-item">
             <a class="nav-link " data-value="contact" href="#">Contact</a>       </li>
     </ul>
-    </div></nav>
+    </div>
+</nav>
 
 
 <header class="header">
 
     <div class="overlay"></div>
-
     <section class="sec-1">
-        <div class="container">
-            <div class="dashboard">
-                <h1>Welcome</h1><h1 th:text="${session.firstName}" ></h1>
-
-            </div>
+        <div class="dashboard">
+            <h1>Welcome</h1><h1 th:text="${session.firstName}" ></h1>
         </div>
     </section>
-    <section class="sec-2">
-        <div class="container">
+
+    <div class="dashboardwrap">
+        <section class="sec-2">
             <div class="assignments">
                 <h1>Assignments</h1>
                 <ul>
@@ -56,12 +54,9 @@
                     <li>English - Due: 25/12/2020</li>
                     <li>Science - Due: 25/12/2020</li>
                 </ul>
-                <form
             </div>
-        </div>
-    </section>
-    <section class="sec-3">
-        <div class="container">
+        </section>
+        <section class="sec-3">
             <div class="contacts">
                 <h1>Contacts</h1>
                 <ul>
@@ -69,25 +64,24 @@
                     <li>Jason Steggles</li>
                     <li>John Colquhoun</li>
                 </ul>
-
             </div>
-        </div>
-    </section>
-    <section class="sec-4">
-        <div class="container">
+        </section>
+        <section class="sec-4">
             <div class="notifications">
-                <h1>Notifications</h1>
-                <ul>
-                    <li>You have been assigned to class x</li>
-                    <li>New message from 'Jason Steggles'</li>
-                    <li>You have 2 new assignments</li>
-                </ul>
-
+                <form action="/getNotifications" method="post" name="notifForm" id="notifForm">
+                    <h1>Notifications</h1>
+                    <input name="getNotifs" id="getNotifs" type="submit">
+                    <ul th:each="notification : ${session.notifications}">
+                        <li id="notifid" th:text="${notification.getContent() + ' Time:' + notification.getDate() + ' By:' + notification.getRecipient()}"></li>
+                        <a th:value="${notification.getId()}" th:href="@{/dismissNotification(id=${notification.getId()})}">Dismiss</a>
+                        <br>
+                    </ul>
+                </form>
             </div>
-        </div>
-    </section>
-
+        </section>
     </div>
+
+
 
 
 

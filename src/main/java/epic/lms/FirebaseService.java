@@ -2,17 +2,18 @@ package epic.lms;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 
 @Service
 public class FirebaseService {
@@ -29,7 +30,7 @@ public class FirebaseService {
         return userArrayList;
     }
 
-    public User addUser(User userAdded) throws ExecutionException, InterruptedException, IOException {
+    public User addUser(User userAdded){
 
         Firestore db = FirestoreClient.getFirestore();
 
@@ -48,4 +49,34 @@ public class FirebaseService {
 
     }
 
+    public List<Notifications> getAllNotifications(HttpSession session) throws ExecutionException, InterruptedException {
+
+        Firestore db = FirestoreClient.getFirestore();
+
+        List<Notifications> notifications = new ArrayList<>();
+        CollectionReference collectionReference = db.collection("Notifications");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
+            if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean)doc.get("read")==false){
+                notifications.add(doc.toObject(Notifications.class));
+            }
+
+        }
+
+        return  notifications;
+    }
+
+    public List<Notifications> deleteNotification(List<Notifications> allNotifications, int id, HttpSession session) throws ExecutionException, InterruptedException {
+
+        for (Notifications notification : allNotifications) {
+            if (notification.getId() == id) {
+                Firestore db = FirestoreClient.getFirestore();
+                notification.setRead(true);
+                db.collection("Notifications").document("" + notification.getId()).update("read", notification.isRead());
+                allNotifications.remove(notification);
+                break;
+            }
+        }
+    return allNotifications;
+    }
 }

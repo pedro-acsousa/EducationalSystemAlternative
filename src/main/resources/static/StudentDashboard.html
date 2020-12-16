@@ -49,11 +49,15 @@
         <section class="sec-2">
             <div class="assignments">
                 <h1>Assignments</h1>
-                <ul>
+                <ul> <!-- can delete these examples once we got the controller giving us values -->
                     <li>Maths - Due: 25/12/2020</li>
                     <li>English - Due: 25/12/2020</li>
                     <li>Science - Due: 25/12/2020</li>
                 </ul>
+                <form action="/getAssignments" method="get">
+
+                    <input type="hidden" value= "${session.username}">
+                </form>
             </div>
         </section>
         <section class="sec-3">

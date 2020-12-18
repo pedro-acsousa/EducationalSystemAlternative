@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LectureDashStyle.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Lecturer Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>Welcome</h1><h1 th:text="${session.firstName}" ></h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+            <div class = "notifications">
+                <h1>Notifications Sent:</h1>
+            </div>
+            <div class = "assignments">
+                <h1>Assignments Set:</h1>
+            </div>
+            <div class = "modules">
+                <h1>Modules:</h1>
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
+
+</body>
+</html>

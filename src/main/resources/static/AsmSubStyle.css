@@ -1,0 +1,75 @@
+.navbar{ background:#1a8cff;}
+
+.nav-link , .navbar-brand{ color: #f4f4f4; cursor: pointer;}
+
+.nav-link{ margin-right: 1em !important;}
+
+.nav-link:hover{ background: #f4f4f4; color: #f97300; }
+
+.navbar-collapse{ justify-content: flex-end;}
+
+.navbar-toggler{  background:#fff !important;}
+
+.navbar-collapse{
+    justify-content: flex-end;
+}
+.overlay{
+    position: absolute;
+    min-height: 100%;
+    min-width: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(244, 244, 244, 0.5);
+}
+
+.header{
+    background-image: url('background.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+.dashboard{
+    position: absolute;
+    right: 45%;
+    top: 10%;
+    padding: 4em;
+    box-shadow: 5px 5px 8px 5px #888888;
+    background: rgba(244, 244, 244, 1);
+    margin: auto
+
+
+}
+.dashboard h1{
+    color:#1a8cff ;
+    font-size: 60px;
+}
+
+.asmupload{
+    position: relative;
+    padding: 4em;
+    float: left;
+    border-radius: 25px;
+    background: rgba(244, 244, 244, 0.9);
+    box-shadow: 10px 10px 8px 10px #888888;
+    margin: 2%;
+}
+
+.asmsubmit{
+    position: relative;
+    padding: 4em;
+    float: left;
+    border-radius: 25px;
+    background: rgba(244, 244, 244, 0.9);
+    box-shadow: 10px 10px 8px 10px #888888;
+    margin: 2%;
+}
+
+.dashboardwrap{
+    position: absolute;
+    overflow: hidden;
+    width: 69%;
+    top: 40%;
+    left: 13%;
+    padding: 2em;
+    border: 5px dotted #bbb;
+}

@@ -8,11 +8,11 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
-    <link rel="stylesheet" type="text/css" href="StudentDashStyle.css">
+    <link rel="stylesheet" type="text/css" href="AsmSubStyle.css">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg fixed-top ">
+<nav class="navbar navbar-expand-lg fixed-top">
     <a class="navbar-brand" href="#">Student Assignment Submission</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -24,35 +24,39 @@
         <li class="nav-item">
             <a class="nav-link" data-value="Assignments" href="#">Assignments</a>        </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="View  Progress"href="#">View Progress</a>          </li>
+            <a class="nav-link " data-value="View Progress"href="#">View Progress</a>          </li>
         <li class="nav-item">
             <a class="nav-link " data-value="Check Contents" href="#">Access Contents</a>         </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>       </li>
+            <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
     </ul>
     </div>
 </nav>
-
-<div class="dropdown-course">
-    <button class="dropdown-course-button">Dropdown</button>
-    <div class="dropdown-course-contents">
-        <a href="#">Course1</a>
-        <a href="#">Course2</a>
-        <a href="#">Course3</a>
+<section class="sec-1">
+    <div class="courseselect">
+        <form action="/courseselect" method="post">
+            <select id="courseselect">
+                <option value="select" selected>Select Course</option>
+                <option value="course1">Course1</option>
+                <option value="course2">Course2</option>
+                <option value="course3">Course3</option>
+            </select>
+            <input type="submit" th:value="Select"/>
+        </form>
     </div>
-</div>
-
-<div class="container">
-    <div class="assignmentselector">
-    <button class="dropdown-course-button">Dropdown</button>
-    <div class="dropdown-course-contents">
-        <a href="#">Course1</a>
-        <a href="#">Course2</a>
-        <a href="#">Course3</a>
+</section>
+<section class="sem-2">
+    <div class="asmsubmit">
+        <form action="/asmsubmit" method="post">
+            <select id="asmsubmit">
+                <option value="select" selected>Select Assignment</option>
+                <option value="Assignment1">Assignment 1</option>
+                <option value="Assignment2">Assignment 2</option>
+                <option value="Assignment3">Assignment 3</option>
+            </select>
+        </form>
     </div>
-    </div>
-</div>
-
+</section>
 
 </body>
 </html>

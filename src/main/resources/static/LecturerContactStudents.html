@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LecturerContactStyle.css">
+</head>
+<body>
+<script>
+    function changeForm(){
+        var contactType = document.getElementById('typedropbox').selectedOptions[0].value;
+        if (contactType == "ContactClass"){
+            document.getElementById("ClassWideForm").style.display = "block";
+            document.getElementById("SpecStudForm").style.display = "none";
+            document.getElementById("AllStudForm").style.display = "none";
+            document.getElementById("SpecStudTextArea").style.display = "none";
+            document.getElementById("ClassWideTextArea").style.display = "block";
+            document.getElementById("AllStudentsTextArea").style.display = "none";
+        }
+        if (contactType == "ContactStud"){
+            document.getElementById("ClassWideForm").style.display = "none";
+            document.getElementById("SpecStudForm").style.display = "block";
+            document.getElementById("AllStudForm").style.display = "none";
+            document.getElementById("SpecStudTextArea").style.display = "block";
+            document.getElementById("ClassWideTextArea").style.display = "none";
+            document.getElementById("AllStudentsTextArea").style.display = "none";
+        }
+        if (contactType == "ContactAll"){
+            document.getElementById("ClassWideForm").style.display = "none";
+            document.getElementById("SpecStudForm").style.display = "none";
+            document.getElementById("AllStudForm").style.display = "block";
+            document.getElementById("SpecStudTextArea").style.display = "none";
+            document.getElementById("ClassWideTextArea").style.display = "none";
+            document.getElementById("AllStudentsTextArea").style.display = "block";
+        }
+    }
+</script>
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Lecturer Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>Contact Students</h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+
+            <div class = "innerwrap">
+                <div class = "headerwrap">
+                    <h2 style="float: left">Contact Type:</h2>
+                    <h2 class="rightheader">Message Contents:</h2>
+                </div>
+
+                <div class="dropdownswrap">
+                    <div class="typedrop">
+                        <label for="typedropbox">Choose contact Type: &nbsp &nbsp </label>
+                        <select name="typedropbox" id="typedropbox" onchange="changeForm()">
+                            <option value="ContactStud">Contact Specific Student</option>
+                            <option value="ContactClass">Send Class Wide Notification</option>
+                            <option value="ContactAll">Send Notification To All</option>
+                        </select>
+                    </div>
+                    <br>
+
+                    <!-- Below are the 3 seperate forms for: message student, message class, and send notification to all
+                    Below the forms is the html is the text areas. Although they are not within the forms, they are linked and the text data
+                    will still be sent in the form (in theory)-->
+
+                    <form class="SpecStudForm" id="SpecStudForm" action="/PedroPutThingHere" method="post" style="display:block">
+                        <label for="StudName">Student Name: </label>
+                        <select name="StudName" id="StudName">
+                            <option value="John">John</option>
+                            <option value="David">David</option>
+                            <option value="Alex">Alex</option>
+                        </select>
+                        <br>
+                        <br>
+                        <input type="submit" value="Send Message" style="width: 40%">
+                    </form>
+                    <br>
+                    <!-- Not sure what support we have for classes and notification sending per class but you can always remove if you dont
+                    think its possible-->
+                    <form class="ClassWideForm" id="ClassWideForm" action="/PedroPutThingHere" method="post" style="display:none">
+                        <label for="StudName">Class ID: </label>
+                        <select name="Classname" id="Classname">
+                            <option value="2031">2031 - Security</option>
+                            <option value="2032">2032 - Algorithms</option>
+                            <option value="2033">2033 - Team Project</option>
+                        </select>
+                        <br>
+                        <br>
+                        <input type="submit" value="Send Message" style="width: 40%">
+                    </form>
+
+                    <form class="AllStudForm" id="AllStudForm" action="/PedroPutThingHere" method="post" style="display:none">
+                        <br>
+                        <br>
+                        <input type="submit" value="Send Message" style="width: 40%">
+                    </form>
+
+
+                </div>
+                <textarea class="textarea" name="SpecStudTextArea" id="SpecStudTextArea" form="SpecStudForm" style="display: block">Text area for the specific student form
+                </textarea>
+                <textarea class="textarea" name="ClassWideTextArea" id="ClassWideTextArea" form="ClassWideForm" style="display: none">Text area for the class wide form
+                </textarea>
+                <textarea class="textarea" name="AllStudentsTextArea" id="AllStudentsTextArea" form="AllStudForm" style="display: none">Text area for all students form
+                </textarea>
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
+
+</body>
+</html>

@@ -36,11 +36,11 @@
     position: absolute;
     float: top;
     padding: 2em;
-    top: 20%;
+    top: 10%;
     bottom: 5%;
     left: 5%;
     right: 5%;
-    height: 50%;
+    height: 80%;
     border-radius: 25px;
     background: rgba(244, 244, 244, 0.9);
     box-shadow: 10px 10px 8px 10px #888888;

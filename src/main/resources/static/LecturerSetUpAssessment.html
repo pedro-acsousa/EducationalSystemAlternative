@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LecturerSetAssessmentStyle.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Lecturer Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>Set Assessments</h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+
+            <div class = "innerwrap">
+                <div class = "headerwrap">
+                    <h2 style="float: left">Create New Assessment</h2>
+                </div>
+                <div class="leftsidewrap">
+
+                    <form id="SetAssessmentForm" action="/PedroPutThingHere" method="post">
+                        <br>
+                        <label for="AssessmentName">Assessment Name: </label>
+                        <input type="text" name = "AssessmentName" id ="AssessmentName">
+                        <br><br>
+                        <label for="DueDate">Due Date: </label>
+                        <input type="date" name = "DueDate" id="DueDate">
+                        <br><br>
+                        <label for="DueDate">Class: </label>
+                        <select name="Class" id="Class">
+                            <option value="2031">2031 - Security</option>
+                            <option value="2032">2032 - Algorithms</option>
+                            <option value="2033">2033 - Team Project</option>
+                        </select>
+                        <br><br>
+                        <input type="submit" value="Set Assignment" style="width: 40%">
+                    </form>
+                </div>
+
+                <textarea class="AssessmentTextArea" name="AssessmentTextArea" id="AssessmentTextArea" form="SetAssessmentForm">Write assessment specification here...
+                </textarea>
+
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
+
+</body>
+</html>

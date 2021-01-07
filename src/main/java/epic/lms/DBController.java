@@ -1,11 +1,9 @@
 package epic.lms;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.script.ScriptException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
@@ -33,6 +31,7 @@ public class DBController {
                 firstname = user.getFirstname();
                 found = 1;
                 session.setAttribute("userid", user.getUsername());
+                session.setAttribute("userrole", user.getRole());
                 break;
             } else {
                 found = 0;
@@ -45,7 +44,19 @@ public class DBController {
         if (found == 1) {
             //set the rest of the session dont forget
             session.setAttribute("firstName", firstname);
-            mv.setViewName("StudentDashboard.html");
+
+            if(session.getAttribute("userrole").equals("Admin")){
+                mv.setViewName("StudentDashboard.html"); //ChangeURL
+            } else if (session.getAttribute("userrole").equals("Student")){
+                mv.setViewName("StudentDashboard.html");
+            }else if (session.getAttribute("userrole").equals("Lecturer")){
+                mv.setViewName("Lecturer Dashboard.html");
+            }
+
+            //Gets Modules to session
+            getModules(session);
+            //get Users to session
+            session.setAttribute("usersList", users);
 
         } else {
 
@@ -60,7 +71,7 @@ public class DBController {
         User newUser = new User();
         mv.setViewName("userAccountPage.html"); //CHANGE URL
         newUser.setFirstname(firstname);
-        newUser.setLastname(lastname);
+        newUser.setSurname(lastname);
         newUser.setRole(role);
         newUser.setPassword(password);
         newUser.setUsername(username);
@@ -90,6 +101,39 @@ public class DBController {
     @PostMapping("/getNotifications")
     public ModelAndView getNotifs(HttpSession session) throws ExecutionException, InterruptedException {
         session.setAttribute("notifications",firebaseService.getAllNotifications(session));
+        return mv;
+    }
+
+    @PostMapping("/sendNotificationAll")
+    public ModelAndView SendNotificationAll(HttpSession session, @RequestParam("AllStudentsTextArea") String text) throws ExecutionException, InterruptedException, IOException {
+        mv.setViewName("LecturerContactStudents.html");
+        String sent = firebaseService.sendNotificationAll(text, session);
+        return mv;
+    }
+
+    @PostMapping("/sendNotificationModule")
+    public ModelAndView SendNotificationModule(HttpSession session, @RequestParam("ClassWideTextArea") String text, @RequestParam("Classname") String module) throws ExecutionException, InterruptedException, IOException {
+        mv.setViewName("LecturerContactStudents.html");
+        String sent = firebaseService.sendNotificationModule(text, session, module);
+        return mv;
+    }
+
+    @PostMapping("/sendNotificationStudent")
+    public ModelAndView SendNotificationStudent(HttpSession session, @RequestParam("SpecStudTextArea") String text, @RequestParam("StudName") String user) throws ExecutionException, InterruptedException, IOException {
+        mv.setViewName("LecturerContactStudents.html");
+        String sent = firebaseService.sendNotificationStudent(text, session, user);
+        return mv;
+    }
+
+    @PostMapping("/getModules")
+    public void getModules(HttpSession session) throws ExecutionException, InterruptedException {
+        List<Modules> moduleList = firebaseService.getModules();
+        session.setAttribute("moduleList", moduleList);
+    }
+
+    @RequestMapping("/redirect-contactStudents")
+    public ModelAndView redirectContactStudents() {
+        mv.setViewName("LecturerContactStudents.html");
         return mv;
     }
 

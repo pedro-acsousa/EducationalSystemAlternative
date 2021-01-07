@@ -1,12 +1,15 @@
 package epic.lms;
 
+import java.util.List;
+
 public class User {
     private String firstname;
     private String password;
     private String role;
     private String username ;
-    private String lastname;
-    private int age;
+    private String surname;
+    private List<String> teaches;
+    private List<String> attends;
     private String email;
 
     public String getEmail() {
@@ -17,20 +20,28 @@ public class User {
         this.email = email;
     }
 
-    public String getLastname() {
-        return lastname;
+    public List<String> getTeaches() {
+        return teaches;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setTeaches(List<String> teaches) {
+        this.teaches = teaches;
     }
 
-    public int getAge() {
-        return age;
+    public List<String> getAttends() {
+        return attends;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setAttends(List<String> attends) {
+        this.attends = attends;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getFirstname() {

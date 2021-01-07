@@ -1,11 +1,10 @@
 package epic.lms;
 
-import java.util.Date;
 
 public class Notifications {
 
     private String content;
-    private Date date;
+    private String date;
     private boolean read;
     private String sender;
     private String recipient;
@@ -20,11 +19,11 @@ public class Notifications {
         this.content = content;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

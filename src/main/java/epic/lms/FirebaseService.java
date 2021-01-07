@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
@@ -39,7 +37,7 @@ public class FirebaseService {
         newUser.put("username", userAdded.getUsername());
         newUser.put("password", userAdded.getPassword());
         newUser.put("firstname", userAdded.getFirstname());
-        newUser.put("lastname", userAdded.getLastname());
+        newUser.put("lastname", userAdded.getSurname());
         newUser.put("email", userAdded.getEmail());
         newUser.put("role", userAdded.getRole());
 
@@ -57,7 +55,7 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Notifications");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
-            if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean)doc.get("read")==false){
+            if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read")==false){
                 notifications.add(doc.toObject(Notifications.class));
             }
 
@@ -72,11 +70,141 @@ public class FirebaseService {
             if (notification.getId() == id) {
                 Firestore db = FirestoreClient.getFirestore();
                 notification.setRead(true);
-                db.collection("Notifications").document("" + notification.getId()).update("read", notification.isRead());
+                db.collection("Notifications").document("" + notification.getId() + " " + notification.getRecipient()).update("read", notification.isRead());
                 allNotifications.remove(notification);
                 break;
             }
         }
     return allNotifications;
+    }
+
+    public String sendNotificationAll(String text, HttpSession session) throws ExecutionException, InterruptedException, IOException {
+
+        List<User> users = getUser();
+        Firestore db = FirestoreClient.getFirestore();
+
+        //increment id so id is unique
+        CollectionReference collectionReference = db.collection("Notifications");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        int id = 0;
+        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
+            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id){
+                id = Integer.parseInt(String.valueOf(doc.get("id")));
+            }
+        }
+
+        for(User user : users){
+            id=id+1;
+            Notifications newNotification = new Notifications();
+            newNotification.setContent(text);
+            Date date = Calendar.getInstance().getTime();
+            SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+            String s = SDF.format(date);
+            newNotification.setDate(s);
+
+
+
+            newNotification.setRecipient(user.getUsername());
+            newNotification.setSender(String.valueOf(session.getAttribute("userid")));
+            newNotification.setId(id);
+            newNotification.setRead(false);
+            db.collection("Notifications").document("" + id + " " + user.getUsername()).create(newNotification);
+        }
+        return "Sent Successfully";
+    }
+
+    public String sendNotificationModule(String text, HttpSession session, String module) throws ExecutionException, InterruptedException, IOException {
+        List<String> studentsModule;
+        Firestore db = FirestoreClient.getFirestore();
+
+        //increment id so id is unique
+        CollectionReference collectionReference = db.collection("Notifications");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        int id = 0;
+        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
+            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id){
+                id = Integer.parseInt(String.valueOf(doc.get("id")));
+            }
+        }
+
+        studentsModule=null;
+        //Check Students in a module
+        CollectionReference collectionReference1 = db.collection("Modules");
+        ApiFuture<QuerySnapshot> querySnapshot1 = collectionReference1.get();
+        for(DocumentSnapshot doc1 : querySnapshot1.get().getDocuments()){
+            if(doc1.getId().equals(module)){
+               studentsModule= (List<String>) doc1.get("students");
+            }
+        }
+        for (String student : studentsModule){
+            id=id+1;
+            Notifications newNotification = new Notifications();
+            newNotification.setContent(text);
+            Date date = Calendar.getInstance().getTime();
+            SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+            String s = SDF.format(date);
+            newNotification.setDate(s);
+            newNotification.setRecipient(student);
+            newNotification.setSender(String.valueOf(session.getAttribute("userid")));
+            newNotification.setId(id);
+            newNotification.setRead(false);
+            db.collection("Notifications").document("" + id + " " + student).create(newNotification);
+
+
+        }
+
+    return "Sent Successfully";
+    }
+
+    public String sendNotificationStudent(String text, HttpSession session, String studentId) throws InterruptedException, ExecutionException, IOException {
+
+
+        Firestore db = FirestoreClient.getFirestore();
+
+        //increment id so id is unique
+        CollectionReference collectionReference = db.collection("Notifications");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        int id = 0;
+        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
+            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id){
+                id = Integer.parseInt(String.valueOf(doc.get("id")));
+            }
+        }
+
+        for (User student : getUser()){
+            if (student.getUsername().equals(studentId)) {
+                id = id + 1;
+                Notifications newNotification = new Notifications();
+                newNotification.setContent(text);
+                Date date = Calendar.getInstance().getTime();
+                SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+                String s = SDF.format(date);
+                newNotification.setDate(s);
+                newNotification.setRecipient(studentId);
+                newNotification.setSender(String.valueOf(session.getAttribute("userid")));
+                newNotification.setId(id);
+                newNotification.setRead(false);
+                db.collection("Notifications").document("" + id + " " + studentId).create(newNotification);
+            }
+
+        }
+
+        return "Sent Successfully";
+    }
+
+
+
+    public List<Modules> getModules() throws ExecutionException, InterruptedException {
+        List<Modules> moduleList = new ArrayList<Modules>();
+
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Modules");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            moduleList.add(doc.toObject(Modules.class));
+        }
+
+        return  moduleList;
     }
 }

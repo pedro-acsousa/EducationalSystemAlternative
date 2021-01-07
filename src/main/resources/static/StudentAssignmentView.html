@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
-    <link rel="stylesheet" type="text/css" href="StudentAsmSubStyle.css">
+    <link rel="stylesheet" type="text/css" href="StudentStyle.css">
 </head>
 
 <header id="header">
@@ -55,10 +55,10 @@
             </div>
         </div>
         <hr/>
-        <div class="row" id="asmselect">
+        <div class="row" id="asmSelect">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <div class="dropdown">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                         Select Assignment
                     </button>
                     <div class="dropdown-menu">
@@ -71,20 +71,15 @@
         </div>
         <hr/>
         <br>
-        <div class="row" id="assignmentcontent">
-            <div class="col-lg-5 col-md-6 col-sm-9 col-xs-12">
-                <h4 id="asmtitle">Assignment X</h4>
-                <div class="asmcontents">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                </div>
+        <div id="assignmentContent">
+            <h4 id="asmTitle">Assignment X</h4>
+            <div class="asmContents">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-9 col-xs-12" id="asmduedatetext"></div>
-                Due Date:&nbsp;
-                <div id="asmduedate">
-                    !!insert date!!
-                </div>
+            <hr/>
+            <div id="asmDueDateText"></div>
+            <h6>Due Date:&nbsp;</h6> <h6 id="asmDueDate"> !!insert date!!</h6>
         </div>
-
     </div>
 </main>
 </body>

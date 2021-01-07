@@ -21,3 +21,6 @@ main {
         padding-top: 0px;
     }
 }
+video {
+    width: 100%;
+}

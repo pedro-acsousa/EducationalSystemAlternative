@@ -91,12 +91,10 @@
                     Below the forms is the html is the text areas. Although they are not within the forms, they are linked and the text data
                     will still be sent in the form (in theory)-->
 
-                    <form class="SpecStudForm" id="SpecStudForm" action="/PedroPutThingHere" method="post" style="display:block">
+                    <form class="SpecStudForm" id="SpecStudForm" action="/sendNotificationStudent" method="post" style="display:block">
                         <label for="StudName">Student Name: </label>
                         <select name="StudName" id="StudName">
-                            <option value="John">John</option>
-                            <option value="David">David</option>
-                            <option value="Alex">Alex</option>
+                            <option th:each="user : ${session.usersList}" th:value="${user.getUsername()}" th:text="${user.getUsername() + ' - ' + user.getFirstname() + ' ' + user.getSurname() }" >
                         </select>
                         <br>
                         <br>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Contents</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+</head>
+
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">EPiC Learning for Students</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Home" href="#">Home</a>       </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-value="Assignments" href="#">Assignments</a>        </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="View Progress"href="#">View Progress</a>          </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Check Contents" href="#">Access Contents</a>         </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body id="body">
+<main class="main">
+    <div class="container">
+        <h4>Course Contents</h4><br>
+        <div class="container row">
+            <div class="dropdown btn-group col-3" id="courseSelect">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Select Course
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="javascript:showMaterialSelection();">Course 1</a>
+                    <a class="dropdown-item" href="#">Course 2</a>
+                    <a class="dropdown-item" href="#">Course 3</a>
+                </div>
+            </div>
+            <div class="dropdown btn-group col-3" id="materialSelect">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                    Select Material
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="javascript:showCourseMaterial();">Material 1</a>
+                    <a class="dropdown-item" href="#">Material 2</a>
+                    <a class="dropdown-item" href="#">Material 3</a>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div id="courseContent">
+            <div class="row">
+                <div class="col" id="courseMedia">
+                    <video controls>
+                        <source src="https://drive.google.com/uc?export=download&id=10UUlAKAPxIP6uahzEab4Xp-KS_TJZl-a" type='video/mp4'>
+                    </video>
+                </div>
+                <div class="col">
+                    <h4 id="courseTitle">Material X</h4>
+                    <div id="courseMaterialDesc">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+<script>
+    $(document).ready(function() {
+        document.getElementById("materialSelect").style.display = "none";
+        document.getElementById("courseContent").style.display = "none";
+    })
+
+    function showMaterialSelection() {
+        document.getElementById("materialSelect").style.display = "block";
+    }
+
+    function showCourseMaterial(){
+        document.getElementById("courseContent").style.display = "block";
+    }
+</script>
+
+</html>

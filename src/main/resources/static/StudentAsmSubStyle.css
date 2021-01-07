@@ -14,7 +14,7 @@
     justify-content: flex-end;
 }
 main {
-    padding-top: 65px;
+    padding-top: 35px;
 }
 @media (max-width: 979px) {
     main {

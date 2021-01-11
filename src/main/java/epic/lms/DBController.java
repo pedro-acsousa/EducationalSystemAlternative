@@ -1,6 +1,8 @@
 package epic.lms;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -8,7 +10,7 @@ import javax.script.ScriptException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static java.lang.Integer.valueOf;
@@ -129,12 +131,59 @@ public class DBController {
     public void getModules(HttpSession session) throws ExecutionException, InterruptedException {
         List<Modules> moduleList = firebaseService.getModules();
         session.setAttribute("moduleList", moduleList);
+        getStudents(session);
     }
+
+    @PostMapping("/getStudents")
+    public void getStudents(HttpSession session) throws ExecutionException, InterruptedException {
+        List<Modules> moduleList = (List<Modules>) session.getAttribute("moduleList");
+        Map<String,String> studentsInModule = new HashMap<>();
+        for(Modules modules: moduleList){
+            for (String student: modules.getStudents()){
+                studentsInModule.put(modules.getId(),student);
+            }
+
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(studentsInModule);
+
+        mv.setViewName("LecturerMarkAssessment.html");
+
+        session.setAttribute("studentsInModule",json);
+    }
+
+
 
     @RequestMapping("/redirect-contactStudents")
     public ModelAndView redirectContactStudents() {
         mv.setViewName("LecturerContactStudents.html");
         return mv;
     }
+
+    @RequestMapping("/redirect-setupAssessments")
+    public ModelAndView redirectSetupAssessments() {
+        mv.setViewName("LecturerSetUpAssessment.html");
+        return mv;
+    }
+
+    @RequestMapping("/redirect-markAssessments")
+    public ModelAndView redirectMarkAssessments() {
+        mv.setViewName("LecturerMarkAssessment.html");
+        return mv;
+    }
+
+
+
+    @PostMapping("/createAssessment")
+    public ModelAndView createAssessment(HttpSession session, @RequestParam("AssessmentName") String name,
+                                 @RequestParam("DueDate") String dueDate, @RequestParam("Class") String module,
+                                 @RequestParam("Type") String assessmentType,
+                                 @RequestParam("AssessmentTextArea") String spec) throws InterruptedException, ExecutionException, IOException {
+        firebaseService.createAssessment(session, name,dueDate, module, assessmentType, spec);
+        mv.setViewName("LecturerSetUpAssessment.html");
+        return mv;
+    }
+
 
 }

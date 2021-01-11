@@ -207,4 +207,53 @@ public class FirebaseService {
 
         return  moduleList;
     }
+
+    public void createAssessment(HttpSession session,String assessmentName, String dueDate, String module, String assessmentType, String spec) throws InterruptedException, ExecutionException, IOException {
+
+
+        Firestore db = FirestoreClient.getFirestore();
+
+        //Checks if a user has been created in the assignments collection
+        for(User user: getUser()){
+            for(Modules moduleiter: getModules()){
+                List<String> studentsInModule= moduleiter.getStudents();
+                if (studentsInModule.contains(user.getUsername()) && module.equals(moduleiter.getId())){
+
+
+                    //Creates Outter map
+                    Map<String, Map<String, Assessment> >  newAssessment = new HashMap<String, Map<String, Assessment>>();
+
+
+                    Assessment assessmentObject = new Assessment();
+                    assessmentObject.setCreator((String) session.getAttribute("userid"));
+                    assessmentObject.setDue(dueDate);
+                    assessmentObject.setSubmitted(false);
+                    assessmentObject.setSpec(spec);
+                    assessmentObject.setType(assessmentType);
+
+
+                    //creates Inner map
+                    Map<String, Assessment> newAssessmentDetail = new HashMap<String, Assessment>();
+                    newAssessmentDetail.put(assessmentName, assessmentObject);
+                    newAssessment.put(module, newAssessmentDetail);
+
+
+                    //Creates document before writing if non existent
+                    CollectionReference collectionReference = db.collection("Assignments");
+                    ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+                    for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+                        if (!doc.getId().equals(user.getUsername())){
+                            db.collection("Assignments").document(user.getUsername()).create(newAssessment);
+                        } else{
+                            //Updates Assessment in DB
+                            db.collection("Assignments").document(user.getUsername()).set(newAssessment,SetOptions.merge());
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
 }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Lecturer Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>Mark Assessments</h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+
+            <div class = "innerwrap">
+                <div class = "headerwrap">
+                    <h2 style="float: left">Student Lookup</h2>
+                </div>
+                <div class="leftsidewrap">
+
+                    <form id="StudLookupForm" action="/getStudents" method="POST">
+                        <br><br>
+                        <label for="Class">Class: </label>
+                        <select onchange="dynamicDrop()" th:action="@{/getModules}" name="Class" id="Class">
+                            <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                        <br><br>
+
+
+                        <label for="Student">Student: </label>
+
+                        <select onchange="dynamicDrop()" th:action="@{/getStudents}"  name="Student" id="Student">
+                            <option id="studentSelect" name="studentSelect"></option>
+                        </select>
+                        <script>
+                        function dynamicDrop(){
+                            var map1 = new Map();
+                            map1='<% =Session["studentsInModule"] %>';
+                            var students = [];
+                            for(var element in map1){
+                                if(document.getElementById("ClassOption").value===element){
+                                    students.add(map1.get(element));
+                            }
+
+                            }
+                            var select = document.getElementById("studentSelect");
+                            for(var i = 0; i < students.length; i++) {
+                                var opt = students[i];
+                                var el = document.createElement("option");
+                                el.textContent = opt;
+                                el.value = opt;
+                                select.appendChild(el);
+                            }
+
+                        }
+
+
+                        </script>
+
+                        <br><br>
+                    </form>
+                </div>
+                <div class="RightHeader">
+                    <label>Assessment Selection: </label>
+                    <select name="Assessment" id="Assessment">
+                        <option value="1">Assessment 1</option>
+                        <option value="2">Assessment 2</option>
+                        <option value="3">Assessment 3</option>
+                    </select>
+                </div>
+                <div class="MarkingSection">
+                    <form id="MarkingForm" action="/PedroPutThingHere" method="post">
+                        <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>
+                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" form="MarkingForm"></textarea>
+                        <div class="GradePos">
+                            <label for="Grade">Grade: </label>
+                            <select id="Grade" name="Grade">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                            </select>
+                        </div>
+                        <input class="SubmitMark" type="submit" value="Submit Marking">
+                    </form>
+                </div>
+
+                <textarea class="AssessmentTextArea" name="Assess1" id="Assess1" style="display: block" >Example Assessment text. Deserves A easily
+                </textarea>
+
+
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
+
+</body>
+</html>

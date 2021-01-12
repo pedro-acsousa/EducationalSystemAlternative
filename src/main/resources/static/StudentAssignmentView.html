@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Assignments</title>
+    <title>Assignment Specifications</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -23,13 +23,13 @@
             </button>
             <ul class="nav navbar-nav mr-4">
                 <li class="nav-item">
-                    <a class="nav-link " data-value="Home" href="#">Home</a>       </li>
+                    <a class="nav-link " data-value="Home" href="#">Assignments</a>       </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-value="Assignments" href="#">Assignments</a>        </li>
+                    <a class="nav-link" data-value="Assignments" href="#">Assignment Submission </a>        </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="View Progress"href="#">View Progress</a>          </li>
+                    <a class="nav-link " data-value="View Progress"href="#">Learning Progress</a>          </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="Check Contents" href="#">Access Contents</a>         </li>
+                    <a class="nav-link " data-value="Check Contents" href="#">Lecture Contents</a>         </li>
                 <li class="nav-item">
                     <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
             </ul>
@@ -39,46 +39,42 @@
 <body id="body">
 <main class="main">
     <div class="container">
-        <h4>Assignment Specifications</h4><br>
-        <div class="row" id="courseselect">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        Select Course
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Course 1</a>
-                        <a class="dropdown-item" href="#">Course 2</a>
-                        <a class="dropdown-item" href="#">Course 3</a>
-                    </div>
+        <h4 class="container">Assignment Specifications</h4><br>
+        <div class="container row">
+            <div class="dropdown btn-group col-sm-3" id="courseSelect">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Select Course
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="javascript:showAssignments();">Course 1</a>
+                    <a class="dropdown-item" href="#">Course 2</a>
+                    <a class="dropdown-item" href="#">Course 3</a>
                 </div>
             </div>
-        </div>
-        <hr/>
-        <div class="row" id="asmSelect">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="dropdown">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                        Select Assignment
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Assignment 1</a>
-                        <a class="dropdown-item" href="#">Assignment 2</a>
-                        <a class="dropdown-item" href="#">Assignment 3</a>
-                    </div>
+            <div class="dropdown btn-group col-sm-3" id="assignmentSelect">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                    Select Assignment
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="javascript:showAssignmentContent();">Assignment 1</a>
+                    <a class="dropdown-item" href="#">Assignment 2</a>
+                    <a class="dropdown-item" href="#">Assignment 3</a>
                 </div>
             </div>
+            <div class="col text-right align-self-end" id="showCourseName">
+                <h5 class="d-inline">Course 1</h5><h5 class="d-inline"></h5>
+            </div>
         </div>
-        <hr/>
-        <br>
         <div id="assignmentContent">
-            <h4 id="asmTitle">Assignment X</h4>
-            <div class="asmContents">
+            <hr>
+            <h4 class="container" id="asmTitle">Assignment X</h4>
+            <div class="container">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
             </div>
             <hr/>
-            <div id="asmDueDateText"></div>
-            <h6>Due Date:&nbsp;</h6> <h6 id="asmDueDate"> !!insert date!!</h6>
+            <div class="container" id="asmDueDateText">
+                <h6 class="d-inline">Due Date:&nbsp;</h6> <h6 class="d-inline" id="asmDueDate"></h6>
+            </div>
         </div>
     </div>
 </main>
@@ -90,6 +86,27 @@
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+
+    $(document).ready(function() {
+        $('#courseSelect').show();
+        $('#showCourseName').hide();
+        $('#assignmentSelect').hide();
+        $('#assignmentContent').hide();
+    })
+
+    function showAssignments(){
+        $('#assignmentSelect').show();
+    }
+
+    function showAssignmentContent(){
+        $('#showCourseName').show();
+        $('#assignmentContent').show();
+    }
+
+    //current date for testing
+    let dt = new Date();
+    document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
+
 </script>
 
 </html>

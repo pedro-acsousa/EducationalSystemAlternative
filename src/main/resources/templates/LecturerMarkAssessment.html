@@ -13,7 +13,7 @@
 <body>
 
 <nav class="navbar navbar-expand-lg fixed-top ">
-    <a class="navbar-brand" href="#">Mark Assessment</a>
+    <a class="navbar-brand" href="#">Lecturer Assessment Marking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,8 +27,6 @@
             <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
         <li class="nav-item">
             <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
     </ul>
     </div>
 </nav>
@@ -50,24 +48,48 @@
                 </div>
                 <div class="leftsidewrap">
 
-                    <form id="StudLookupForm" action="/PedroPutThingHere" method="post">
+                    <form id="StudLookupForm" action="/getStudents" method="POST">
                         <br><br>
                         <label for="Class">Class: </label>
-                        <select name="Class" id="Class">
-                            <option value="2031">2031 - Security</option>
-                            <option value="2032">2032 - Algorithms</option>
-                            <option value="2033">2033 - Team Project</option>
+                        <select onchange="dynamicDrop()" th:action="@{/getModules}" name="Class" id="Class">
+                            <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
+                            <option>1</option>
+                            <option>2</option>
                         </select>
                         <br><br>
 
+
                         <label for="Student">Student: </label>
-                        <select name="Student" id="Student">
-                            <option value="John">John</option>
-                            <option value="David">David</option>
-                            <option value="Alex">Alex</option>
+
+                        <select onchange="dynamicDrop()" th:action="@{/getStudents}"  name="Student" id="Student">
+                            <option id="studentSelect" name="studentSelect"></option>
                         </select>
+                        <script>
+                        function dynamicDrop(){
+                            var map1 = new Map();
+                            map1='<% =Session["studentsInModule"] %>';
+                            var students = [];
+                            for(var element in map1){
+                                if(document.getElementById("ClassOption").value===element){
+                                    students.add(map1.get(element));
+                            }
+
+                            }
+                            var select = document.getElementById("studentSelect");
+                            for(var i = 0; i < students.length; i++) {
+                                var opt = students[i];
+                                var el = document.createElement("option");
+                                el.textContent = opt;
+                                el.value = opt;
+                                select.appendChild(el);
+                            }
+
+                        }
+
+
+                        </script>
+
                         <br><br>
-                        <input type="submit" value="Retrieve Assessments" style="width: 40%">
                     </form>
                 </div>
                 <div class="RightHeader">

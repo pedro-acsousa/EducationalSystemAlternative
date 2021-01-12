@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Lecturer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+</head>
+
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">EPiC Learning for Students</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Home" href="#">Home</a>       </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-value="Assignments" href="#">Assignments</a>        </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="View Progress"href="#">View Progress</a>          </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Check Contents" href="#">Access Contents</a>         </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body id="body">
+<main class="main">
+    <div class="container">
+        <form action="#">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h4>Contact Lecturers</h4><br>
+                    <div class="form-group" id="courseSelect">
+                        <label for="formCourseSelect">Select Course</label>
+                        <select class="form-control" id="formCourseSelect" onchange="showLecturer();">
+                            <option>Select...</option>
+                            <option>Course 1</option>
+                            <option>Course 2</option>
+                            <option>Course 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="lecturerSelect">
+                        <label for="formLecturerSelect">Select Lecturer</label>
+                        <select class="form-control" id="formLecturerSelect" onchange="showRest();">
+                            <option>Select...</option>
+                            <option>John Colquhoun</option>
+                            <option>Chris Napier</option>
+                            <option>Marie Devlin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-right align-self-center" id="courseDetails">
+                    <h5>Course Details:</h5>
+                    <h6 id="courseShowTitle">Course 1</h6>
+                    <p class="d-inline">Module Leader:&nbsp;</p><p class="d-inline" id="showModuleLeader">Chris Napier</p>
+                    <br>
+                    <p class="d-inline">Email:&nbsp;</p><p class="d-inline" id="showModuleLeaderEmail">chris.napier@newcastle.ac.uk</p>
+                    <br>
+                    <p class="d-inline">Credits:&nbsp;</p><p class="d-inline" id="showModuleCredits">30</p><br>
+                </div>
+            </div>
+            <div class="form-group" id="lecturerEmail">
+                Lecturer Email:&nbsp;&nbsp;<span id="formLecturerEmail">john.colquhoun@ncl.ac.uk</span>
+            </div>
+            <div class="form-group" id="inputEmail">
+                <label for="formEmail">Email address:</label>
+                <input type="email" class="form-control" id="formEmail" placeholder="your.name@ncl.ac.uk">
+            </div>
+            <div class="form-group" id="inputMessage">
+                <label for="formTextbox">Your Message:</label>
+                <textarea class="form-control" id="formTextbox" rows="5" placeholder="Write your message here..."></textarea>
+            </div>
+            <hr id="divider">
+            <button type="submit" class="btn btn-primary mb-2" id="submitButton">Submit</button>
+        </form>
+    </div>
+</main>
+</body>
+
+<script>
+
+    $(document).ready(function() {
+        $('#courseSelect').show();
+        $('#courseDetails').hide();
+        $('#lecturerSelect').hide();
+        $('#lecturerEmail').hide();
+        $('#inputEmail').hide();
+        $('#inputMessage').hide();
+        $('#divider').hide();
+        $('#submitButton').hide();
+    })
+    function showLecturer(){
+        $('#lecturerSelect').show();
+        $('#courseDetails').show();
+    }
+    function showRest(){
+        $('#lecturerEmail').show();
+        $('#inputEmail').show();
+        $('#inputMessage').show();
+        $('#divider').show();
+        $('#submitButton').show();
+    }
+
+    //current date for testing
+    let dt = new Date();
+    document.getElementById('assignmentDueDate1').innerHTML = dt.toLocaleDateString('en-GB');
+    document.getElementById('assignmentDueDate2').innerHTML = dt.toLocaleDateString('en-GB');
+    document.getElementById('assignmentDueDate3').innerHTML = dt.toLocaleDateString('en-GB');
+</script>
+
+</html>

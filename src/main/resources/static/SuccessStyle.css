@@ -1,0 +1,34 @@
+.TickImage{
+    position: relative;
+    left: 44%;
+    top: 10%;
+}
+.OuterWrap{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+    border: 4px solid #4CAF50;
+}
+
+.MessageWrap{
+    position: absolute;
+    width: 50%;
+    height: 20%;
+    bottom: 15%;
+    left: 25%;
+    border:1px solid #ccc;
+    text-align: center;
+}
+.Success{
+    position: absolute;
+    color: #4CAF50;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 100px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    left: 38%;
+    top: 30%;
+}

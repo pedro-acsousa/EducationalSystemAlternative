@@ -1,11 +1,18 @@
 package epic.lms;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firestore.v1.Document;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.io.DataInput;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -204,8 +211,53 @@ public class FirebaseService {
         for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             moduleList.add(doc.toObject(Modules.class));
         }
-
         return  moduleList;
+    }
+
+    public Map<String,Map<String,Assessment>> getAssessments(Modules module) throws ExecutionException, InterruptedException, JSONException, IOException {
+        List<Assessment> assessmentList = new ArrayList<Assessment>();
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Assignments");
+        Map<String,Assessment> assessmentMap = new HashMap<>();
+        Map<String,Map<String,Assessment>> studentModuleAssessmentMap = new HashMap<>();
+
+
+        CollectionReference collection = db.collection("Assignments");
+        for (DocumentReference document : collection.listDocuments()) {
+
+
+
+            for (String student : module.getStudents()) {
+                if (document.getId().equals(module.getId() + " : " + student))  {
+
+                    DocumentReference docRef = db.collection("Assignments").document(module.getId() + " : " + student);
+                    ApiFuture<DocumentSnapshot> future = docRef.get();
+                    DocumentSnapshot doc = future.get();
+
+                    Map<String, Object> assessmentMapObject;
+
+                    assessmentMapObject=doc.getData();
+                    for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
+                        final ObjectMapper mapper = new ObjectMapper();
+                        final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
+                        assessmentMap.put(pair.getKey(), pojo);
+                    }
+                    studentModuleAssessmentMap.put(module.getId() + " : " + student, assessmentMap);
+                }
+            }
+
+        }
+
+        /*if (document.exists()) {
+            Map<String, Object> assessmentMapObject = document.getData();
+            for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
+                final ObjectMapper mapper = new ObjectMapper();
+                final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
+                assessmentMap.put(pair.getKey(), pojo);
+            }
+        }
+        */
+        return  studentModuleAssessmentMap;
     }
 
     public void createAssessment(HttpSession session,String assessmentName, String dueDate, String module, String assessmentType, String spec) throws InterruptedException, ExecutionException, IOException {
@@ -213,47 +265,90 @@ public class FirebaseService {
 
         Firestore db = FirestoreClient.getFirestore();
 
-        //Checks if a user has been created in the assignments collection
-        for(User user: getUser()){
-            for(Modules moduleiter: getModules()){
-                List<String> studentsInModule= moduleiter.getStudents();
-                if (studentsInModule.contains(user.getUsername()) && module.equals(moduleiter.getId())){
+        for(Modules moduleiter: getModules()){
+            List<String> studentsInModule= moduleiter.getStudents();
+            if (module.equals(moduleiter.getId())){
 
 
-                    //Creates Outter map
-                    Map<String, Map<String, Assessment> >  newAssessment = new HashMap<String, Map<String, Assessment>>();
+                Assessment assessmentObject = new Assessment();
+                assessmentObject.setCreator((String) session.getAttribute("userid"));
+                assessmentObject.setDue(dueDate);
+                assessmentObject.setSubmitted(false);
+                assessmentObject.setSpec(spec);
+                assessmentObject.setType(assessmentType);
 
 
-                    Assessment assessmentObject = new Assessment();
-                    assessmentObject.setCreator((String) session.getAttribute("userid"));
-                    assessmentObject.setDue(dueDate);
-                    assessmentObject.setSubmitted(false);
-                    assessmentObject.setSpec(spec);
-                    assessmentObject.setType(assessmentType);
+
+                //FALTA ADICIONAR OS ESTUDANTES COMO ARRAY AO ASSESSMENTDETAIL
 
 
-                    //creates Inner map
-                    Map<String, Assessment> newAssessmentDetail = new HashMap<String, Assessment>();
-                    newAssessmentDetail.put(assessmentName, assessmentObject);
-                    newAssessment.put(module, newAssessmentDetail);
+                //creates Inner map
+                Map<String, Assessment> newAssessmentDetail = new HashMap<String, Assessment>();
+                newAssessmentDetail.put(assessmentName, assessmentObject);
 
 
-                    //Creates document before writing if non existent
-                    CollectionReference collectionReference = db.collection("Assignments");
-                    ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
 
-                    for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-                        if (!doc.getId().equals(user.getUsername())){
-                            db.collection("Assignments").document(user.getUsername()).create(newAssessment);
-                        } else{
-                            //Updates Assessment in DB
-                            db.collection("Assignments").document(user.getUsername()).set(newAssessment,SetOptions.merge());
+
+                //Creates document before writing if non existent
+                CollectionReference collectionReference = db.collection("Assignments");
+                ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+                for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+
+                        for(String user: studentsInModule){
+                            if (!doc.getId().equals(module + " : "+user)) {
+                                db.collection("Assignments").document(module + " : " + user).create(newAssessmentDetail);
+                            }else{
+                        db.collection("Assignments").document(module+ " : " + user).set(newAssessmentDetail,SetOptions.merge());
                         }
                     }
                 }
+
             }
         }
 
+
+
     }
+
+    public void getAssessmentsinModule(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        List<Modules> moduleList = (List<Modules>) session.getAttribute("moduleList");
+        Map<String, Map<String,Assessment>> assessmentsInModule = new HashMap<>();
+
+        Map<String , String> mapForMarking= new HashMap<>();
+
+        for (Modules modules : moduleList) {
+            //for(Map<String,Assessment> extractMap : assessmentsInModule.get(modules.getId())){
+
+            Firestore db = FirestoreClient.getFirestore();
+            CollectionReference collectionReference = db.collection("Assignments");
+            ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+            assessmentsInModule = getAssessments(modules);
+
+            for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+
+                if (doc.getId().equals(modules.getId())) {
+
+
+
+                    for (Map<String, Assessment> value : assessmentsInModule) {
+
+                        for (Map.Entry<String, Assessment> entry : value.entrySet()) {
+                            mapForMarking.put(modules.getId(), entry.getKey());
+                        }
+
+                    }
+                }
+            }
+
+
+        }
+        session.setAttribute("AssignmentsInModule",mapForMarking);
+        System.out.println(mapForMarking);
+    }
+
+
+
 
 }

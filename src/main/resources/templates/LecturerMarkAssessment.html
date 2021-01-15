@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
 </head>
 <body>
-
+<form id="StudLookupForm" action="/gradeAssessment" method="POST">
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" href="#">Lecturer Assessment Marking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="leftsidewrap">
 
-                    <form id="StudLookupForm" action="/getStudents" method="POST">
+
                         <br><br>
                         <label for="Class">Class: </label>
                         <select onchange="dynamicDrop()" th:action="@{/getModules}" name="Class" id="Class">
@@ -105,7 +105,7 @@
 
 
                         <br><br>
-                    </form>
+
                 </div>
                 <div class="RightHeader">
                     <label>Assessment Selection: </label>
@@ -154,21 +154,15 @@
 
 
                 <div class="MarkingSection">
-                    <form id="MarkingForm" action="/PedroPutThingHere" method="post">
+
                         <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>
-                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" form="MarkingForm"></textarea>
+                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" required></textarea>
                         <div class="GradePos">
                             <label for="Grade">Grade: </label>
-                            <select id="Grade" name="Grade">
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
+                            <input type="number" max="100" min="0" id="Grade" name="Grade" required></input>
                         </div>
                         <input class="SubmitMark" type="submit" value="Submit Marking">
-                    </form>
+
                 </div>
 
                 <textarea class="AssessmentTextArea" name="Assess1" id="Assess1" style="display: block" >Example Assessment text. Deserves A easily
@@ -182,6 +176,6 @@
 
 </header>
 
-
+</form>
 </body>
 </html>

@@ -275,6 +275,7 @@ public class FirebaseService {
                 assessmentObject.setSubmitted(false);
                 assessmentObject.setSpec(spec);
                 assessmentObject.setType(assessmentType);
+                assessmentObject.setFeedback(null);
 
 
                 //creates Inner map
@@ -343,6 +344,36 @@ public class FirebaseService {
 
 
        return allAssessments;
+    }
+
+    public String gradeAssessment(HttpSession session, String feedback, String grade, String assessment, String student,
+                                  String module) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Assignments");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        System.out.println(feedback);
+        System.out.println(grade);
+        System.out.println(assessment);
+        System.out.println(student);
+        System.out.println(module);
+
+
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (doc.getId().equals(module + " : " + student)){
+
+
+                Map<String, Object> updates = new HashMap<>();
+
+                updates.put(assessment+".mark", grade);
+                updates.put(assessment+".feedback", feedback);
+
+                DocumentReference DocRef = db.collection("Assignments").document(module + " : " + student);
+                ApiFuture<WriteResult> writeResult = DocRef.update(updates);
+            }
+
+        }
+        return "success";
     }
 
 }

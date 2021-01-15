@@ -60,11 +60,15 @@
 
                         <label for="Student">Student: </label>
 
-                        <select onchange="dynamicDrop();dynamicAssessmentDrop();" th:action="@{/getStudents}"  name="Student" id="Student">
+                        <select onchange="dynamicDrop();" th:action="@{/getStudents}"  name="Student" id="Student">
                             <option id="studentSelect" name="studentSelect"></option>
                         </select>
                         <script>
                         function dynamicDrop(){
+
+
+
+                            dynamicAssessmentDrop();
 
                             var students = [];
                             var x = "[[${studentsInModule}]]";
@@ -99,11 +103,6 @@
 
                         </script>
 
-                    <script>
-                    function dynamicAssessmentDrop(){
-
-                    }
-                    </script>
 
                         <br><br>
                     </form>
@@ -111,11 +110,49 @@
                 <div class="RightHeader">
                     <label>Assessment Selection: </label>
                     <select name="Assessment" id="Assessment">
-                        <option value="1">Assessment 1</option>
-                        <option value="2">Assessment 2</option>
-                        <option value="3">Assessment 3</option>
+                        <option value="1">Select Assessment</option>
+
                     </select>
                 </div>
+
+                <script>
+                    function dynamicAssessmentDrop(){
+
+                        var assessment = [];
+                        var x = "[[${assessmentsInModule}]]";
+
+                        var changed2 = x.split('\=').join('\:');
+                        var changed3 = changed2.split('~').join(',');
+                        var changed4 = changed3.split('#').join('\"');
+                        var changed5 = JSON.parse(changed4);
+                        for (var value in changed5) {
+                            if (value === document.getElementById("Class").value) {
+                                for(var value1 in changed5[value]){
+                                    assessment.push(changed5[value][value1]);
+                                }
+                            }
+                        }
+
+                        var select = document.getElementById("Assessment");
+                        while (select.firstChild) {
+                            select.removeChild(select.lastChild);
+                        }
+                        for(var i = 0; i < assessment.length; i++) {
+                            var opt = assessment[i];
+                            var el = document.createElement("option");
+                            el.textContent = opt;
+                            el.value = opt;
+
+                            select.appendChild(el);
+                        }
+
+                    }
+                </script>
+
+
+
+
+
                 <div class="MarkingSection">
                     <form id="MarkingForm" action="/PedroPutThingHere" method="post">
                         <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>

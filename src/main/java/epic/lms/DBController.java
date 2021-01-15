@@ -141,13 +141,13 @@ public class DBController {
     public void getModules(HttpSession session, HttpServletResponse response, Model model ) throws ExecutionException, InterruptedException, JSONException, IOException {
         List<Modules> moduleList = firebaseService.getModules();
         session.setAttribute("moduleList", moduleList);
-        getStudents(session, response, model );
+        getStudents(session);
         getAssessments(session);
 
     }
 
     @PostMapping("/getStudents")
-    public void getStudents(HttpSession session, HttpServletResponse response, Model model ) throws ExecutionException, InterruptedException {
+    public void getStudents(HttpSession session) throws ExecutionException, InterruptedException {
         List<Modules> moduleList = (List<Modules>) session.getAttribute("moduleList");
         Multimap<String, String> studentsInModule = ArrayListMultimap.create();
 
@@ -186,8 +186,23 @@ public class DBController {
     public ModelAndView redirectMarkAssessments(Model model,HttpSession session) {
         mv.setViewName("LecturerMarkAssessment.html");
         model.addAttribute("studentsInModule",session.getAttribute("studentsInModule"));
+        model.addAttribute("assessmentsInModule",session.getAttribute("assessmentsInModule"));
         return mv;
     }
+
+    @RequestMapping("/redirect-login")
+    public ModelAndView loginRedirect() {
+        mv.setViewName("login.html");
+        return mv;
+    }
+    @RequestMapping("/redirect-signUp")
+    public ModelAndView singUpRedirect() {
+        mv.setViewName("CreateAccount.html");
+        return mv;
+    }
+
+
+
 
 
 
@@ -202,7 +217,16 @@ public class DBController {
     }
 
     public void getAssessments(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
-        firebaseService.getAssessmentsinModule(session);
+        Map<String,List<String>> assessmentMap= firebaseService.getAssessmentsList(session);
+
+        Gson gson = new Gson();
+        String unPrepared = gson.toJson(assessmentMap);
+        String replaceString=unPrepared.replace('\"','#');
+        String replaceString1=replaceString.replace(',','~');
+
+        mv.setViewName("LecturerMarkAssessment.html");
+
+        session.setAttribute("assessmentsInModule", replaceString1);
     }
 
 

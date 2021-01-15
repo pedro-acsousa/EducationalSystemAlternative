@@ -52,35 +52,45 @@
                         <br><br>
                         <label for="Class">Class: </label>
                         <select onchange="dynamicDrop()" th:action="@{/getModules}" name="Class" id="Class">
+                            <option>Please select an option</option>
                             <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
-                            <option>1</option>
-                            <option>2</option>
                         </select>
                         <br><br>
 
 
                         <label for="Student">Student: </label>
 
-                        <select onchange="dynamicDrop()" th:action="@{/getStudents}"  name="Student" id="Student">
+                        <select onchange="dynamicDrop();dynamicAssessmentDrop();" th:action="@{/getStudents}"  name="Student" id="Student">
                             <option id="studentSelect" name="studentSelect"></option>
                         </select>
                         <script>
                         function dynamicDrop(){
-                            var map1 = new Map();
-                            map1='<% =Session["studentsInModule"] %>';
+
                             var students = [];
-                            for(var element in map1){
-                                if(document.getElementById("ClassOption").value===element){
-                                    students.add(map1.get(element));
+                            var x = "[[${studentsInModule}]]";
+
+                            var changed2 = x.split('\=').join('\:');
+                            var changed3 = changed2.split('~').join(',');
+                            var changed4 = changed3.split('#').join('\"');
+                            var changed5 = JSON.parse(changed4);
+                            for (var value in changed5) {
+                                if (value === document.getElementById("Class").value) {
+                                    for(var value1 in changed5[value]){
+                                        students.push(changed5[value][value1]);
+                                    }
+                                }
                             }
 
+                            var select = document.getElementById("Student");
+                            while (select.firstChild) {
+                                select.removeChild(select.lastChild);
                             }
-                            var select = document.getElementById("studentSelect");
                             for(var i = 0; i < students.length; i++) {
                                 var opt = students[i];
                                 var el = document.createElement("option");
                                 el.textContent = opt;
                                 el.value = opt;
+
                                 select.appendChild(el);
                             }
 
@@ -88,6 +98,12 @@
 
 
                         </script>
+
+                    <script>
+                    function dynamicAssessmentDrop(){
+
+                    }
+                    </script>
 
                         <br><br>
                     </form>

@@ -23,13 +23,13 @@
             </button>
             <ul class="nav navbar-nav mr-4">
                 <li class="nav-item">
-                    <a class="nav-link " data-value="Home" href="#">Home</a>       </li>
+                    <a class="nav-link " data-value="Home" href="#">Assignments</a>       </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-value="Assignments" href="#">Assignments</a>        </li>
+                    <a class="nav-link" data-value="Assignments" href="#">Assignment Submission </a>        </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="View Progress"href="#">View Progress</a>          </li>
+                    <a class="nav-link " data-value="View Progress"href="#">Learning Progress</a>          </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="Check Contents" href="#">Access Contents</a>         </li>
+                    <a class="nav-link " data-value="Check Contents" href="#">Lecture Contents</a>         </li>
                 <li class="nav-item">
                     <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
             </ul>
@@ -39,45 +39,54 @@
 <body id="body">
     <main class="main">
         <div class="container">
-            <h4>Assignment Submission</h4><br>
-            <div class="row" id="courseselect">
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            Select Course
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Course 1</a>
-                            <a class="dropdown-item" href="#">Course 2</a>
-                            <a class="dropdown-item" href="#">Course 3</a>
-                        </div>
+            <h4 class="container">Assignment Submission</h4><br>
+            <div class="container row">
+                <div class="dropdown btn-group col-sm-3" id="courseSelect">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Select Course
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:showAssignments();">Course 1</a>
+                        <a class="dropdown-item" href="#">Course 2</a>
+                        <a class="dropdown-item" href="#">Course 3</a>
+                    </div>
+                </div>
+                <div class="dropdown btn-group col-sm-3" id="assignmentSelect">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                        Select Assignment
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:showFileSubmission();">Assignment 1</a>
+                        <a class="dropdown-item" href="#">Assignment 2</a>
+                        <a class="dropdown-item" href="#">Assignment 3</a>
                     </div>
                 </div>
             </div>
-            <hr/>
-            <div class="row" id="asmselect">
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            Select Assignment
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Assignment 1</a>
-                            <a class="dropdown-item" href="#">Assignment 2</a>
-                            <a class="dropdown-item" href="#">Assignment 3</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr/>
-            <div class="col-12">
+            <div class="col-12" id="assignmentSubmission">
+                <hr/>
+                <h4 class="d-inline">Course 1:&nbsp;</h4><h4 class="d-inline">Assignment 1</h4>
+                <p id="assignmentDesc"><br>This is a template description of this assignment.<br>Files submitted should be in pdf format.</p>
                 <form action="#">
-                    <p>File Upload</p>
-                    <div class="custom-file mb-3">
-                        <input type="file" class="custom-file-input" id="customFile" name="filename">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <p>&nbsp;Webpage</p>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="submitLink" placeholder="Paste Webpage here...">
+                            </div>
+                        </div>
+                        <p><br>OR...</p>
+                        <div class="clearfix"></div>
+                        <div class="col-sm-5">
+                            <p>&nbsp;File Upload</p>
+                            <div class="form-group custom-file">
+                                <input type="file" class="custom-file-input" id="submitFile" name="filename" placeholder="Choose file...">
+                                <label class="custom-file-label" for="submitFile">Choose file</label>
+                            </div>
+                        </div>
                     </div>
-                    <input type="submit" th:value="Select"/>
+                    <h6 class="d-inline">Due Date:&nbsp;</h6><h6 class="d-inline" id="asmDueDate"></h6>
+                    <br><br>
+                    <button type="submit" class="btn btn-primary mb-2" id="submitButton">Submit</button>
                 </form>
             </div>
         </div>
@@ -85,11 +94,30 @@
 </body>
 
 <script>
+
+    $(document).ready(function() {
+        $('#courseSelect').show();
+        $('#assignmentSelect').hide();
+        $('#assignmentSubmission').hide();
+    })
+
+    function showAssignments(){
+        $('#assignmentSelect').show();
+    }
+
+    function showFileSubmission(){
+        $('#assignmentSubmission').show();
+    }
+
     // File name appear on selection
     $(".custom-file-input").on("change", function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
+    })
+
+    //current date for testing
+    let dt = new Date();
+    document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
 </script>
 
 </html>

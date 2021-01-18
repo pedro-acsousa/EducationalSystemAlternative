@@ -89,8 +89,10 @@ body{
     position: absolute;
     right: 0%;
     top: 0%;
-    width: 49%;
-    height: 100%;
+    width: 46%;
+    height: 90%;
+    padding: 20px;
+    border: 1px solid black;
 
 }
 .header3{
@@ -99,6 +101,20 @@ body{
     font-size: 28px; font-weight: 300;
     line-height: 32px;
     margin: 0 0 14px;
+}
+.MobileIcon{
+    position: relative;
+    top: 10%;
+
+}
+.MobileTextWrap{
+    position: absolute;
+    right: 10%;
+    width: 60%;
+    top: 25%;
+    border: 1px solid black;
+    height: 50%;
+    padding-left: 10px;
 }
 
 p{
@@ -110,4 +126,6 @@ ul{
     font-family: 'Open sans', sans-serif;
     color: #888888;
     font-size: 18px; }
+
+
 

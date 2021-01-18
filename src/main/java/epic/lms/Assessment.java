@@ -11,7 +11,7 @@ public class Assessment {
     private boolean submitted;
     private String type;
     private String datesubmitted;
-    private int mark;
+    private String mark;
     private String feedback;
 
 
@@ -23,11 +23,11 @@ public class Assessment {
         this.feedback = feedback;
     }
 
-    public int getMark() {
+    public String getMark() {
         return mark;
     }
 
-    public void setMark(int mark) {
+    public void setMark(String mark) {
         this.mark = mark;
     }
 

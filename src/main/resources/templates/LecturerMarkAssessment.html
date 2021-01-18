@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
 </head>
 <body>
-<form id="StudLookupForm" action="/gradeAssessment" method="POST">
+<form id="StudLookupForm" method="POST">
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" href="#">Lecturer Assessment Marking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,8 @@
                         <select onchange="dynamicDrop();" th:action="@{/getStudents}"  name="Student" id="Student">
                             <option id="studentSelect" name="studentSelect"></option>
                         </select>
+                        <br><br>
+                        <input formmethod="get" formaction="/admin/generate_pdf/online" type="submit" value="download document">
                         <script>
                         function dynamicDrop(){
 
@@ -156,12 +158,12 @@
                 <div class="MarkingSection">
 
                         <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>
-                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" required></textarea>
+                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" ></textarea>
                         <div class="GradePos">
                             <label for="Grade">Grade: </label>
-                            <input type="number" max="100" min="0" id="Grade" name="Grade" required></input>
+                            <input type="number" max="100" min="0" id="Grade" name="Grade" ></input>
                         </div>
-                        <input class="SubmitMark" type="submit" value="Submit Marking">
+                        <input formaction="/gradeAssessment" class="SubmitMark" type="submit" value="Submit Marking">
 
                 </div>
 

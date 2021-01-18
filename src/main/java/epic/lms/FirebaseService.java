@@ -214,7 +214,11 @@ public class FirebaseService {
         return moduleList;
     }
 
-    public Map<String, Map<String, Assessment>> getAssessments(Modules module) throws ExecutionException, InterruptedException, JSONException, IOException {
+    public Map<String, Map<String, Assessment>> getAssessments(String module, String student) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        //CREATE CONDITION TO CHECK IF THE MARK IS NULL. IFF IT IS NULL GRADE THE ASSESSMENT, IF IT IS ALREADY DEFINED
+        //REDIRECT TO ERROR PAGE WITH ALREADY GRADED MESSAGE
+
         List<Assessment> assessmentList = new ArrayList<Assessment>();
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference collectionReference = db.collection("Assignments");
@@ -226,10 +230,9 @@ public class FirebaseService {
         for (DocumentReference document : collection.listDocuments()) {
 
 
-            for (String student : module.getStudents()) {
-                if (document.getId().equals(module.getId() + " : " + student)) {
 
-                    DocumentReference docRef = db.collection("Assignments").document(module.getId() + " : " + student);
+
+                    DocumentReference docRef = db.collection("Assignments").document(module + " : " + student);
                     ApiFuture<DocumentSnapshot> future = docRef.get();
                     DocumentSnapshot doc = future.get();
 
@@ -241,9 +244,7 @@ public class FirebaseService {
                         final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
                         assessmentMap.put(pair.getKey(), pojo);
                     }
-                    studentModuleAssessmentMap.put(module.getId() + " : " + student, assessmentMap);
-                }
-            }
+                    studentModuleAssessmentMap.put(module + " : " + student, assessmentMap);
 
         }
 

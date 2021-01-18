@@ -100,6 +100,7 @@
     width: 50%;
     height: 100%;
     border:1px solid #ccc;
+    padding-left: 15px;
 
 }
 .AssessmentTextArea{
@@ -111,35 +112,78 @@
 }
 .RightHeader{
     position: absolute;
-    top: 15%;
-    right: 20%;
+    top: 10%;
+    right: 34%;
 }
 .MarkingSection{
     position: absolute;
     border:1px solid #ccc;
-    bottom: 5%;
+    bottom: 3%;
     right: 5%;
-    width: 40%;
+    width: 42%;
     height: 15%;
 }
-.FeedbackArea{
+
+.FeedbackAreaWrap{
     position: absolute;
-    left:15%;
-    width: 30%;
-    top: 10%;
+    border:1px solid #ccc;
+    top: 18%;
+    right:5%;
+    bottom: 22%;
+    left:53%;
+
+}
+.FeedbackArea{
+    position: relative;
+    left: 5%;
+    width: 90%;
+    height: 80%;
+    top: 15%;
 }
 .GradePos{
     position: absolute;
-    right: 40%;
-    top: 10%;
+    right: 60%;
+    top: 30%;
 }
 .FeedbackHeader{
     position: absolute;
-    top: 10%;
+    top: 5%;
+    left:5%;
+    font-size: 18px;
 }
 .SubmitMark{
     position: absolute;
-    right: 10%;
-    top: 10%;
+    right: 20%;
+    top: 0%;
+    display: inline-flex;
+    height: 40px;
+    width: 150px;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: .8em;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
 
+
+
+.button {
+    display: inline-flex;
+    height: 40px;
+    width: 200px;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: #BFC0C0;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: .8em;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }

@@ -10,7 +10,7 @@
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
 </head>
-<body>
+<body onload="checkLookupComplete()">
 <form id="StudLookupForm" method="POST">
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" href="#">Lecturer Assessment Marking</a>
@@ -39,6 +39,22 @@
         </div>
     </section>
 
+    <script>
+        function checkLookupComplete(){
+            var ClassCheck = document.getElementById("Class")
+            var StudentCheck = document.getElementById("Student")
+            var AssessmentCheck = document.getElementById("Assessment")
+            if (!((ClassCheck.value == "Select a Class") || (StudentCheck.value == "Select a Student") || (AssessmentCheck.value == "Select Assessment"))){
+                document.getElementById("DownloadButton").style.display = "block";
+                document.getElementById("SubmitButton").disabled = false
+            }
+        }
+        function DropChange(){
+            checkLookupComplete()
+            dynamicDrop()
+        }
+    </script>
+
     <section class="sec-2">
         <div class="boxwrap">
 
@@ -50,31 +66,40 @@
 
 
                         <br><br>
-                        <label for="Class">Class: </label>
-                        <select onchange="dynamicDrop()" th:action="@{/getModules}" name="Class" id="Class">
-                            <option>Please select an option</option>
+                        <label for="Class">Select Class:</label>
+
+
+                        <select onchange="DropChange()" th:action="@{/getModules}" name="Class" id="Class">
+                            <option>Select a Class</option>
                             <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
+
                         <br><br>
 
+                        <label for="Student">Student: &nbsp; &nbsp; &nbsp;</label>
 
-                        <label for="Student">Student: </label>
-
-                        <select onchange="dynamicDrop();" th:action="@{/getStudents}"  name="Student" id="Student">
+                        <select onchange="DropChange()" th:action="@{/getStudents}"  name="Student" id="Student">
+                            <option>Select a Student</option>
                             <option id="studentSelect" name="studentSelect"></option>
                         </select>
+
                         <br><br>
-                        <input formmethod="get" formaction="/admin/generate_pdf/online" type="submit" value="download document">
+
+                        <label for="Assessment">Assessment: </label>
+                        <select onchange="DropChange()" name="Assessment" id="Assessment">
+                            <option>Select Assessment</option>
+                            <option>Assessment 1</option>
+                        </select>
+
+                        <br><br>
+
+                        <input id="DownloadButton" style="display: none" formmethod="get" formaction="/admin/generate_pdf/online" type="submit" value="Download Document">
                         <script>
+
                         function dynamicDrop(){
-
-
-
                             dynamicAssessmentDrop();
-
                             var students = [];
                             var x = "[[${studentsInModule}]]";
-
                             var changed2 = x.split('\=').join('\:');
                             var changed3 = changed2.split('~').join(',');
                             var changed4 = changed3.split('#').join('\"');
@@ -86,7 +111,6 @@
                                     }
                                 }
                             }
-
                             var select = document.getElementById("Student");
                             while (select.firstChild) {
                                 select.removeChild(select.lastChild);
@@ -102,19 +126,9 @@
 
                         }
 
-
                         </script>
-
-
                         <br><br>
 
-                </div>
-                <div class="RightHeader">
-                    <label>Assessment Selection: </label>
-                    <select name="Assessment" id="Assessment">
-                        <option value="1">Select Assessment</option>
-
-                    </select>
                 </div>
 
                 <script>
@@ -153,24 +167,20 @@
 
 
 
-
-
+                <h2 class="RightHeader">Feedback Area</h2>
+                <div class="FeedbackAreaWrap">
+                    <h3 class="FeedbackHeader">Write feedback on the student's work:</h3>
+                    <textarea class="FeedbackArea" name="Feedback" id="Feedback" ></textarea>
+                </div>
                 <div class="MarkingSection">
 
-                        <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>
-                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" ></textarea>
                         <div class="GradePos">
                             <label for="Grade">Grade: </label>
                             <input type="number" max="100" min="0" id="Grade" name="Grade" ></input>
                         </div>
-                        <input formaction="/gradeAssessment" class="SubmitMark" type="submit" value="Submit Marking">
+                        <input id="SubmitButton" formaction="/gradeAssessment" disabled="disabled" class="SubmitMark" type="submit" value="Submit Marking">
 
                 </div>
-
-                <textarea class="AssessmentTextArea" name="Assess1" id="Assess1" style="display: block" >Example Assessment text. Deserves A easily
-                </textarea>
-
-
             </div>
         </div>
 

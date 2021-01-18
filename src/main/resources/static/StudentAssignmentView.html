@@ -41,38 +41,32 @@
     <div class="container">
         <h4 class="container">Assignment Specifications</h4><br>
         <div class="container row">
-            <div class="dropdown btn-group col-sm-3" id="courseSelect">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    Select Course
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:showAssignments();">Course 1</a>
-                    <a class="dropdown-item" href="#">Course 2</a>
-                    <a class="dropdown-item" href="#">Course 3</a>
+            <form class="container" action="#">
+                <div class="form-row">
+                    <select class="custom-select col-md-3 mr-3" name="courseSelect" id="courseSelect">
+                        <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                        <!---Pedro when doing thymeleaf please add &nbsp;&nbsp; for correct spacing for items thanks! --->
+                        <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
+                    </select>
+                    <select class="custom-select col-md-3 mr-3" name="assignmentSelect" id="assignmentSelect" disabled>
+                        <option selected value="defaultAssignment">&nbsp;&nbsp;Select Assignment</option>
+                        <option name="assignmentSelect" id="getAssignment">&nbsp;&nbsp;Assignment X</option>
+                    </select>
+                    <!--- Can opt out by using js for triggering the assignment contents (ui looks more clean), but enable if submit button is required.
+                    <input class="btn btn-primary col-md-1" type="Submit" id="submitButton" value="Select" disabled>
+                    --->
                 </div>
-            </div>
-            <div class="dropdown btn-group col-sm-3" id="assignmentSelect">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                    Select Assignment
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:showAssignmentContent();">Assignment 1</a>
-                    <a class="dropdown-item" href="#">Assignment 2</a>
-                    <a class="dropdown-item" href="#">Assignment 3</a>
-                </div>
-            </div>
-            <div class="col text-right align-self-end" id="showCourseName">
-                <h5 class="d-inline">Course 1</h5><h5 class="d-inline"></h5>
-            </div>
+            </form>
         </div>
-        <div id="assignmentContent">
-            <hr>
-            <h4 class="container" id="asmTitle">Assignment X</h4>
-            <div class="container">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        <div id="assignmentContent" class="container" style="display:none;">
+            <br><hr>
+            <h5 class="d-inline" id="courseTitle">Course X</h5><h5 class="d-inline">&nbsp;-&nbsp;</h5><h5 class="d-inline" id="asmTitle">Assignment X</h5>
+            <br><br>
+            <div id="asmDescription">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent blandit et nisi in pellentesque. Vivamus congue lobortis dapibus. Suspendisse auctor porttitor metus ut ultrices. Nulla facilisi. Nunc scelerisque nisi vitae viverra dignissim. Nunc at mi eleifend, vulputate orci quis, dapibus ante. Sed vel pellentesque orci, quis porta orci. Nam tempus, libero nec consequat accumsan, lectus velit suscipit libero, vitae molestie est mauris in purus.</p>
             </div>
             <hr/>
-            <div class="container" id="asmDueDateText">
+            <div id="asmDueDateText">
                 <h6 class="d-inline">Due Date:&nbsp;</h6> <h6 class="d-inline" id="asmDueDate"></h6>
             </div>
         </div>
@@ -81,31 +75,40 @@
 </body>
 
 <script>
-    // File name appear on selection
-    $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+    // Assignment Dropdown Visiblity
+    document.getElementById('courseSelect').addEventListener("change", function() {
+        if (document.getElementById('courseSelect').value === 'defaultCourse'){
+            //document.getElementById('submitButton').disabled = true;
+            document.getElementById('assignmentSelect').disabled = true;
+            document.getElementById('assignmentSelect').selectedIndex=0;
+        } else {
+            document.getElementById('assignmentSelect').disabled = false;
+            document.getElementById('assignmentSelect').selectedIndex=0;
+        }
     });
 
-    $(document).ready(function() {
-        $('#courseSelect').show();
-        $('#showCourseName').hide();
-        $('#assignmentSelect').hide();
-        $('#assignmentContent').hide();
-    })
+    // Submit Button Visiblity
+    document.getElementById('assignmentSelect').addEventListener("change", function() {
+        if (document.getElementById('assignmentSelect').value === 'defaultAssignment'){
+            document.getElementById('assignmentContent').style.display = 'none';
 
-    function showAssignments(){
-        $('#assignmentSelect').show();
-    }
+            // for submit button  document.getElementById('submitButton').disabled = true;
+        } else {
+            // Triggers content
+            document.getElementById('assignmentContent').style.display = 'block';
+            // for submit button  document.getElementById('submitButton').disabled = false;
 
-    function showAssignmentContent(){
-        $('#showCourseName').show();
-        $('#assignmentContent').show();
-    }
+            // Current date for testing
+            let dt = new Date();
+            document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
+        }
+    });
 
-    //current date for testing
-    let dt = new Date();
-    document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
+    /*** if submit button is required
+    document.getElementById('submitButton').addEventListener("click", function() {
+        document.getElementById('assignmentContent').style.display = 'block';
+    }); ***/
 
 </script>
 

@@ -58,9 +58,6 @@
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     </button>
                 </div>
-                <div class="col text-right align-self-end" id="showCourseName">
-                    <h5 class="d-inline">Course 1</h5><h5 class="d-inline"></h5>
-                </div>
             </div>
             <div id="courseProgress">
                 <hr>
@@ -131,11 +128,13 @@
 <script>
     $(document).ready(function() {
         $('#courseSelect').show();
+        $('#showCourseName').hide();
         $('#courseProgress').hide();
         $('#tutorInfo').hide();
     })
 
     function showCourseProgress(){
+        $('#showCourseName').show();
         $('#courseProgress').show();
         $('#tutorInfo').show();
     }

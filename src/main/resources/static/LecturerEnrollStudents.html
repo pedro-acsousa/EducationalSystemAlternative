@@ -1,10 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LecturerEnrollStyle.css">
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Enroll Students</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>Enroll Students</h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+
+            <div class = "innerwrap">
+
+                <h4>Select a Student to Enroll</h4>
+
+                <form id="EnrollForm" action="/Enroll" method="post">
+
+                    <select id="StudentSelect" name="StudentSelect" class="StudentSelect" size="15">
+                        <option>Oscar Wilson</option>
+                        <option>Liv Reed</option>
+                        <option>Carter Harrison</option>
+                        <option>Matt Pilkington</option>
+                        <option>Harry Schofield</option>
+                        <option>Lu Appleby</option>
+                        <option>Tiger Kato</option>
+                        <option>Ben Crofts</option>
+                        <option>Kieron Ruddick</option>
+                        <option>James Whiting</option>
+                        <option>Cameron Hardy</option>
+                        <option>Finn Thompson</option>
+                        <option>Paddy Berry</option>
+                        <option>Thomas Bennet</option>
+                        <option>Oscar Wilson</option>
+                        <option>Liv Reed</option>
+                        <option>Carter Harrison</option>
+                        <option>Matt Pilkington</option>
+                        <option>Harry Schofield</option>
+                        <option>Lu Appleby</option>
+                        <option>Tiger Kato</option>
+                        <option>Ben Crofts</option>
+                        <option>Kieron Ruddick</option>
+                        <option>James Whiting</option>
+                        <option>Cameron Hardy</option>
+                        <option>Finn Thompson</option>
+                        <option>Paddy Berry</option>
+                        <option>Thomas Bennet</option>
+                    </select>
+
+                    <div class="MidWrap">
+                        <h4>Select course to Enroll into</h4>
+
+                        <select id="CourseSelect" name="CourseSelect" class="CourseSelect" size="15">
+                            <option>CSC2031 - Security</option>
+                            <option>CSC2032 - Algorithms</option>
+                            <option>CSC1032 - Systems</option>
+                            <option>CSC1031 - Fundamentals</option>
+                            <option>CSC1033 - Storage</option>
+                            <option>CSC2034 - Contempory</option>
+                            <option>CSC2035 - OS and Networks</option>
+
+                        </select>
+
+                    </div>
+
+                    <input type="submit" class="Submitbutton" value="Enroll Student">
+
+                </form>
+
+
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
 
 </body>
 </html>

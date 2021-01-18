@@ -1,5 +1,7 @@
 package epic.lms;
 
+import java.util.List;
+
 public class Assessment {
 
     private String creator;
@@ -9,13 +11,23 @@ public class Assessment {
     private boolean submitted;
     private String type;
     private String datesubmitted;
-    private int mark;
+    private String mark;
+    private String feedback;
 
-    public int getMark() {
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getMark() {
         return mark;
     }
 
-    public void setMark(int mark) {
+    public void setMark(String mark) {
         this.mark = mark;
     }
 

@@ -10,8 +10,8 @@
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
 </head>
-<body>
-
+<body onload="checkLookupComplete()">
+<form id="StudLookupForm" method="POST">
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" href="#">Lecturer Assessment Marking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,22 @@
         </div>
     </section>
 
+    <script>
+        function checkLookupComplete(){
+            var ClassCheck = document.getElementById("Class")
+            var StudentCheck = document.getElementById("Student")
+            var AssessmentCheck = document.getElementById("Assessment")
+            if (!((ClassCheck.value == "Select a Class") || (StudentCheck.value == "Select a Student") || (AssessmentCheck.value == "Select Assessment"))){
+                document.getElementById("DownloadButton").style.display = "block";
+                document.getElementById("SubmitButton").disabled = false
+            }
+        }
+        function DropChange(){
+            checkLookupComplete()
+            dynamicDrop()
+        }
+    </script>
+
     <section class="sec-2">
         <div class="boxwrap">
 
@@ -48,80 +64,123 @@
                 </div>
                 <div class="leftsidewrap">
 
-                    <form id="StudLookupForm" action="/getStudents" method="POST">
+
                         <br><br>
-                        <label for="Class">Class: </label>
-                        <select onchange="dynamicDrop()" th:action="@{/getModules}" name="Class" id="Class">
+                        <label for="Class">Select Class:</label>
+
+
+                        <select onchange="DropChange()" th:action="@{/getModules}" name="Class" id="Class">
+                            <option>Select a Class</option>
                             <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
-                            <option>1</option>
-                            <option>2</option>
                         </select>
+
                         <br><br>
 
+                        <label for="Student">Student: &nbsp; &nbsp; &nbsp;</label>
 
-                        <label for="Student">Student: </label>
-
-                        <select onchange="dynamicDrop()" th:action="@{/getStudents}"  name="Student" id="Student">
+                        <select onchange="DropChange()" th:action="@{/getStudents}"  name="Student" id="Student">
+                            <option>Select a Student</option>
                             <option id="studentSelect" name="studentSelect"></option>
                         </select>
-                        <script>
-                        function dynamicDrop(){
-                            var map1 = new Map();
-                            map1='<% =Session["studentsInModule"] %>';
-                            var students = [];
-                            for(var element in map1){
-                                if(document.getElementById("ClassOption").value===element){
-                                    students.add(map1.get(element));
-                            }
 
+                        <br><br>
+
+                        <label for="Assessment">Assessment: </label>
+                        <select onchange="DropChange()" name="Assessment" id="Assessment">
+                            <option>Select Assessment</option>
+                            <option>Assessment 1</option>
+                        </select>
+
+                        <br><br>
+
+                        <input id="DownloadButton" style="display: none" formmethod="get" formaction="/admin/generate_pdf/online" type="submit" value="Download Document">
+                        <script>
+
+                        function dynamicDrop(){
+                            dynamicAssessmentDrop();
+                            var students = [];
+                            var x = "[[${studentsInModule}]]";
+                            var changed2 = x.split('\=').join('\:');
+                            var changed3 = changed2.split('~').join(',');
+                            var changed4 = changed3.split('#').join('\"');
+                            var changed5 = JSON.parse(changed4);
+                            for (var value in changed5) {
+                                if (value === document.getElementById("Class").value) {
+                                    for(var value1 in changed5[value]){
+                                        students.push(changed5[value][value1]);
+                                    }
+                                }
                             }
-                            var select = document.getElementById("studentSelect");
+                            var select = document.getElementById("Student");
+                            while (select.firstChild) {
+                                select.removeChild(select.lastChild);
+                            }
                             for(var i = 0; i < students.length; i++) {
                                 var opt = students[i];
                                 var el = document.createElement("option");
                                 el.textContent = opt;
                                 el.value = opt;
+
                                 select.appendChild(el);
                             }
 
                         }
 
-
                         </script>
-
                         <br><br>
-                    </form>
+
                 </div>
-                <div class="RightHeader">
-                    <label>Assessment Selection: </label>
-                    <select name="Assessment" id="Assessment">
-                        <option value="1">Assessment 1</option>
-                        <option value="2">Assessment 2</option>
-                        <option value="3">Assessment 3</option>
-                    </select>
+
+                <script>
+                    function dynamicAssessmentDrop(){
+
+                        var assessment = [];
+                        var x = "[[${assessmentsInModule}]]";
+
+                        var changed2 = x.split('\=').join('\:');
+                        var changed3 = changed2.split('~').join(',');
+                        var changed4 = changed3.split('#').join('\"');
+                        var changed5 = JSON.parse(changed4);
+                        for (var value in changed5) {
+                            if (value === document.getElementById("Class").value) {
+                                for(var value1 in changed5[value]){
+                                    assessment.push(changed5[value][value1]);
+                                }
+                            }
+                        }
+
+                        var select = document.getElementById("Assessment");
+                        while (select.firstChild) {
+                            select.removeChild(select.lastChild);
+                        }
+                        for(var i = 0; i < assessment.length; i++) {
+                            var opt = assessment[i];
+                            var el = document.createElement("option");
+                            el.textContent = opt;
+                            el.value = opt;
+
+                            select.appendChild(el);
+                        }
+
+                    }
+                </script>
+
+
+
+                <h2 class="RightHeader">Feedback Area</h2>
+                <div class="FeedbackAreaWrap">
+                    <h3 class="FeedbackHeader">Write feedback on the student's work:</h3>
+                    <textarea class="FeedbackArea" name="Feedback" id="Feedback" ></textarea>
                 </div>
                 <div class="MarkingSection">
-                    <form id="MarkingForm" action="/PedroPutThingHere" method="post">
-                        <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>
-                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" form="MarkingForm"></textarea>
+
                         <div class="GradePos">
                             <label for="Grade">Grade: </label>
-                            <select id="Grade" name="Grade">
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
+                            <input type="number" max="100" min="0" id="Grade" name="Grade" ></input>
                         </div>
-                        <input class="SubmitMark" type="submit" value="Submit Marking">
-                    </form>
+                        <input id="SubmitButton" formaction="/gradeAssessment" disabled="disabled" class="SubmitMark" type="submit" value="Submit Marking">
+
                 </div>
-
-                <textarea class="AssessmentTextArea" name="Assess1" id="Assess1" style="display: block" >Example Assessment text. Deserves A easily
-                </textarea>
-
-
             </div>
         </div>
 
@@ -129,6 +188,6 @@
 
 </header>
 
-
+</form>
 </body>
 </html>

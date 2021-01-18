@@ -81,98 +81,50 @@
 
 }
 
-
-
-
-.headerwrap{
+.StudentSelect{
     position: relative;
-    top: 0%;
-    height: 10%;
-
-}
-.rightheader{
-    position: relative;
-    float: right;
-    right: 13%;
-}
-.leftsidewrap{
-    position: relative;
-    width: 50%;
-    height: 100%;
-    border:1px solid #ccc;
-    padding-left: 15px;
-
-}
-.AssessmentTextArea{
-    position: absolute;
-    right: 5%;
-    top: 25%;
-    width: 40%;
-    height: 50%;
-}
-.RightHeader{
-    position: absolute;
-    top: 10%;
-    right: 34%;
-}
-.MarkingSection{
-    position: absolute;
-    border:1px solid #ccc;
-    bottom: 3%;
-    right: 5%;
-    width: 42%;
-    height: 15%;
-}
-
-.FeedbackAreaWrap{
-    position: absolute;
-    border:1px solid #ccc;
-    top: 18%;
-    right:5%;
-    bottom: 22%;
-    left:53%;
-
-}
-.FeedbackArea{
-    position: relative;
-    left: 5%;
-    width: 90%;
+    width: 30%;
     height: 80%;
-    top: 15%;
-}
-.GradePos{
-    position: absolute;
-    right: 60%;
-    top: 30%;
-}
-.FeedbackHeader{
-    position: absolute;
-    top: 5%;
-    left:5%;
-    font-size: 18px;
-}
-.SubmitMark{
-    position: absolute;
-    right: 20%;
-    top: 0%;
     display: inline-flex;
-    height: 40px;
-    width: 150px;
     border: 2px solid #BFC0C0;
     margin: 20px 20px 20px 20px;
     color: black;
     text-transform: uppercase;
     text-decoration: none;
-    font-size: .8em;
+    font-size: 18px;
     letter-spacing: 1.5px;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+
+}
+.MidWrap{
+    position: absolute;
+    top: 10%;
+    left:40%;
+    height: 80%;
+    width: 30%;
+
+
+}
+.CourseSelect{
+    position: relative;
+    width: 90%;
+    height: 80%;
+    display: inline-flex;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
 }
 
-
-
-.button {
+.Submitbutton {
+    position: absolute;
+    right: 5%;
     display: inline-flex;
     height: 40px;
     width: 200px;

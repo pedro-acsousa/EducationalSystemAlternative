@@ -10,103 +10,184 @@
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
 </head>
-<body>
-
-<nav class="navbar navbar-expand-lg fixed-top ">
-    <a class="navbar-brand" href="#">Mark Assessment</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
-        <li class="nav-item">
-            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
-    </ul>
-    </div>
-</nav>
-
-<header class="header">
-    <div class="overlay"></div>
-    <section class="sec-1">
-        <div class="welcome">
-            <h1>Mark Assessments</h1>
+<body onload="checkLookupComplete()">
+<form id="StudLookupForm" method="POST">
+    <nav class="navbar navbar-expand-lg fixed-top ">
+        <a class="navbar-brand" href="#">Lecturer Assessment Marking</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+            <li class="nav-item">
+                <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+            <li class="nav-item">
+                <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+            <li class="nav-item">
+                <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+        </ul>
         </div>
-    </section>
+    </nav>
 
-    <section class="sec-2">
-        <div class="boxwrap">
+    <header class="header">
+        <div class="overlay"></div>
+        <section class="sec-1">
+            <div class="welcome">
+                <h1>Mark Assessments</h1>
+            </div>
+        </section>
 
-            <div class = "innerwrap">
-                <div class = "headerwrap">
-                    <h2 style="float: left">Student Lookup</h2>
-                </div>
-                <div class="leftsidewrap">
+        <script>
+            function checkLookupComplete(){
+                var ClassCheck = document.getElementById("Class")
+                var StudentCheck = document.getElementById("Student")
+                var AssessmentCheck = document.getElementById("Assessment")
+                if (!((ClassCheck.value == "Select a Class") || (StudentCheck.value == "Select a Student") || (AssessmentCheck.value == "Select Assessment"))){
+                    document.getElementById("DownloadButton").style.display = "block";
+                    document.getElementById("SubmitButton").disabled = false
+                }
+            }
+            function DropChange(){
+                checkLookupComplete()
+                dynamicDrop()
+            }
+        </script>
 
-                    <form id="StudLookupForm" action="/PedroPutThingHere" method="post">
+        <section class="sec-2">
+            <div class="boxwrap">
+
+                <div class = "innerwrap">
+                    <div class = "headerwrap">
+                        <h2 style="float: left">Student Lookup</h2>
+                    </div>
+                    <div class="leftsidewrap">
+
+
                         <br><br>
-                        <label for="Class">Class: </label>
-                        <select name="Class" id="Class">
-                            <option value="2031">2031 - Security</option>
-                            <option value="2032">2032 - Algorithms</option>
-                            <option value="2033">2033 - Team Project</option>
+                        <label for="Class">Select Class:</label>
+
+
+                        <select onchange="DropChange()" th:action="@{/getModules}" name="Class" id="Class">
+                            <option>Select a Class</option>
+                            <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
+
                         <br><br>
 
-                        <label for="Student">Student: </label>
-                        <select name="Student" id="Student">
-                            <option value="John">John</option>
-                            <option value="David">David</option>
-                            <option value="Alex">Alex</option>
+                        <label for="Student">Student: &nbsp; &nbsp; &nbsp;</label>
+
+                        <select onchange="DropChange()" th:action="@{/getStudents}"  name="Student" id="Student">
+                            <option>Select a Student</option>
+                            <option id="studentSelect" name="studentSelect"></option>
                         </select>
+
                         <br><br>
-                        <input type="submit" value="Retrieve Assessments" style="width: 40%">
-                    </form>
-                </div>
-                <div class="RightHeader">
-                    <label>Assessment Selection: </label>
-                    <select name="Assessment" id="Assessment">
-                        <option value="1">Assessment 1</option>
-                        <option value="2">Assessment 2</option>
-                        <option value="3">Assessment 3</option>
-                    </select>
-                </div>
-                <div class="MarkingSection">
-                    <form id="MarkingForm" action="/PedroPutThingHere" method="post">
-                        <label for="Feedback" class="FeedbackHeader">&nbsp; Feedback: </label>
-                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" form="MarkingForm"></textarea>
+
+                        <label for="Assessment">Assessment: </label>
+                        <select onchange="DropChange()" name="Assessment" id="Assessment">
+                            <option>Select Assessment</option>
+                            <option>Assessment 1</option>
+                        </select>
+
+                        <br><br>
+
+                        <input id="DownloadButton" style="display: none" formmethod="get" formaction="/admin/generate_pdf/online" type="submit" value="Download Document">
+                        <script>
+
+                            function dynamicDrop(){
+                                dynamicAssessmentDrop();
+                                var students = [];
+                                var x = "[[${studentsInModule}]]";
+                                var changed2 = x.split('\=').join('\:');
+                                var changed3 = changed2.split('~').join(',');
+                                var changed4 = changed3.split('#').join('\"');
+                                var changed5 = JSON.parse(changed4);
+                                for (var value in changed5) {
+                                    if (value === document.getElementById("Class").value) {
+                                        for(var value1 in changed5[value]){
+                                            students.push(changed5[value][value1]);
+                                        }
+                                    }
+                                }
+                                var select = document.getElementById("Student");
+                                while (select.firstChild) {
+                                    select.removeChild(select.lastChild);
+                                }
+                                for(var i = 0; i < students.length; i++) {
+                                    var opt = students[i];
+                                    var el = document.createElement("option");
+                                    el.textContent = opt;
+                                    el.value = opt;
+
+                                    select.appendChild(el);
+                                }
+
+                            }
+
+                        </script>
+                        <br><br>
+
+                    </div>
+
+                    <script>
+                        function dynamicAssessmentDrop(){
+
+                            var assessment = [];
+                            var x = "[[${assessmentsInModule}]]";
+
+                            var changed2 = x.split('\=').join('\:');
+                            var changed3 = changed2.split('~').join(',');
+                            var changed4 = changed3.split('#').join('\"');
+                            var changed5 = JSON.parse(changed4);
+                            for (var value in changed5) {
+                                if (value === document.getElementById("Class").value) {
+                                    for(var value1 in changed5[value]){
+                                        assessment.push(changed5[value][value1]);
+                                    }
+                                }
+                            }
+
+                            var select = document.getElementById("Assessment");
+                            while (select.firstChild) {
+                                select.removeChild(select.lastChild);
+                            }
+                            for(var i = 0; i < assessment.length; i++) {
+                                var opt = assessment[i];
+                                var el = document.createElement("option");
+                                el.textContent = opt;
+                                el.value = opt;
+
+                                select.appendChild(el);
+                            }
+
+                        }
+                    </script>
+
+
+
+                    <h2 class="RightHeader">Feedback Area</h2>
+                    <div class="FeedbackAreaWrap">
+                        <h3 class="FeedbackHeader">Write feedback on the student's work:</h3>
+                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" ></textarea>
+                    </div>
+                    <div class="MarkingSection">
+
                         <div class="GradePos">
                             <label for="Grade">Grade: </label>
-                            <select id="Grade" name="Grade">
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
+                            <input type="number" max="100" min="0" id="Grade" name="Grade" ></input>
                         </div>
-                        <input class="SubmitMark" type="submit" value="Submit Marking">
-                    </form>
+                        <input id="SubmitButton" formaction="/gradeAssessment" disabled="disabled" class="SubmitMark" type="submit" value="Submit Marking">
+
+                    </div>
                 </div>
-
-                <textarea class="AssessmentTextArea" name="Assess1" id="Assess1" style="display: block" >Example Assessment text. Deserves A easily
-                </textarea>
-
-
             </div>
-        </div>
 
-    </section>
+        </section>
 
-</header>
+    </header>
 
-
+</form>
 </body>
 </html>

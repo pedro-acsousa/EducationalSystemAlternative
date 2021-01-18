@@ -1,15 +1,24 @@
 package epic.lms;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firestore.v1.Document;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.io.DataInput;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 
@@ -22,18 +31,18 @@ public class FirebaseService {
 
         CollectionReference collectionReference = db.collection("Users");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
-        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             userArrayList.add(doc.toObject(User.class));
         }
         return userArrayList;
     }
 
-    public User addUser(User userAdded){
+    public User addUser(User userAdded) {
 
         Firestore db = FirestoreClient.getFirestore();
 
 
-        Map<String,String> newUser = new HashMap<String,String>();
+        Map<String, String> newUser = new HashMap<String, String>();
         newUser.put("username", userAdded.getUsername());
         newUser.put("password", userAdded.getPassword());
         newUser.put("firstname", userAdded.getFirstname());
@@ -54,14 +63,14 @@ public class FirebaseService {
         List<Notifications> notifications = new ArrayList<>();
         CollectionReference collectionReference = db.collection("Notifications");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
-        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
-            if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read")==false){
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
                 notifications.add(doc.toObject(Notifications.class));
             }
 
         }
 
-        return  notifications;
+        return notifications;
     }
 
     public List<Notifications> deleteNotification(List<Notifications> allNotifications, int id, HttpSession session) throws ExecutionException, InterruptedException {
@@ -75,7 +84,7 @@ public class FirebaseService {
                 break;
             }
         }
-    return allNotifications;
+        return allNotifications;
     }
 
     public String sendNotificationAll(String text, HttpSession session) throws ExecutionException, InterruptedException, IOException {
@@ -87,21 +96,20 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Notifications");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         int id = 0;
-        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
-            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id){
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id) {
                 id = Integer.parseInt(String.valueOf(doc.get("id")));
             }
         }
 
-        for(User user : users){
-            id=id+1;
+        for (User user : users) {
+            id = id + 1;
             Notifications newNotification = new Notifications();
             newNotification.setContent(text);
             Date date = Calendar.getInstance().getTime();
             SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
             String s = SDF.format(date);
             newNotification.setDate(s);
-
 
 
             newNotification.setRecipient(user.getUsername());
@@ -121,23 +129,23 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Notifications");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         int id = 0;
-        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
-            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id){
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id) {
                 id = Integer.parseInt(String.valueOf(doc.get("id")));
             }
         }
 
-        studentsModule=null;
+        studentsModule = null;
         //Check Students in a module
         CollectionReference collectionReference1 = db.collection("Modules");
         ApiFuture<QuerySnapshot> querySnapshot1 = collectionReference1.get();
-        for(DocumentSnapshot doc1 : querySnapshot1.get().getDocuments()){
-            if(doc1.getId().equals(module)){
-               studentsModule= (List<String>) doc1.get("students");
+        for (DocumentSnapshot doc1 : querySnapshot1.get().getDocuments()) {
+            if (doc1.getId().equals(module)) {
+                studentsModule = (List<String>) doc1.get("students");
             }
         }
-        for (String student : studentsModule){
-            id=id+1;
+        for (String student : studentsModule) {
+            id = id + 1;
             Notifications newNotification = new Notifications();
             newNotification.setContent(text);
             Date date = Calendar.getInstance().getTime();
@@ -153,7 +161,7 @@ public class FirebaseService {
 
         }
 
-    return "Sent Successfully";
+        return "Sent Successfully";
     }
 
     public String sendNotificationStudent(String text, HttpSession session, String studentId) throws InterruptedException, ExecutionException, IOException {
@@ -165,13 +173,13 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Notifications");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         int id = 0;
-        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()){
-            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id){
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (Integer.parseInt(String.valueOf(doc.get("id"))) >= id) {
                 id = Integer.parseInt(String.valueOf(doc.get("id")));
             }
         }
 
-        for (User student : getUser()){
+        for (User student : getUser()) {
             if (student.getUsername().equals(studentId)) {
                 id = id + 1;
                 Notifications newNotification = new Notifications();
@@ -193,7 +201,6 @@ public class FirebaseService {
     }
 
 
-
     public List<Modules> getModules() throws ExecutionException, InterruptedException {
         List<Modules> moduleList = new ArrayList<Modules>();
 
@@ -201,59 +208,173 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Modules");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
 
-        for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             moduleList.add(doc.toObject(Modules.class));
         }
-
-        return  moduleList;
+        return moduleList;
     }
 
-    public void createAssessment(HttpSession session,String assessmentName, String dueDate, String module, String assessmentType, String spec) throws InterruptedException, ExecutionException, IOException {
+    public Map<String, Map<String, Assessment>> getAssessments(String module, String student) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        //CREATE CONDITION TO CHECK IF THE MARK IS NULL. IFF IT IS NULL GRADE THE ASSESSMENT, IF IT IS ALREADY DEFINED
+        //REDIRECT TO ERROR PAGE WITH ALREADY GRADED MESSAGE
+
+        List<Assessment> assessmentList = new ArrayList<Assessment>();
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Assignments");
+        Map<String, Assessment> assessmentMap = new HashMap<>();
+        Map<String, Map<String, Assessment>> studentModuleAssessmentMap = new HashMap<>();
+
+
+        CollectionReference collection = db.collection("Assignments");
+        for (DocumentReference document : collection.listDocuments()) {
+
+
+
+
+                    DocumentReference docRef = db.collection("Assignments").document(module + " : " + student);
+                    ApiFuture<DocumentSnapshot> future = docRef.get();
+                    DocumentSnapshot doc = future.get();
+
+                    Map<String, Object> assessmentMapObject;
+
+                    assessmentMapObject = doc.getData();
+                    for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
+                        final ObjectMapper mapper = new ObjectMapper();
+                        final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
+                        assessmentMap.put(pair.getKey(), pojo);
+                    }
+                    studentModuleAssessmentMap.put(module + " : " + student, assessmentMap);
+
+        }
+
+        /*if (document.exists()) {
+            Map<String, Object> assessmentMapObject = document.getData();
+            for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
+                final ObjectMapper mapper = new ObjectMapper();
+                final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
+                assessmentMap.put(pair.getKey(), pojo);
+            }
+        }
+        */
+        return studentModuleAssessmentMap;
+    }
+
+    public void createAssessment(HttpSession session, String assessmentName, String dueDate, String module, String assessmentType, String spec) throws InterruptedException, ExecutionException, IOException {
 
 
         Firestore db = FirestoreClient.getFirestore();
 
-        //Checks if a user has been created in the assignments collection
-        for(User user: getUser()){
-            for(Modules moduleiter: getModules()){
-                List<String> studentsInModule= moduleiter.getStudents();
-                if (studentsInModule.contains(user.getUsername()) && module.equals(moduleiter.getId())){
+        for (Modules moduleiter : getModules()) {
+            List<String> studentsInModule = moduleiter.getStudents();
+            if (module.equals(moduleiter.getId())) {
 
 
-                    //Creates Outter map
-                    Map<String, Map<String, Assessment> >  newAssessment = new HashMap<String, Map<String, Assessment>>();
+                Assessment assessmentObject = new Assessment();
+                assessmentObject.setCreator((String) session.getAttribute("userid"));
+                assessmentObject.setDue(dueDate);
+                assessmentObject.setSubmitted(false);
+                assessmentObject.setSpec(spec);
+                assessmentObject.setType(assessmentType);
+                assessmentObject.setFeedback(null);
 
 
-                    Assessment assessmentObject = new Assessment();
-                    assessmentObject.setCreator((String) session.getAttribute("userid"));
-                    assessmentObject.setDue(dueDate);
-                    assessmentObject.setSubmitted(false);
-                    assessmentObject.setSpec(spec);
-                    assessmentObject.setType(assessmentType);
+                //creates Inner map
+                Map<String, Assessment> newAssessmentDetail = new HashMap<String, Assessment>();
+                newAssessmentDetail.put(assessmentName, assessmentObject);
 
 
-                    //creates Inner map
-                    Map<String, Assessment> newAssessmentDetail = new HashMap<String, Assessment>();
-                    newAssessmentDetail.put(assessmentName, assessmentObject);
-                    newAssessment.put(module, newAssessmentDetail);
+                //Creates document before writing if non existent
+                CollectionReference collectionReference = db.collection("Assignments");
+                ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
 
+                for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
 
-                    //Creates document before writing if non existent
-                    CollectionReference collectionReference = db.collection("Assignments");
-                    ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
-
-                    for(DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-                        if (!doc.getId().equals(user.getUsername())){
-                            db.collection("Assignments").document(user.getUsername()).create(newAssessment);
-                        } else{
-                            //Updates Assessment in DB
-                            db.collection("Assignments").document(user.getUsername()).set(newAssessment,SetOptions.merge());
+                    for (String user : studentsInModule) {
+                        if (!doc.getId().equals(module + " : " + user)) {
+                            db.collection("Assignments").document(module + " : " + user).create(newAssessmentDetail);
+                        } else {
+                            db.collection("Assignments").document(module + " : " + user).set(newAssessmentDetail, SetOptions.merge());
                         }
                     }
                 }
+
+
+
+
             }
         }
 
+        //Updates Modules Collection to contain an Array of the Assignment names
+        CollectionReference collectionReference1 = db.collection("Modules");
+        ApiFuture<QuerySnapshot> querySnapshot1 = collectionReference1.get();
+
+        for (DocumentSnapshot doc1 : querySnapshot1.get().getDocuments()) {
+
+
+            List<String> currentAssessment = new ArrayList<>();
+            currentAssessment.add(assessmentName);
+            if (!doc1.getId().equals(module)) {
+                db.collection("Modules").document(module).update("assignments",FieldValue.arrayUnion(assessmentName));
+            }
+        }
+
+
+    }
+
+    public Map<String,List<String>> getAssessmentsList(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        Firestore db = FirestoreClient.getFirestore();
+
+
+        List<String> assessmentsInModule = new ArrayList<>();
+        Map<String, List<String>> allAssessments = new HashMap<>();
+
+
+
+
+            CollectionReference collectionReference = db.collection("Modules");
+            ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+            for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+                assessmentsInModule= (List<String>) doc.get("assignments");
+                allAssessments.put(doc.getId(), assessmentsInModule);
+
+            }
+
+
+
+       return allAssessments;
+    }
+
+    public String gradeAssessment(HttpSession session, String feedback, String grade, String assessment, String student,
+                                  String module) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Assignments");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        System.out.println(feedback);
+        System.out.println(grade);
+        System.out.println(assessment);
+        System.out.println(student);
+        System.out.println(module);
+
+
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (doc.getId().equals(module + " : " + student)){
+
+
+                Map<String, Object> updates = new HashMap<>();
+
+                updates.put(assessment+".mark", grade);
+                updates.put(assessment+".feedback", feedback);
+
+                DocumentReference DocRef = db.collection("Assignments").document(module + " : " + student);
+                ApiFuture<WriteResult> writeResult = DocRef.update(updates);
+            }
+
+        }
+        return "success";
     }
 
 }

@@ -10,7 +10,15 @@ public class Modules {
     private List<String> lecturers;
     private List<String> students;
     private String title;
+    private String status;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public List<String> getAssignments() {
         return assignments;

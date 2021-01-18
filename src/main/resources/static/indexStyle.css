@@ -78,12 +78,20 @@ body{
     background-color: #4CAF50; /* Green */
     color: white;
 }
-.righthalf{
+.lefthalf{
     position: relative;
     height: 100%;
     width: 50%;
     left: 0%;
     border-right: 2px solid rgba(0,0,0,0.1);
+}
+.righthalf{
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    width: 49%;
+    height: 100%;
+
 }
 .header3{
     color: white;

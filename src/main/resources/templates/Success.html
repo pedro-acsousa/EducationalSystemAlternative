@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
         <img class="TickImage" src="Success.jpg" alt="Success!">
         <h1 class="Success">Success!</h1>
         <div class="MessageWrap">
-            <h3>(Example) Success, Student Oscar Wilson has been enrolled in course: CSC2033 - Team Project</h3>
+            <h3 th:text="${session.success}"></h3>
         </div>
     </div>
 

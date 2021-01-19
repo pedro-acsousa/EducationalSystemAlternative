@@ -8,29 +8,27 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
-    <link rel="stylesheet" type="text/css" href="LectureDashStyle.css">
+    <link rel="stylesheet" type="text/css" href="LecturerEnrollStyle.css">
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg fixed-top ">
-    <a class="navbar-brand" href="#">Lecturer Dashboard</a>
+    <a class="navbar-brand" href="#">Enroll Students</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
         <li class="nav-item">
-            <a class="nav-link" data-value="Set Assignments" th:href="@{redirect-}">Set Assignments</a>        </li>
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="View Student Progress" href="#">View Student Progress</a>
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
         </li>
         <li class="nav-item">
             <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="Contact Students" th:href="@{redirect-contactStudents}">Contact Students</a>       </li>
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
         <li class="nav-item">
             <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Enrol Students">Enrol Students</a>       </li>
     </ul>
     </div>
 </nav>
@@ -39,20 +37,37 @@
     <div class="overlay"></div>
     <section class="sec-1">
         <div class="welcome">
-            <h1>Welcome</h1><h1 th:text="${session.firstName}" ></h1>
+            <h1>Enroll Students</h1>
         </div>
     </section>
 
     <section class="sec-2">
         <div class="boxwrap">
-            <div class = "notifications">
-                <h1>Notifications Sent:</h1>
-            </div>
-            <div class = "assignments">
-                <h1>Assignments Set:</h1>
-            </div>
-            <div class = "modules">
-                <h1>Modules:</h1>
+
+            <div class = "innerwrap">
+
+                <h4>Select a Student to Enroll</h4>
+
+                <form id="EnrollForm" action="/enroll" method="post">
+
+                    <select th:action="@{/allStudents}" name="StudentSelect" id="StudentSelect" class="StudentSelect" size="15">
+                        <option th:each="student : ${students}" th:value="${student.getUsername()}" th:text="${student.getUsername() + ' - ' + student.getFirstname() + ' ' + student.getSurname()}"></option>
+                    </select>
+
+                    <div class="MidWrap">
+                        <h4>Select course to Enroll into</h4>
+
+                        <select th:action="@{/getModules}" name="CourseSelect" id="CourseSelect" class="CourseSelect" size="15">
+                            <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
+                        </select>
+
+                    </div>
+                    <input type="submit" class="Submitbutton" value="Enroll Student">
+
+                </form>
+
+
+
             </div>
         </div>
 

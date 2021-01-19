@@ -10,6 +10,7 @@ import com.google.firestore.v1.Document;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.io.DataInput;
@@ -376,5 +377,49 @@ public class FirebaseService {
         }
         return "success";
     }
+
+
+    public List<User> usersStudent() throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Users");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        List<User> students = new ArrayList<>();
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if(Objects.equals(doc.get("role"), "Student")){
+                students.add(doc.toObject(User.class));
+
+            }
+
+        }
+      return students;
+    }
+    public ModelAndView enroll(HttpSession session,String student,String course) throws ExecutionException, InterruptedException {
+        ModelAndView x = new ModelAndView();
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Modules");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if(doc.getId().equals(course)){
+                List<String> studentsinModule= (List<String>) doc.get("students");
+                for(String studentModule: studentsinModule){
+                    if(student.equals(studentModule)) {
+                        x.setViewName("errorPage.html");
+                        session.setAttribute("error", "Student is already in the module");
+                        return x;
+                    }
+
+
+                }
+            }
+            db.collection("Modules").document(course).update("students",FieldValue.arrayUnion(student));
+            x.setViewName("Success.html");
+            session.setAttribute("success", "Student is now enrolled in the module!");
+
+
+        }
+        return x;
+    }
+
 
 }

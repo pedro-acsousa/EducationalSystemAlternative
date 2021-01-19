@@ -47,19 +47,18 @@
                         <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                         <!---Pedro when doing thymeleaf please add &nbsp;&nbsp; for correct spacing for items thanks! --->
                         <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
+                        <option name="courseSelect" id="getCourseTest">&nbsp;&nbsp;Course Test</option>
                     </select>
                     <select class="custom-select col-md-3 mr-3" name="assignmentSelect" id="assignmentSelect" disabled>
                         <option selected value="defaultAssignment">&nbsp;&nbsp;Select Assignment</option>
                         <option name="assignmentSelect" id="getAssignment">&nbsp;&nbsp;Assignment X</option>
+                        <option name="assignmentSelect" id="getAssignmentTest">&nbsp;&nbsp;Assignment Test</option>
                     </select>
-                    <!--- Can opt out by using js for triggering the assignment contents (ui looks more clean), but enable if submit button is required.
-                    <input class="btn btn-primary col-md-1" type="Submit" id="submitButton" value="Select" disabled>
-                    --->
                 </div>
             </form>
         </div>
-        <div id="assignmentContent" class="container" style="display:none;">
-            <br><hr>
+        <div id="assignmentContent" class="container" style="opacity: 0;">
+            <hr>
             <h5 class="d-inline" id="courseTitle">Course X</h5><h5 class="d-inline">&nbsp;-&nbsp;</h5><h5 class="d-inline" id="asmTitle">Assignment X</h5>
             <br><br>
             <div id="asmDescription">
@@ -76,39 +75,63 @@
 
 <script>
 
-    // Assignment Dropdown Visiblity
-    document.getElementById('courseSelect').addEventListener("change", function() {
-        if (document.getElementById('courseSelect').value === 'defaultCourse'){
-            //document.getElementById('submitButton').disabled = true;
-            document.getElementById('assignmentSelect').disabled = true;
-            document.getElementById('assignmentSelect').selectedIndex=0;
+    const selCourse = document.getElementById('courseSelect');
+    const selAssignment = document.getElementById('assignmentSelect');
+    const contAssignment = document.getElementById('assignmentContent');
+    let selCourseCount = 0;
+    let selAssignmentCount = 0;
+
+
+    // Assignment Dropdown Animation
+    selCourse.addEventListener("change", function() {
+        selCourseCount++;
+        if (selCourse.value === 'defaultCourse'){
+            if (selAssignmentCount >= 1){
+                selAssignmentCount = 0;
+                contAssignment.classList.add('slide-down')
+                contAssignment.style.opacity = 0;
+                setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
+            }
+            selAssignment.selectedIndex = 0;
+            selAssignment.disabled = true;
+            selCourseCount = 0;
         } else {
-            document.getElementById('assignmentSelect').disabled = false;
-            document.getElementById('assignmentSelect').selectedIndex=0;
+            if (selCourseCount > 1) {
+                selAssignment.selectedIndex = 0;
+                if (selAssignmentCount >= 1) {
+                    selAssignmentCount = 0;
+                    contAssignment.classList.add('slide-down')
+                    contAssignment.style.opacity = 0;
+                    setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
+                }
+                return;
+            }
+            selAssignment.disabled = false;
         }
     });
 
-    // Submit Button Visiblity
-    document.getElementById('assignmentSelect').addEventListener("change", function() {
-        if (document.getElementById('assignmentSelect').value === 'defaultAssignment'){
-            document.getElementById('assignmentContent').style.display = 'none';
-
-            // for submit button  document.getElementById('submitButton').disabled = true;
+    // Assignment Content Visiblity
+    selAssignment.addEventListener("change", function() {
+        selAssignmentCount++;
+        if (selAssignment.value === 'defaultAssignment'){
+            contAssignment.classList.add('slide-down')
+            contAssignment.style.opacity = 0;
+            setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
+            selAssignmentCount = 0;
         } else {
-            // Triggers content
-            document.getElementById('assignmentContent').style.display = 'block';
-            // for submit button  document.getElementById('submitButton').disabled = false;
-
-            // Current date for testing
-            let dt = new Date();
+            let dt = new Date(); // Current date for testing, these 2 lines should be removed
             document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
+
+            if (selAssignmentCount > 1) {
+                contAssignment.classList.add('content-refresh')
+                setTimeout(function(){ contAssignment.classList.remove('content-refresh'); }, 600);
+                return;
+            }
+            contAssignment.classList.add('slide-up')
+            contAssignment.style.opacity = 1;
+            setTimeout(function(){ contAssignment.classList.remove('slide-up'); }, 200);
         }
     });
-
-    /*** if submit button is required
-    document.getElementById('submitButton').addEventListener("click", function() {
-        document.getElementById('assignmentContent').style.display = 'block';
-    }); ***/
 
 </script>
 

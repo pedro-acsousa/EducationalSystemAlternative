@@ -205,24 +205,18 @@ public class DBController {
     }
     @RequestMapping("/redirect-enrollStudents")
     public ModelAndView enrollStudentsRedirect(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
-        List<Modules> modules = firebaseService.getModules();
-        Map<String,String> moduleNames = new HashMap<>();
-        for (Modules module : modules){
-            moduleNames.put(module.getId(),module.getTitle());
-        }
-        session.setAttribute("modules", moduleNames);
 
-        Gson gson = new Gson();
-        String unPrepared = gson.toJson(firebaseService.usersStudent());
-        String replaceString=unPrepared.replace('\"','#');
-        String replaceString1=replaceString.replace(',','~');
-        model.addAttribute("students", replaceString1);
+        List<User> studentList = firebaseService.usersStudent();
+        model.addAttribute("students", studentList);
         mv.setViewName("LecturerEnrollStudents.html");
         return mv;
     }
 
-
-
+    @RequestMapping("/allStudents")
+    public void allStudents(Model model) throws ExecutionException, InterruptedException {
+        List<User> studentList = firebaseService.usersStudent();
+        model.addAttribute("students", studentList);
+    }
 
 
 
@@ -256,6 +250,13 @@ public class DBController {
         String success= firebaseService.gradeAssessment(session, feedback,grade, assessment, student, module);
         mv.setViewName("Success.html");
         return mv;
+    }
+    @PostMapping("/enroll")
+    public ModelAndView enroll(HttpSession session,@RequestParam("StudentSelect") String student,
+                                        @RequestParam("CourseSelect") String course) throws InterruptedException, ExecutionException, IOException, JSONException {
+        ModelAndView x= firebaseService.enroll(session, student,course);
+
+        return x;
     }
 
 

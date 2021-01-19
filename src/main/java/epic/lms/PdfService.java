@@ -102,16 +102,52 @@ public class PdfService {
 
             //SE O ASSESSMENT JA FOI SUBMETIDO ELSE ADICIONAR
             if("false".equals(String.valueOf(currentAssessment.isSubmitted()))){
-                Font f=new Font(Font.FontFamily.HELVETICA,25.0f,Font.UNDERLINE,BaseColor.RED);
+                Font f=new Font(Font.FontFamily.HELVETICA,15.0f,Font.UNDERLINE+ Font.BOLD,BaseColor.RED);
                 Paragraph p1 = new Paragraph("This assignment was not submitted yet!",f);
                 p1.setAlignment(Element.ALIGN_CENTER);
                 document.add(p1);
+                document.add(new Paragraph(Chunk.NEWLINE));
+                document.add(new Paragraph(Chunk.NEWLINE));
 
+            } else if("true".equals(String.valueOf(currentAssessment.isSubmitted()))) {
+                Font f = new Font(Font.FontFamily.HELVETICA, 15.0f, Font.UNDERLINE + Font.BOLD, BaseColor.GREEN);
+                Paragraph p1 = new Paragraph("This assignment was submitted. Submission details:", f);
+                p1.setAlignment(Element.ALIGN_CENTER);
+                document.add(p1);
+                document.add(new Paragraph(Chunk.NEWLINE));
+                document.add(new Paragraph(Chunk.NEWLINE));
+                document.add(new Paragraph("Date of submission: " + currentAssessment.getDatesubmitted()));
+                document.add(new Paragraph(Chunk.NEWLINE));
+                document.add(new Paragraph("Submission URL: " + currentAssessment.getFileUrl()));
+                document.add(new Paragraph(Chunk.NEWLINE));
+                document.add(new Paragraph(Chunk.NEWLINE));
+
+                if(currentAssessment.getMark()==null) {
+                    Font f1 = new Font(Font.FontFamily.HELVETICA, 15.0f, Font.UNDERLINE+ Font.BOLD, BaseColor.ORANGE);
+                    Paragraph p2 = new Paragraph("--This assignment is awaiting grading--", f1);
+                    p2.setAlignment(Element.ALIGN_CENTER);
+                    document.add(p2);
+                    document.add(new Paragraph(Chunk.NEWLINE));
+                    document.add(new Paragraph(Chunk.NEWLINE));
+                } else {
+                    Font f2 = new Font(Font.FontFamily.HELVETICA, 15.0f, Font.UNDERLINE+ Font.BOLD, BaseColor.GREEN);
+                    Paragraph p3 = new Paragraph("--This assignment has been graded--", f2);
+                    p3.setAlignment(Element.ALIGN_CENTER);
+                    document.add(p3);
+                    document.add(new Paragraph(Chunk.NEWLINE));
+                    document.add(new Paragraph(Chunk.NEWLINE));
+                    document.add(new Paragraph("Grade attributed :" + currentAssessment.getMark()));
+                    document.add(new Paragraph(Chunk.NEWLINE));
+                    document.add(new Paragraph("Additional marking feedback: " + currentAssessment.getFeedback()));
+                    document.add(new Paragraph(Chunk.NEWLINE));
+                    document.add(new Paragraph(Chunk.NEWLINE));
+
+                }
             }
 
-
-            // some logic here
-
+            Paragraph p4 = new Paragraph("--End of Report--");
+            p4.setAlignment(Element.ALIGN_CENTER);
+            document.add(p4);
             document.close();
 
             return new ByteArrayInputStream(out.toByteArray());

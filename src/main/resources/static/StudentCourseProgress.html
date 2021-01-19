@@ -42,69 +42,63 @@
         <div class="container">
             <h4 id="courseText">Course Progress</h4><br>
             <div class="row">
-                <div class="dropdown btn-group col-sm-3" id="courseSelect">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        Select Course
-                    </button>
-                    <div class="dropdown-menu">
-                        <!--- href should be reassigned to thymeleaf values or js // Course x should be values from database as well--->
-                        <a class="dropdown-item" href="javascript:showCourseProgress();">Course 1</a>
-                        <a class="dropdown-item" href="#">Course 2</a>
-                        <a class="dropdown-item" href="#">Course 3</a>
-                    </div>
-                </div>
-                <!--- this div is a placeholder for formatting--->
-                <div hidden class="dropdown btn-group col-sm-3" id="spacing">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    </button>
-                </div>
+                <form class="container" action="#">
+                    <select class="custom-select col-md-3" name="courseSelect" id="courseSelect">
+                        <option selected value="defaultCourse" id="defCourse">&nbsp;Select Course</option>
+                        <option value="courseSelect" id="getCourse">&nbsp;Course X</option>
+                        <option value="courseSelect" id="getCourseTest">&nbsp;Course Test</option>
+                    </select>
+                </form>
             </div>
-            <div id="courseProgress">
-                <hr>
-                <div class="row">
-                    <hr/>
-                    <div class="col-md-4 border-right">
-                        <h5 class="assignmentTitle">Assignment 1</h5>
-                        <div class="assignmentDesc">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+            <div id="courseProgress" style="opacity: 0;">
+                <hr/>
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    Assignment 1
+                                </button>
+                            </h5>
                         </div>
-                        <hr/>
-                        <div class="assignmentDetails" style="clear: both">
-                            <h6 class="dueDateTitle d-inline">Due Date:</h6> <h6 class="dueDate d-inline" id="assignmentDueDate1"></h6><br><br>
-                            <h6 class="d-inline">Weighting: </h6> <h6 id="asmWeighting1" class="d-inline">30</h6> <h6 class="d-inline">%</h6>
-                            <br>
-                            <h6 class="asmScoreTitle d-inline">Assignment Score:</h6> <h6 class="assignmentScore d-inline">Pending/88</h6>
-                        </div>
-                    </div>
-                    <div class="col-md-4 border-right">
-                        <h5 class="assignmentTitle">Assignment 2</h5>
-                        <div class="assignmentDesc">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                        </div>
-                        <hr/>
-                        <div class="assignmentDetails" style="clear: both">
-                            <h6 class="dueDateTitle d-inline">Due Date:</h6> <h6 class="dueDate d-inline" id="assignmentDueDate2"></h6><br><br>
-                            <h6 class="d-inline">Weighting: </h6> <h6 id="asmWeighting2" class="d-inline">20</h6> <h6 class="d-inline">%</h6>
-                            <br>
-                            <h6 class="asmScoreTitle d-inline">Assignment Score:</h6> <h6 class="assignmentScore d-inline">100/100</h6>
+
+                        <div id="collapse1" class="collapse" aria-labelledby="heading1" data-parent="#accordion">
+                            <div class="card-body">
+                                <p id="heading">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
+                                <div class="assignmentDetails" style="clear: both">
+                                    <hr>
+                                    <h6 class="dueDateTitle d-inline">Due Date:</h6> <h6 class="dueDate d-inline" id="assignmentDueDate1"></h6><br><br>
+                                    <h6 class="d-inline">Weighting: </h6> <h6 id="asmWeighting1" class="d-inline">30</h6> <h6 class="d-inline">%</h6>
+                                    <br>
+                                    <h6 class="asmScoreTitle d-inline">Assignment Score:</h6> <h6 class="assignmentScore d-inline">Pending/88</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <h5 class="assignmentTitle">Assignment 3</h5>
-                        <div class="assignmentDesc">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                    <div class="card">
+                        <div class="card-header" id="heading2">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    Assignment 2
+                                </button>
+                            </h5>
                         </div>
-                        <hr/>
-                        <div class="assignmentDetails" style="clear: both">
-                            <h6 class="dueDateTitle d-inline">Due Date:</h6> <h6 class="dueDate d-inline" id="assignmentDueDate3"></h6><br><br>
-                            <h6 class="d-inline">Weighting: </h6> <h6 id="asmWeighting3" class="d-inline">test</h6> <h6 class="d-inline">%</h6>
-                            <br>
-                            <h6 class="asmScoreTitle d-inline">Assignment Score:</h6> <h6 class= "assignmentScore d-inline">0/10</h6>
+                        <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion">
+                            <div class="card-body">
+                                <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
+                                <div class="assignmentDetails" style="clear: both">
+                                    <hr>
+                                    <h6 class="dueDateTitle d-inline">Due Date:</h6> <h6 class="dueDate d-inline" id="assignmentDueDate2"></h6><br><br>
+                                    <h6 class="d-inline">Weighting: </h6> <h6 id="asmWeighting2" class="d-inline">20</h6> <h6 class="d-inline">%</h6>
+                                    <br>
+                                    <h6 class="asmScoreTitle d-inline">Assignment Score:</h6> <h6 class="assignmentScore d-inline">100/100</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <hr/>
                 <div>
+                    <hr/>
                     <div class="row align-items-center">
                         <div class="col" id="courseScoreText">
                             <h5 class="d-inline">Course Overall Score:&nbsp;</h5><h5 class="d-inline" id="courseScore">70%</h5>
@@ -126,23 +120,32 @@
 </body>
 
 <script>
-    $(document).ready(function() {
-        $('#courseSelect').show();
-        $('#showCourseName').hide();
-        $('#courseProgress').hide();
-        $('#tutorInfo').hide();
-    })
 
-    function showCourseProgress(){
-        $('#showCourseName').show();
-        $('#courseProgress').show();
-        $('#tutorInfo').show();
-    }
-    //current date for testing
-    let dt = new Date();
-    document.getElementById('assignmentDueDate1').innerHTML = dt.toLocaleDateString('en-GB');
-    document.getElementById('assignmentDueDate2').innerHTML = dt.toLocaleDateString('en-GB');
-    document.getElementById('assignmentDueDate3').innerHTML = dt.toLocaleDateString('en-GB');
+    //variable initalization
+    const selCourse = document.getElementById('courseSelect');
+    const courseProg = document.getElementById('courseProgress');
+    let selCount = 0;
+
+    // event listener for animations
+    selCourse.addEventListener('change', function() {
+        selCount++;
+        if (selCourse.value === "defaultCourse" && selCount !== 1){
+            courseProg.classList.add('slide-down')
+            courseProg.style.opacity = 0;
+            setTimeout(function(){ courseProg.classList.remove('slide-down'); }, 200);
+            selCount = 0;
+        } else {
+            if (selCount > 1){
+                courseProg.classList.add('content-refresh');
+                setTimeout(function(){ courseProg.classList.remove('content-refresh'); }, 500);
+                return;
+            }
+            courseProg.classList.add('slide-up')
+            courseProg.style.opacity = 1;
+            setTimeout(function(){ courseProg.classList.remove('slide-up'); }, 200);
+        }
+    });
+
 </script>
 
 </html>

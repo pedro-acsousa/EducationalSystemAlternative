@@ -377,4 +377,20 @@ public class FirebaseService {
         return "success";
     }
 
+
+    public Map<String,String> usersStudent() throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Users");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        Map<String,String> students = new HashMap<>();
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if(Objects.equals(doc.get("role"), "Student")){
+                students.put((String) doc.get("username"),doc.get("firstname") + " " + doc.get("surname"));
+
+            }
+
+        }
+      return students;
+    }
+
 }

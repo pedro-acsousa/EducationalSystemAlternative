@@ -10,7 +10,7 @@
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerEnrollStyle.css">
 </head>
-<body onload="getData()">
+<body>
 
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" href="#">Enroll Students</a>
@@ -48,58 +48,25 @@
 
                 <h4>Select a Student to Enroll</h4>
 
-                <form id="EnrollForm" action="/Enroll" method="post">
+                <form id="EnrollForm" action="/enroll" method="post">
 
-                    <select id="StudentSelect" name="StudentSelect" class="StudentSelect" size="15">
+                    <select th:action="@{/allStudents}" name="StudentSelect" id="StudentSelect" class="StudentSelect" size="15">
+                        <option th:each="student : ${students}" th:value="${student.getUsername()}" th:text="${student.getUsername() + ' - ' + student.getFirstname() + ' ' + student.getSurname()}"></option>
                     </select>
 
                     <div class="MidWrap">
                         <h4>Select course to Enroll into</h4>
 
-                        <select id="CourseSelect" name="CourseSelect" class="CourseSelect" size="15">
-                            <option>CSC2031 - Security</option>
-                            <option>CSC2032 - Algorithms</option>
-                            <option>CSC1032 - Systems</option>
-                            <option>CSC1031 - Fundamentals</option>
-                            <option>CSC1033 - Storage</option>
-                            <option>CSC2034 - Contempory</option>
-                            <option>CSC2035 - OS and Networks</option>
-
+                        <select th:action="@{/getModules}" name="CourseSelect" id="CourseSelect" class="CourseSelect" size="15">
+                            <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
 
                     </div>
-
-                    <input type="submit" style="display: none;" class="Submitbutton" value="Enroll Student">
+                    <input type="submit" class="Submitbutton" value="Enroll Student">
 
                 </form>
 
-                <script>
-                    function getData() {
 
-
-                        var x = "[[${students}]]";
-                        var changed1 = x.split('#').join('\"');
-                        var changed2 = changed1.split('~').join(',');
-                        var changed3 = JSON.parse(changed2);
-
-                        var select = document.getElementById("StudentSelect");
-                        while (select.firstChild) {
-                            select.removeChild(select.lastChild);
-                        }
-
-
-                        for (var value in changed3) {
-                            var el = document.createElement("option");
-                            el.textContent = value;
-                            el.value = value;
-                            select.appendChild(el);
-                        }
-
-
-
-
-                    }
-                </script>
 
             </div>
         </div>

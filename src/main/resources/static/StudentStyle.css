@@ -14,8 +14,8 @@
     justify-content: flex-end;
 }
 
-html {
-    overflow-y: hidden;
+html::-webkit-scrollbar {
+    display: none;
 }
 
 main {

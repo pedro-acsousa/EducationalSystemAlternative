@@ -86,14 +86,14 @@
     selCourse.addEventListener("change", function() {
         selCourseCount++;
         if (selCourse.value === 'defaultCourse'){
-            selAssignment.disabled = true;
-            selAssignment.selectedIndex = 0;
-            if (selCourseCount > 1){
+            if (selAssignmentCount >= 1){
                 selAssignmentCount = 0;
                 contAssignment.classList.add('slide-down')
                 contAssignment.style.opacity = 0;
                 setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
             }
+            selAssignment.selectedIndex = 0;
+            selAssignment.disabled = true;
             selCourseCount = 0;
         } else {
             if (selCourseCount > 1) {
@@ -107,14 +107,13 @@
                 return;
             }
             selAssignment.disabled = false;
-            selAssignment.selectedIndex = 0;
         }
     });
 
     // Assignment Content Visiblity
     selAssignment.addEventListener("change", function() {
         selAssignmentCount++;
-        if (selAssignment.value === 'defaultAssignment' && selAssignmentCount !== 1){
+        if (selAssignment.value === 'defaultAssignment'){
             contAssignment.classList.add('slide-down')
             contAssignment.style.opacity = 0;
             setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);

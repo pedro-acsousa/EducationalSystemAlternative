@@ -43,13 +43,13 @@
         <div class="container row">
             <form class="container" action="#">
                 <div class="form-row">
-                    <select class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
-                        <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                    <select th:action="@{/getModules}" class="custom-select col-md-3 mr-3" name="courseSelect" id="courseSelect">
+                        <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}" selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                         <!---Pedro when doing thymeleaf please add &nbsp;&nbsp; for correct spacing for items thanks! --->
                         <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
                         <option name="courseSelect" id="getCourseTest">&nbsp;&nbsp;Course Test</option>
                     </select>
-                    <select class="custom-select col-md-3 mr-3 mb-2" name="assignmentSelect" id="assignmentSelect" disabled>
+                    <select class="custom-select col-md-3 mr-3" name="assignmentSelect" id="assignmentSelect" disabled>
                         <option selected value="defaultAssignment">&nbsp;&nbsp;Select Assignment</option>
                         <option name="assignmentSelect" id="getAssignment">&nbsp;&nbsp;Assignment X</option>
                         <option name="assignmentSelect" id="getAssignmentTest">&nbsp;&nbsp;Assignment Test</option>
@@ -88,7 +88,7 @@
         if (selCourse.value === 'defaultCourse'){
             if (selAssignmentCount >= 1){
                 selAssignmentCount = 0;
-                contAssignment.classList.add('slide-down');
+                contAssignment.classList.add('slide-down')
                 contAssignment.style.opacity = 0;
                 setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
             }
@@ -100,7 +100,7 @@
                 selAssignment.selectedIndex = 0;
                 if (selAssignmentCount >= 1) {
                     selAssignmentCount = 0;
-                    contAssignment.classList.add('slide-down');
+                    contAssignment.classList.add('slide-down')
                     contAssignment.style.opacity = 0;
                     setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
                 }
@@ -114,7 +114,7 @@
     selAssignment.addEventListener("change", function() {
         selAssignmentCount++;
         if (selAssignment.value === 'defaultAssignment'){
-            contAssignment.classList.add('slide-down');
+            contAssignment.classList.add('slide-down')
             contAssignment.style.opacity = 0;
             setTimeout(function(){ contAssignment.classList.remove('slide-down'); }, 200);
             selAssignmentCount = 0;
@@ -123,11 +123,11 @@
             document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
 
             if (selAssignmentCount > 1) {
-                contAssignment.classList.add('content-refresh');
+                contAssignment.classList.add('content-refresh')
                 setTimeout(function(){ contAssignment.classList.remove('content-refresh'); }, 600);
                 return;
             }
-            contAssignment.classList.add('slide-up');
+            contAssignment.classList.add('slide-up')
             contAssignment.style.opacity = 1;
             setTimeout(function(){ contAssignment.classList.remove('slide-up'); }, 200);
         }

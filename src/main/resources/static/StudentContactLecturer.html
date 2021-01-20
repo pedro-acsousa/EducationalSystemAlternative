@@ -42,83 +42,101 @@
         <form action="#" class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h4>Contact Lecturers</h4><br>
+                    <h4 class="">Contact Lecturers</h4><br>
                     <div class="form-group" id="courseSelect">
                         <label for="formCourseSelect">Select Course</label>
-                        <select class="form-control" id="formCourseSelect" onchange="showLecturer();">
-                            <option>Select...</option>
-                            <option>Course 1</option>
-                            <option>Course 2</option>
-                            <option>Course 3</option>
+                        <select class="form-control" id="formCourseSelect">
+                            <option selected value="defaultCourse">Select...</option>
+                            <option name="courseSelect" id="getCourse">Course X</option>
+                            <option name="courseSelect" id="getCourseTest">Course Test</option>
                         </select>
                     </div>
                     <div class="form-group" id="lecturerSelect">
                         <label for="formLecturerSelect">Select Lecturer</label>
-                        <select class="form-control" id="formLecturerSelect" onchange="showRest();">
-                            <option>Select...</option>
-                            <option>John Colquhoun</option>
-                            <option>Chris Napier</option>
-                            <option>Marie Devlin</option>
+                        <select class="form-control" id="formLecturerSelect" disabled>
+                            <option selected value="defaultLecturer">Select...</option>
+                            <option name="lecturerSelect" id="getLecturer">John Colquhoun</option>
+                            <option name="lecturerSelect" id="getLecturerTest">Lecturer Test</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-4 text-right align-self-end" id="courseDetails">
-                    <h5>Course Details:</h5>
-                    <h6 id="courseShowTitle">Course 1</h6>
-                    <p class="d-inline">Module Leader:&nbsp;</p><p class="d-inline" id="showModuleLeader">Chris Napier</p>
-                    <br>
-                    <p class="d-inline">Email:&nbsp;</p><p class="d-inline" id="showModuleLeaderEmail">chris.napier@newcastle.ac.uk</p>
-                    <br>
-                    <p class="d-inline">Credits:&nbsp;</p><p class="d-inline" id="showModuleCredits">30</p><br>
+            </div>
+            <div class="row">
+                <div class="col" id="formFill" style="opacity: 0;">
+                    <div class="form-group" id="lecturerEmail">
+                        Lecturer Email:&nbsp;&nbsp;<span id="formLecturerEmail">john.colquhoun@ncl.ac.uk</span>
+                    </div>
+                    <div class="form-group" id="inputEmail">
+                        <label for="formEmail">Email address:</label>
+                        <input type="email" class="form-control" id="formEmail" placeholder="your.name@ncl.ac.uk">
+                    </div>
+                    <div class="form-group" id="inputMessage">
+                        <label for="formTextbox">Your Message:</label>
+                        <textarea class="form-control" id="formTextbox" rows="5" placeholder="Write your message here..."></textarea>
+                    </div>
+                    <hr id="divider">
+                    <button type="submit" class="btn btn-primary mb-2" id="submitButton">Submit</button>
                 </div>
             </div>
-            <div class="form-group" id="lecturerEmail">
-                Lecturer Email:&nbsp;&nbsp;<span id="formLecturerEmail">john.colquhoun@ncl.ac.uk</span>
-            </div>
-            <div class="form-group" id="inputEmail">
-                <label for="formEmail">Email address:</label>
-                <input type="email" class="form-control" id="formEmail" placeholder="your.name@ncl.ac.uk">
-            </div>
-            <div class="form-group" id="inputMessage">
-                <label for="formTextbox">Your Message:</label>
-                <textarea class="form-control" id="formTextbox" rows="5" placeholder="Write your message here..."></textarea>
-            </div>
-            <hr id="divider">
-            <button type="submit" class="btn btn-primary mb-2" id="submitButton">Submit</button>
         </form>
     </div>
 </main>
 </body>
 
 <script>
+    const selCourse = document.getElementById('formCourseSelect');
+    const selLecturer = document.getElementById('formLecturerSelect');
+    const fillInForm = document.getElementById('formFill');
+    let selCourseCount = 0;
+    let selMaterialCount = 0;
 
-    $(document).ready(function() {
-        $('#courseSelect').show();
-        $('#courseDetails').hide();
-        $('#lecturerSelect').hide();
-        $('#lecturerEmail').hide();
-        $('#inputEmail').hide();
-        $('#inputMessage').hide();
-        $('#divider').hide();
-        $('#submitButton').hide();
-    })
-    function showLecturer(){
-        $('#lecturerSelect').show();
-        $('#courseDetails').show();
-    }
-    function showRest(){
-        $('#lecturerEmail').show();
-        $('#inputEmail').show();
-        $('#inputMessage').show();
-        $('#divider').show();
-        $('#submitButton').show();
-    }
+    // Assignment Dropdown Animation
+    selCourse.addEventListener("change", function() {
+        selCourseCount++;
+        if (selCourse.value === 'defaultCourse'){
+            if (selMaterialCount >= 1){
+                selMaterialCount = 0;
+                fillInForm.classList.add('slide-down');
+                fillInForm.style.opacity = 0;
+                setTimeout(function(){ fillInForm.classList.remove('slide-down'); }, 200);
+            }
+            selLecturer.selectedIndex = 0;
+            selLecturer.disabled = true;
+            selCourseCount = 0;
+        } else {
+            if (selCourseCount > 1) {
+                selLecturer.selectedIndex = 0;
+                if (selMaterialCount >= 1) {
+                    selMaterialCount = 0;
+                    fillInForm.classList.add('slide-down');
+                    fillInForm.style.opacity = 0;
+                    setTimeout(function(){ fillInForm.classList.remove('slide-down'); }, 200);
+                }
+                return;
+            }
+            selLecturer.disabled = false;
+        }
+    });
 
-    //current date for testing
-    let dt = new Date();
-    document.getElementById('assignmentDueDate1').innerHTML = dt.toLocaleDateString('en-GB');
-    document.getElementById('assignmentDueDate2').innerHTML = dt.toLocaleDateString('en-GB');
-    document.getElementById('assignmentDueDate3').innerHTML = dt.toLocaleDateString('en-GB');
+    // Assignment Content Visiblity
+    selLecturer.addEventListener("change", function() {
+        selMaterialCount++;
+        if (selLecturer.value === 'defaultLecturer'){
+            fillInForm.classList.add('slide-down');
+            fillInForm.style.opacity = 0;
+            setTimeout(function(){ fillInForm.classList.remove('slide-down'); }, 200);
+            selMaterialCount = 0;
+        } else {
+            if (selMaterialCount > 1) {
+                fillInForm.classList.add('content-refresh');
+                setTimeout(function(){ fillInForm.classList.remove('content-refresh'); }, 600);
+                return;
+            }
+            fillInForm.classList.add('slide-up');
+            fillInForm.style.opacity = 1;
+            setTimeout(function(){ fillInForm.classList.remove('slide-up'); }, 200);
+        }
+    });
 </script>
 
 </html>

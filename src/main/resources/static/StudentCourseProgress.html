@@ -40,7 +40,7 @@
 <main class="main">
     <div class="container">
         <div class="container">
-            <h4 id="courseText">Course Progress</h4><br>
+            <h4 id="courseText" class="">Course Progress</h4><br>
             <div class="row">
                 <form class="container" action="#">
                     <select class="custom-select col-md-3" name="courseSelect" id="courseSelect">
@@ -130,7 +130,7 @@
     selCourse.addEventListener('change', function() {
         selCount++;
         if (selCourse.value === "defaultCourse" && selCount !== 1){
-            courseProg.classList.add('slide-down')
+            courseProg.classList.add('slide-down');
             courseProg.style.opacity = 0;
             setTimeout(function(){ courseProg.classList.remove('slide-down'); }, 200);
             selCount = 0;
@@ -140,7 +140,7 @@
                 setTimeout(function(){ courseProg.classList.remove('content-refresh'); }, 500);
                 return;
             }
-            courseProg.classList.add('slide-up')
+            courseProg.classList.add('slide-up');
             courseProg.style.opacity = 1;
             setTimeout(function(){ courseProg.classList.remove('slide-up'); }, 200);
         }

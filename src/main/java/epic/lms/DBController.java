@@ -211,6 +211,13 @@ public class DBController {
         mv.setViewName("LecturerEnrollStudents.html");
         return mv;
     }
+    @RequestMapping("/redirect-studentViewAssignment")
+    public ModelAndView studendentViewAssignmentRedirect(HttpSession session, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        mv.setViewName("StudentAssignmentView.html");
+        getAssessmentStudent(session);
+        model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
+        return mv;
+    }
 
     @RequestMapping("/allStudents")
     public void allStudents(Model model) throws ExecutionException, InterruptedException {
@@ -238,8 +245,6 @@ public class DBController {
         String replaceString=unPrepared.replace('\"','#');
         String replaceString1=replaceString.replace(',','~');
 
-        mv.setViewName("LecturerMarkAssessment.html");
-
         session.setAttribute("assessmentsInModule", replaceString1);
     }
 
@@ -257,6 +262,17 @@ public class DBController {
         ModelAndView x= firebaseService.enroll(session, student,course);
 
         return x;
+    }
+
+    @RequestMapping("/getAssessmentStudent")
+    public void getAssessmentStudent(HttpSession session) throws InterruptedException, ExecutionException, JSONException, IOException {
+        Multimap<String, Map<String,Assessment>> studentAssessments= firebaseService.getAssessmentsStudent(session);
+        Gson gson = new Gson();
+        String unPrepared = gson.toJson(studentAssessments.asMap());
+        String replaceString=unPrepared.replace('\"','#');
+        String replaceString1=replaceString.replace(',','~');
+        session.setAttribute("studentAssessments", replaceString1);
+
     }
 
 

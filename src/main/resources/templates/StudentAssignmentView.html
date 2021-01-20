@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment Specifications</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+</head>
+
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">EPiC Learning for Students</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Home" href="#">Assignments</a>       </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-value="Assignments" href="#">Assignment Submission </a>        </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="View Progress"href="#">Learning Progress</a>          </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Check Contents" href="#">Lecture Contents</a>         </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body id="body">
+<main class="main">
+    <div class="container">
+        <h4 class="container">Assignment Specifications</h4><br>
+        <div class="container row">
+            <form class="container" action="#">
+                <div class="form-row">
+                    <select onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-md-3 mr-3" name="courseSelect" id="courseSelect">
+                        <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}" selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                        <!---Pedro when doing thymeleaf please add &nbsp;&nbsp; for correct spacing for items thanks! --->
+                    </select>
+                    <select onchange="fillAssignment()" class="custom-select col-md-3 mr-3" name="assignmentSelect" id="assignmentSelect" disabled>
+
+                    </select>
+                    <!--- Can opt out by using js for triggering the assignment contents (ui looks more clean), but enable if submit button is required.
+                    <input class="btn btn-primary col-md-1" type="Submit" id="submitButton" value="Select" disabled>
+                    --->
+                </div>
+                <script>
+                    function dynamicDrop(){
+
+                        var assessment = [];
+                        var x = "[[${studentAssessments}]]";
+
+                        var changed2 = x.split('\=').join('\:');
+                        var changed3 = changed2.split('~').join(',');
+                        var changed4 = changed3.split('#').join('\"');
+                        var changed5 = JSON.parse(changed4);
+                        var assignmentText;
+                        for (var value in changed5) {
+                            if (value === document.getElementById("courseSelect").value) {
+                                for(var value1 in changed5[value]){
+                                    for (var value2 in changed5[value][value1]){
+                                        assessment.push(value2);
+                                        //add to javascript variables for assignment text here
+                                            assignmentText=changed5[value][value1][value2]["spec"];
+                                    }
+
+                                }
+                            }
+                        }
+
+                        var select = document.getElementById("assignmentSelect");
+                        while (select.firstChild) {
+                            var el = document.createElement("option");
+                            select.removeChild(select.lastChild);
+                        }
+
+                        el = document.createElement("option");
+                        el.textContent = 'Select an option';
+                        el.value = null;
+                        select.appendChild(el);
+                        for(var i = 0; i < assessment.length; i++) {
+                            var opt = assessment[i];
+                            el1 = document.createElement("option");
+                            el1.textContent = opt;
+                            el1.value = opt;
+                            select.appendChild(el1);
+                        }
+
+                    }
+
+
+
+                    function fillAssignment(){
+
+                        var x = "[[${studentAssessments}]]";
+
+                        var changed2 = x.split('\=').join('\:');
+                        var changed3 = changed2.split('~').join(',');
+                        var changed4 = changed3.split('#').join('\"');
+                        var changed5 = JSON.parse(changed4);
+                        var assignmentText;
+                        var dueDate;
+                        var submitted;
+                        var submissionDate;
+                        var mark;
+                        var feedback;
+                        var selectedCourse=document.getElementById("courseSelect").value;
+                        var selectedAssignment=document.getElementById("assignmentSelect").value;
+
+
+                        assignmentText=changed5[selectedCourse][0][selectedAssignment]["spec"];
+                        dueDate=changed5[selectedCourse][0][selectedAssignment]["due"];
+                        if(changed5[selectedCourse][0][selectedAssignment]["submitted"] ===false){
+                            submitted="This assignment has not been submitted yet";
+                            submissionDate="";
+                        }else{
+                            submitted="This assignment has been submitted";
+                            submissionDate=changed5[selectedCourse][0][selectedAssignment]["datesubmitted"];
+                        }
+
+                        if(changed5[selectedCourse][0][selectedAssignment]["mark"] ===null){
+                            mark="This assignment was not marked yet";
+                            feedback="";
+                        }else{
+                            mark=changed5[selectedCourse][0][selectedAssignment]["mark"];
+                            feedback=changed5[selectedCourse][0][selectedAssignment]["feedback"];
+                        }
+                        document.getElementById("assignmentSpec").innerHTML =assignmentText;
+                        document.getElementById("asmDueDate").innerHTML = dueDate;
+                        document.getElementById("courseTitle").innerHTML = selectedCourse;
+                        document.getElementById("asmTitle").innerHTML = selectedAssignment;
+                        document.getElementById("submitted").innerHTML = submitted;
+                        document.getElementById("submissionDate").innerHTML = submissionDate;
+                        document.getElementById("mark").innerHTML = mark;
+                        document.getElementById("feedback").innerHTML = feedback;
+                    }
+                </script>
+
+
+
+
+            </form>
+        </div>
+
+        <div id="assignmentContent" class="container" style="display:none;">
+            <br><hr>
+            <h5 class="d-inline" id="courseTitle"> </h5><h5 class="d-inline">&nbsp;-&nbsp;</h5><h5 class="d-inline" id="asmTitle"></h5>
+            <br><br>
+            <div id="asmDescription">
+                <p id="assignmentSpec">
+                </p>
+            </div>
+            <hr/>
+            <div id="asmDueDateText">
+                <h6 class="d-inline">Due Date:&nbsp;</h6> <h6 class="d-inline" id="asmDueDate"></h6><br>
+                <h6 class="d-inline">Submitted? :&nbsp;</h6><h6 class="d-inline" id="submitted"></h6><br>
+                <h6 class="d-inline">Submission Date :&nbsp;</h6><h6 class="d-inline" id="submissionDate"></h6><br>
+                <h6 class="d-inline">Mark :&nbsp;</h6><h6 class="d-inline" id="mark"></h6><br>
+                <h6 class="d-inline">Feedback :&nbsp;</h6><h6 class="d-inline" id="feedback"></h6><br>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+<script>
+
+    // Assignment Dropdown Visiblity
+    document.getElementById('courseSelect').addEventListener("change", function() {
+        if (document.getElementById('courseSelect').value === ''){
+            //document.getElementById('submitButton').disabled = true;
+            document.getElementById('assignmentSelect').disabled = true;
+            document.getElementById('assignmentSelect').selectedIndex=0;
+        } else {
+            document.getElementById('assignmentSelect').disabled = false;
+            document.getElementById('assignmentSelect').selectedIndex=0;
+        }
+    });
+
+    // Submit Button Visiblity
+    document.getElementById('assignmentSelect').addEventListener("change", function() {
+        if (document.getElementById('assignmentSelect').value === ''){
+            document.getElementById('assignmentContent').style.display = 'none';
+            // for submit button  document.getElementById('submitButton').disabled = true;
+        } else {
+            // Triggers content
+            document.getElementById('assignmentContent').style.display = 'block';
+            // for submit button  document.getElementById('submitButton').disabled = false;
+        }
+    });
+
+
+</script>
+
+</html>

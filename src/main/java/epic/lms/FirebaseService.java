@@ -230,34 +230,21 @@ public class FirebaseService {
         CollectionReference collection = db.collection("Assignments");
         for (DocumentReference document : collection.listDocuments()) {
 
+            DocumentReference docRef = db.collection("Assignments").document(module + " : " + student);
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot doc = future.get();
 
+            Map<String, Object> assessmentMapObject;
 
-
-                    DocumentReference docRef = db.collection("Assignments").document(module + " : " + student);
-                    ApiFuture<DocumentSnapshot> future = docRef.get();
-                    DocumentSnapshot doc = future.get();
-
-                    Map<String, Object> assessmentMapObject;
-
-                    assessmentMapObject = doc.getData();
-                    for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
-                        final ObjectMapper mapper = new ObjectMapper();
-                        final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
-                        assessmentMap.put(pair.getKey(), pojo);
-                    }
-                    studentModuleAssessmentMap.put(module + " : " + student, assessmentMap);
-
-        }
-
-        /*if (document.exists()) {
-            Map<String, Object> assessmentMapObject = document.getData();
+            assessmentMapObject = doc.getData();
             for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
                 final ObjectMapper mapper = new ObjectMapper();
                 final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
                 assessmentMap.put(pair.getKey(), pojo);
             }
+            studentModuleAssessmentMap.put(module + " : " + student, assessmentMap);
+
         }
-        */
         return studentModuleAssessmentMap;
     }
 
@@ -419,6 +406,44 @@ public class FirebaseService {
 
         }
         return x;
+    }
+
+    public Multimap<String, Map<String,Assessment>> getAssessmentsStudent(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
+
+        Firestore db = FirestoreClient.getFirestore();
+
+
+
+        Multimap<String, Map<String,Assessment>> studentAssessments = ArrayListMultimap.create();
+        Map<String, Object> studentAssessmentObject;
+        Map<String,Assessment> innerMap = new HashMap<>();
+
+
+
+
+
+        CollectionReference collectionReference = db.collection("Assignments");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if(doc.getId().contains((CharSequence) session.getAttribute("userid"))){
+                studentAssessmentObject=doc.getData();
+                for (Map.Entry<String, Object> pair : studentAssessmentObject.entrySet()) {
+                    final ObjectMapper mapper = new ObjectMapper();
+                    final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
+                    innerMap.put(pair.getKey(),pojo);
+
+                }
+                String complexName = doc.getId();
+                String simpleName = complexName.substring(0,complexName.indexOf(" "));
+                studentAssessments.put(simpleName, innerMap);
+            }
+
+        }
+
+
+
+        return studentAssessments;
     }
 
 

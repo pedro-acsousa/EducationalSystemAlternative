@@ -41,43 +41,36 @@
     <div class="container">
         <h4 class="container">Course Contents</h4><br>
         <div class="container row">
-            <div class="dropdown btn-group col-sm-3" id="courseSelect">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    Select Course
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:showMaterialSelection();">Course 1</a>
-                    <a class="dropdown-item" href="#">Course 2</a>
-                    <a class="dropdown-item" href="#">Course 3</a>
+            <form class="container" action="#">
+                <div class="form-row">
+                    <select class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                        <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                        <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
+                        <option name="courseSelect" id="getCourseTest">&nbsp;&nbsp;Course Test</option>
+                    </select>
+                    <select class="custom-select col-md-3 mr-3 mb-2" name="materialSelect" id="materialSelect" disabled>
+                        <option selected value="defaultMaterial">&nbsp;&nbsp;Select Material</option>
+                        <option name="materialSelect" id="getMaterial">&nbsp;&nbsp;Material X</option>
+                        <option name="materialSelect" id="getMaterialTest">&nbsp;&nbsp;Material Test</option>
+                    </select>
                 </div>
-            </div>
-            <div class="dropdown btn-group col-sm-3" id="materialSelect">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                    Select Material
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:showCourseMaterial();">Material 1</a>
-                    <a class="dropdown-item" href="#">Material 2</a>
-                    <a class="dropdown-item" href="#">Material 3</a>
-                </div>
-            </div>
-            <div class="col text-right align-self-center" id="showCourseName">
-                <h6 class="d-inline">Course 1 -&nbsp;</h6><h6 class="d-inline">Material 1</h6>
-            </div>
+            </form>
         </div>
-        <hr id="divider">
-        <div id="courseContent">
+        <div id="courseContent" style="opacity: 0;">
+            <hr class="mt-3">
             <div class="container row">
                 <div class="col-sm-7" id="courseMedia">
                     <video controls>
                         <source src="https://drive.google.com/uc?export=download&id=10UUlAKAPxIP6uahzEab4Xp-KS_TJZl-a" type='video/mp4'>
                     </video>
                 </div>
-                <div class="col-sm-5">
-                    <h4 id="courseTitle">Material X</h4>
-                    <div id="courseMaterialDesc">
+                <div class="col-sm-5 mt-2">
+                    <h5 class="d-inline" id="courseTitle">Course X</h5><h5 class="d-inline">&nbsp;-&nbsp;</h5><h5 class="d-inline" id="materialTitle">Material X</h5>
+                    <br>
+                    <div id="courseMaterialDesc" class="mt-3">
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
                     </div>
+                    <br>
                 </div>
             </div>
         </div>
@@ -86,23 +79,61 @@
 </body>
 
 <script>
-    $(document).ready(function() {
-        $('#courseSelect').show();
-        $('#materialSelect').hide();
-        $('#showCourseName').hide();
-        $('#divider').hide();
-        $('#courseContent').hide();
-    })
 
-    function showMaterialSelection() {
-        $('#materialSelect').show();
-    }
+    const selCourse = document.getElementById('courseSelect');
+    const selMaterial = document.getElementById('materialSelect');
+    const courseContent = document.getElementById('courseContent');
+    let selCourseCount = 0;
+    let selMaterialCount = 0;
 
-    function showCourseMaterial(){
-        $('#showCourseName').show();
-        $('#divider').show();
-        $('#courseContent').show();
-    }
+    // Assignment Dropdown Animation
+    selCourse.addEventListener("change", function() {
+        selCourseCount++;
+        if (selCourse.value === 'defaultCourse'){
+            if (selMaterialCount >= 1){
+                selMaterialCount = 0;
+                courseContent.classList.add('slide-down');
+                courseContent.style.opacity = 0;
+                setTimeout(function(){ courseContent.classList.remove('slide-down'); }, 200);
+            }
+            selMaterial.selectedIndex = 0;
+            selMaterial.disabled = true;
+            selCourseCount = 0;
+        } else {
+            if (selCourseCount > 1) {
+                selMaterial.selectedIndex = 0;
+                if (selMaterialCount >= 1) {
+                    selMaterialCount = 0;
+                    courseContent.classList.add('slide-down');
+                    courseContent.style.opacity = 0;
+                    setTimeout(function(){ courseContent.classList.remove('slide-down'); }, 200);
+                }
+                return;
+            }
+            selMaterial.disabled = false;
+        }
+    });
+
+    // Assignment Content Visiblity
+    selMaterial.addEventListener("change", function() {
+        selMaterialCount++;
+        if (selMaterial.value === 'defaultMaterial'){
+            courseContent.classList.add('slide-down');
+            courseContent.style.opacity = 0;
+            setTimeout(function(){ courseContent.classList.remove('slide-down'); }, 200);
+            selMaterialCount = 0;
+        } else {
+            if (selMaterialCount > 1) {
+                courseContent.classList.add('content-refresh');
+                setTimeout(function(){ courseContent.classList.remove('content-refresh'); }, 600);
+                return;
+            }
+            courseContent.classList.add('slide-up');
+            courseContent.style.opacity = 1;
+            setTimeout(function(){ courseContent.classList.remove('slide-up'); }, 200);
+        }
+    });
+
 </script>
 
 </html>

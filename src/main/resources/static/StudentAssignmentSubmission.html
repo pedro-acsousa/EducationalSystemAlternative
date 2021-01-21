@@ -41,31 +41,27 @@
         <div class="container">
             <h4 class="container">Assignment Submission</h4><br>
             <div class="container row">
-                <div class="dropdown btn-group col-sm-3" id="courseSelect">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        Select Course
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="javascript:showAssignments();">Course 1</a>
-                        <a class="dropdown-item" href="#">Course 2</a>
-                        <a class="dropdown-item" href="#">Course 3</a>
+                <form class="container" action="#">
+                    <div class="form-row">
+                        <select class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                            <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                            <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
+                            <option name="courseSelect" id="getCourseTest">&nbsp;&nbsp;Course Test</option>
+                        </select>
+                        <select class="custom-select col-md-3 mr-3 mb-2" name="assignmentSelect" id="assignmentSelect" disabled>
+                            <option selected value="defaultAssignment">&nbsp;&nbsp;Select Assignment</option>
+                            <option name="assignmentSelect" id="getAssignment">&nbsp;&nbsp;Assignment X</option>
+                            <option name="assignmentSelect" id="getAssignmentTest">&nbsp;&nbsp;Assignment Test</option>
+                        </select>
                     </div>
-                </div>
-                <div class="dropdown btn-group col-sm-3" id="assignmentSelect">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                        Select Assignment
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="javascript:showFileSubmission();">Assignment 1</a>
-                        <a class="dropdown-item" href="#">Assignment 2</a>
-                        <a class="dropdown-item" href="#">Assignment 3</a>
-                    </div>
-                </div>
+                </form>
             </div>
-            <div class="col-12" id="assignmentSubmission">
+            <div class="col-12" id="assignmentSubmission" style="opacity: 0;">
                 <hr/>
-                <h4 class="d-inline">Course 1:&nbsp;</h4><h4 class="d-inline">Assignment 1</h4>
-                <p id="assignmentDesc"><br>This is a template description of this assignment.<br>Files submitted should be in pdf format.</p>
+                <h4 class="d-inline" id="courseTitle">Course X</h4><h4 class="d-inline">:&nbsp;</h4><h4 class="d-inline" id="assignmentTitle">Assignment X</h4>
+                <p id="assignmentDesc">
+                    <br>This is a template description of this assignment.<br>Files submitted should be in pdf format.
+                </p>
                 <form action="#">
                     <div class="row">
                         <div class="col-sm-5">
@@ -95,19 +91,63 @@
 
 <script>
 
-    $(document).ready(function() {
-        $('#courseSelect').show();
-        $('#assignmentSelect').hide();
-        $('#assignmentSubmission').hide();
-    })
+    const selCourse = document.getElementById('courseSelect');
+    const selAssignment = document.getElementById('assignmentSelect');
+    const assignmentSubmission = document.getElementById('assignmentSubmission');
+    let selCourseCount = 0;
+    let selAssignmentCount = 0;
 
-    function showAssignments(){
-        $('#assignmentSelect').show();
-    }
 
-    function showFileSubmission(){
-        $('#assignmentSubmission').show();
-    }
+    // Assignment Dropdown Animation
+    selCourse.addEventListener("change", function() {
+        selCourseCount++;
+        if (selCourse.value === 'defaultCourse'){
+            if (selAssignmentCount >= 1){
+                selAssignmentCount = 0;
+                assignmentSubmission.classList.add('slide-down');
+                assignmentSubmission.style.opacity = 0;
+                setTimeout(function(){ assignmentSubmission.classList.remove('slide-down'); }, 200);
+            }
+            selAssignment.selectedIndex = 0;
+            selAssignment.disabled = true;
+            selCourseCount = 0;
+        } else {
+            if (selCourseCount > 1) {
+                selAssignment.selectedIndex = 0;
+                if (selAssignmentCount >= 1) {
+                    selAssignmentCount = 0;
+                    assignmentSubmission.classList.add('slide-down');
+                    assignmentSubmission.style.opacity = 0;
+                    setTimeout(function(){ assignmentSubmission.classList.remove('slide-down'); }, 200);
+                }
+                return;
+            }
+            selAssignment.disabled = false;
+        }
+    });
+
+    // Assignment Content Visiblity
+    selAssignment.addEventListener("change", function() {
+        selAssignmentCount++;
+        if (selAssignment.value === 'defaultAssignment'){
+            assignmentSubmission.classList.add('slide-down');
+            assignmentSubmission.style.opacity = 0;
+            setTimeout(function(){ assignmentSubmission.classList.remove('slide-down'); }, 200);
+            selAssignmentCount = 0;
+        } else {
+            let dt = new Date(); // Current date for testing, these 2 lines should be removed
+            document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
+
+            if (selAssignmentCount > 1) {
+                assignmentSubmission.classList.add('content-refresh');
+                setTimeout(function(){ assignmentSubmission.classList.remove('content-refresh'); }, 600);
+                return;
+            }
+            assignmentSubmission.classList.add('slide-up');
+            assignmentSubmission.style.opacity = 1;
+            setTimeout(function(){ assignmentSubmission.classList.remove('slide-up'); }, 200);
+        }
+    });
 
     // File name appear on selection
     $(".custom-file-input").on("change", function() {

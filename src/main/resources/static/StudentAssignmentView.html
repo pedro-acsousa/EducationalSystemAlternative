@@ -43,8 +43,8 @@
         <div class="container row">
             <form class="container" action="#">
                 <div class="form-row">
-                    <select class="custom-select col-md-3 mr-3" name="courseSelect" id="courseSelect">
-                        <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                    <select th:action="@{/getModules}" class="custom-select col-md-3 mr-3" name="courseSelect" id="courseSelect">
+                        <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}" selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                         <!---Pedro when doing thymeleaf please add &nbsp;&nbsp; for correct spacing for items thanks! --->
                         <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
                         <option name="courseSelect" id="getCourseTest">&nbsp;&nbsp;Course Test</option>

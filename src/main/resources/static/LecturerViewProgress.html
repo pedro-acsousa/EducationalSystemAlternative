@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Student Progress</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LecturerViewProgressStyle.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">View Progress</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>View Student Progress</h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+
+            <div class = "innerwrap">
+
+                <div class="LeftSide">
+                    <h3>Select a Student</h3>
+
+                    <form method="POST">
+
+                        <br><br>
+                        <label style="font-size: 20px" for="ModuleSelect">Module: &nbsp;</label>
+                        <select id="ModuleSelect" class="Dropdown">
+                            <option>CSC2032-Algorithms</option>
+                        </select>
+                        <div class="Line" style="top: 40%"></div>
+                        <br><br><br>
+                        <label style="font-size: 20px" for="StudentSelect">Student: &nbsp;</label>
+                        <select id="StudentSelect" class="Dropdown">
+                            <option>Oscar Wilson</option>
+                        </select>
+                        <div class="Line" style="top: 60%"></div>
+                        <br><br><br><br>
+                        <input class="Submitbutton" type="submit">
+                        <br><br><br><br>
+
+                    </form>
+                    <p>Damn who's this Oscar guy? must be the smartest guy alive o_o --></p>
+
+                </div>
+
+                <div class="RightSide">
+                    <ul class="customtable">
+                        <li class="table-header customtable">
+                            <div class="col col-1">Student</div>
+                            <div class="col col-2">Assessment Title</div>
+                            <div class="col col-3">Date Handed</div>
+                            <div class="col col-4">Grade/Mark</div>
+                        </li>
+                        <li class="table-row customtable">
+                            <div class="col col-1" data-label="Student">Oscar</div>
+                            <div class="col col-2" data-label="AssessmentTitle">Team Project</div>
+                            <div class="col col-3" data-label="Date">22/12/2000</div>
+                            <div class="col col-4" data-label="Grade">100/100</div>
+                        </li>
+                        <li class="table-row customtable">
+                            <div class="col col-1" data-label="Student">Oscar</div>
+                            <div class="col col-2" data-label="AssessmentTitle">Algorithms</div>
+                            <div class="col col-3" data-label="Date">22/12/2000</div>
+                            <div class="col col-4" data-label="Grade">100/100</div>
+                        </li>
+                        <li class="table-row customtable">
+                            <div class="col col-1" data-label="Student">Oscar</div>
+                            <div class="col col-2" data-label="AssessmentTitle">Games Dev</div>
+                            <div class="col col-3" data-label="Date">22/12/2000</div>
+                            <div class="col col-4" data-label="Grade">100/100</div>
+                        </li>
+                        <li class="table-row customtable">
+                            <div class="col col-1" data-label="Student">Oscar</div>
+                            <div class="col col-2" data-label="AssessmentTitle">Maths</div>
+                            <div class="col col-3" data-label="Date">22/12/2000</div>
+                            <div class="col col-4" data-label="Grade">110/100</div>
+                        </li>
+                        <li class="table-row customtable">
+                            <div class="col col-1" data-label="Student">Oscar</div>
+                            <div class="col col-2" data-label="AssessmentTitle">Fundamentals</div>
+                            <div class="col col-3" data-label="Date">22/12/2000</div>
+                            <div class="col col-4" data-label="Grade">100/100</div>
+                        </li>
+
+                    </ul>
+
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
+
+</body>
+</html>

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import java.io.DataInput;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -341,12 +343,6 @@ public class FirebaseService {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference collectionReference = db.collection("Assignments");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
-        System.out.println(feedback);
-        System.out.println(grade);
-        System.out.println(assessment);
-        System.out.println(student);
-        System.out.println(module);
-
 
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             if (doc.getId().equals(module + " : " + student)){
@@ -444,6 +440,41 @@ public class FirebaseService {
 
 
         return studentAssessments;
+    }
+
+    public ModelAndView submitAssessment(String student, String assessment, String module, String assessmentURL) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Assignments");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+        ModelAndView mv = new ModelAndView();
+
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+
+            if (doc.getId().equals(module + " : " + student)){
+                boolean submitted = doc.getBoolean(assessment +".submitted");
+                if(!(submitted)) {
+                    Map<String, Object> updates = new HashMap<>();
+
+
+                    LocalDateTime dateTime = LocalDateTime.now();
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    String formattedDate = dateTime.format(format);
+
+                    updates.put(assessment + ".datesubmitted", formattedDate);
+                    updates.put(assessment + ".fileUrl", assessmentURL);
+                    updates.put(assessment + ".submitted", true);
+
+                    DocumentReference DocRef = db.collection("Assignments").document(module + " : " + student);
+                    ApiFuture<WriteResult> writeResult = DocRef.update(updates);
+                    mv.setViewName("Success.html");
+                    return mv;
+                }
+            }
+
+
+        }
+        mv.setViewName("errorPage.html");
+        return mv;
     }
 
 

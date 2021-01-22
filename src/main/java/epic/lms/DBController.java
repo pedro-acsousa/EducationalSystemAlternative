@@ -182,6 +182,19 @@ public class DBController {
         return mv;
     }
 
+    @RequestMapping("/redirect-studentSubmitAssessment")
+    public ModelAndView redirectSubmitAssessment(Model model,HttpSession session) throws ExecutionException, InterruptedException, IOException, JSONException {
+        getStudents(session);
+        getAssessmentStudent(session);
+        model.addAttribute("studentsInModule",session.getAttribute("studentsInModule"));
+        model.addAttribute("studentAssessments",session.getAttribute("studentAssessments"));
+
+        mv.setViewName("StudentAssignmentSubmission.html");
+        return mv;
+    }
+
+
+
     @RequestMapping("/redirect-markAssessments")
     public ModelAndView redirectMarkAssessments(Model model,HttpSession session) throws ExecutionException, InterruptedException, IOException, JSONException {
         mv.setViewName("LecturerMarkAssessment.html");
@@ -275,6 +288,13 @@ public class DBController {
 
     }
 
+    @PostMapping("/assessmentSubmission")
+    public ModelAndView assessmentSubmission(HttpSession session,@RequestParam("assignmentSelect") String assessment,
+                                      @RequestParam("courseSelect") String module, @RequestParam("submitLink") String assessmentURL, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        String student = (String) session.getAttribute("userid");
+        mv= firebaseService.submitAssessment(student,assessment, module, assessmentURL);
+        return mv;
+    }
 
 
 

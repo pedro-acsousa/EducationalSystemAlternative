@@ -37,56 +37,115 @@
     </nav>
 </header>
 <body id="body">
+<form class="container" id="myForm" method="post" action="/assessmentSubmission">
     <main class="main">
         <div class="container">
             <h4 class="container">Assignment Submission</h4><br>
             <div class="container row">
-                <form class="container" action="#">
+
                     <div class="form-row">
-                        <select th:action="@{/getModules}" class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                        <select onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
                             <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                             <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
-                        <select class="custom-select col-md-3 mr-3 mb-2" name="assignmentSelect" id="assignmentSelect" disabled>
+                        <select onchange="updateDetails()" class="custom-select col-md-3 mr-3 mb-2" name="assignmentSelect" id="assignmentSelect" disabled>
                             <option selected value="defaultAssignment">&nbsp;&nbsp;Select Assignment</option>
-                            <option name="assignmentSelect" id="getAssignment">&nbsp;&nbsp;Assignment X</option>
-                            <option name="assignmentSelect" id="getAssignmentTest">&nbsp;&nbsp;Assignment Test</option>
                         </select>
                     </div>
-                </form>
+
             </div>
             <div class="col-12" id="assignmentSubmission" style="opacity: 0;">
                 <hr/>
-                <h4 class="d-inline" id="courseTitle">Course X</h4><h4 class="d-inline">:&nbsp;</h4><h4 class="d-inline" id="assignmentTitle">Assignment X</h4>
-                <p id="assignmentDesc">
-                    <br>This is a template description of this assignment.<br>Files submitted should be in pdf format.
-                </p>
-                <form action="#">
+                <h4 class="d-inline" id="courseTitle"></h4><h4 class="d-inline">:&nbsp;</h4><h4 class="d-inline" id="asmTitle"></h4>
                     <div class="row">
                         <div class="col-sm-5">
-                            <p>&nbsp;Webpage</p>
+                            <p style="font-weight: bold;">&nbsp;Assessment submission link:</p>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="submitLink" placeholder="Paste Webpage here...">
-                            </div>
-                        </div>
-                        <p><br>OR...</p>
-                        <div class="clearfix"></div>
-                        <div class="col-sm-5">
-                            <p>&nbsp;File Upload</p>
-                            <div class="form-group custom-file">
-                                <input type="file" class="custom-file-input" id="submitFile" name="filename" placeholder="Choose file...">
-                                <label class="custom-file-label" for="submitFile">Choose file</label>
+                                <input type="text" class="form-control" id="submitLink" name="submitLink" placeholder="Paste Webpage here...">
                             </div>
                         </div>
                     </div>
-                    <h6 class="d-inline">Due Date:&nbsp;</h6><h6 class="d-inline" id="asmDueDate"></h6>
                     <br><br>
-                    <button type="submit" class="btn btn-primary mb-2" id="submitButton">Submit</button>
-                </form>
+                    <button type="button" onclick="submitForm()"  class="btn btn-primary mb-2" id="submitButton">Submit</button>
+
             </div>
         </div>
     </main>
+</form>
 </body>
+
+<script>
+    function dynamicDrop(){
+
+        var assessment = [];
+        var x = "[[${studentAssessments}]]";
+
+        var changed2 = x.split('\=').join('\:');
+        var changed3 = changed2.split('~').join(',');
+        var changed4 = changed3.split('#').join('\"');
+        var changed5 = JSON.parse(changed4);
+        var assignmentText;
+        for (var value in changed5) {
+            if (value === document.getElementById("courseSelect").value) {
+                for(var value1 in changed5[value]){
+                    for (var value2 in changed5[value][value1]){
+                        assessment.push(value2);
+                        //add to javascript variables for assignment text here
+                        assignmentText=changed5[value][value1][value2]["spec"];
+                    }
+
+                }
+            }
+        }
+
+        var select = document.getElementById("assignmentSelect");
+        while (select.firstChild) {
+            var el = document.createElement("option");
+            select.removeChild(select.lastChild);
+        }
+
+        el = document.createElement("option");
+        el.textContent = 'Select an option';
+        el.value = 'defaultAssignment';
+        select.appendChild(el);
+        for(var i = 0; i < assessment.length; i++) {
+            var opt = assessment[i];
+            el1 = document.createElement("option");
+            el1.textContent = opt;
+            el1.value = opt;
+            select.appendChild(el1);
+        }
+
+
+    }
+
+    function updateDetails(){
+        var selectedCourse=document.getElementById("courseSelect").value;
+        var selectedAssignment=document.getElementById("assignmentSelect").value;
+        document.getElementById("courseTitle").innerHTML = selectedCourse;
+        document.getElementById("asmTitle").innerHTML = selectedAssignment;
+    }
+
+
+    function submitForm(){
+
+        var x = "[[${studentAssessments}]]";
+
+        var changed2 = x.split('\=').join('\:');
+        var changed3 = changed2.split('~').join(',');
+        var changed4 = changed3.split('#').join('\"');
+        var changed5 = JSON.parse(changed4);
+        var selectedCourse=document.getElementById("courseSelect").value;
+        var selectedAssignment=document.getElementById("assignmentSelect").value;
+        if(changed5[selectedCourse][0][selectedAssignment]["submitted"]===false) {
+            //submit form
+            document.getElementById("myForm").submit();
+        } else{
+            //create alert not possible
+            alert("Submission failed, already submitted");
+        }
+    }
+</script>
 
 <script>
 
@@ -134,8 +193,6 @@
             setTimeout(function(){ assignmentSubmission.classList.remove('slide-down'); }, 200);
             selAssignmentCount = 0;
         } else {
-            let dt = new Date(); // Current date for testing, these 2 lines should be removed
-            document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
 
             if (selAssignmentCount > 1) {
                 assignmentSubmission.classList.add('content-refresh');
@@ -146,17 +203,10 @@
             assignmentSubmission.style.opacity = 1;
             setTimeout(function(){ assignmentSubmission.classList.remove('slide-up'); }, 200);
         }
+
     });
 
-    // File name appear on selection
-    $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    })
 
-    //current date for testing
-    let dt = new Date();
-    document.getElementById('asmDueDate').innerHTML = dt.toLocaleDateString('en-GB');
 </script>
 
 </html>

@@ -65,8 +65,8 @@ public class DBController {
             //get Users to session
             session.setAttribute("usersList", users);
 
-            if(session.getAttribute("userrole").equals("Admin")){
-                mv.setViewName("StudentDashboard.html"); //ChangeURL
+            if(session.getAttribute("userrole").equals("Public")){
+                mv.setViewName("PublicUser.html");
             } else if (session.getAttribute("userrole").equals("Student")){
                 mv.setViewName("StudentDashboard.html");
             }else if (session.getAttribute("userrole").equals("Lecturer")){
@@ -86,7 +86,7 @@ public class DBController {
         User newUser = new User();
         Hash hash = new Hash();
         String HashedPassword = hash.HashString(password)[1];
-        mv.setViewName("userAccountPage.html"); //CHANGE URL
+        mv.setViewName("PublicUser.html");
         newUser.setFirstname(firstname);
         newUser.setSurname(lastname);
         newUser.setRole(role);

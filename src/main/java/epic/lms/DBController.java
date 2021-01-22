@@ -18,6 +18,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -32,12 +34,13 @@ public class DBController {
     FirebaseService firebaseService;
 
     @PostMapping(value = "/login")
-    public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException {
+    public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException, InvalidKeySpecException, NoSuchAlgorithmException {
         found = 0;
-
+        Hash hash = new Hash();
+        String HashedPassword = hash.HashString(password)[1];
         List<User> users = firebaseService.getUser();
         for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(HashedPassword)) {
                 firstname = user.getFirstname();
                 found = 1;
                 session.setAttribute("userid", user.getUsername());
@@ -79,13 +82,15 @@ public class DBController {
     }
 
     @PostMapping(value = "/createAccount")
-    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException {
+    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
         User newUser = new User();
+        Hash hash = new Hash();
+        String HashedPassword = hash.HashString(password)[1];
         mv.setViewName("userAccountPage.html"); //CHANGE URL
         newUser.setFirstname(firstname);
         newUser.setSurname(lastname);
         newUser.setRole(role);
-        newUser.setPassword(password);
+        newUser.setPassword(HashedPassword);
         newUser.setUsername(username);
         newUser.setEmail(email);
 

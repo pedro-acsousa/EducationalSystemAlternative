@@ -1,0 +1,100 @@
+.navbar{ background: green;}
+
+.nav-link , .navbar-brand{ color: #f4f4f4; cursor: pointer;}
+
+.nav-link{ margin-right: 1em !important;}
+
+.nav-link:hover{ background: #f4f4f4; color: #f97300; }
+
+.navbar-collapse{ justify-content: flex-end;}
+
+.navbar-toggler{  background:#fff !important;}
+
+.navbar-collapse{
+    justify-content: flex-end;
+}
+.overlay{
+    position: absolute;
+    min-height: 100%;
+    min-width: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(244, 244, 244, 0.5);
+}
+
+.header{
+    background-image: url('background.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+.boxwrap{
+    position: absolute;
+    float: top;
+    padding: 2em;
+    top: 25%;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    border-radius: 25px;
+    background: rgba(244, 244, 244, 0.9);
+    box-shadow: 10px 10px 8px 10px #888888;
+}
+
+.vl {
+    border-left: 6px solid red;
+    bottom: 0%;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+    top: 0%;
+}
+.welcome{
+    position: absolute;
+    right: 5%;
+    left: 5%;
+    top: 10%;
+    padding: 2em;
+    box-shadow: 5px 5px 8px 5px #888888;
+    background: rgba(244, 244, 244, 1);
+    margin: auto
+
+
+}
+.welcome h1{
+    position: relative;
+    left: 40%;
+    color: #4CAF50;
+
+}
+
+.innerwrap {
+    position: relative;
+    color: #4CAF50;
+    padding: 4em;
+    border-style: solid;
+    background: rgba(244, 244, 244, 1);
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    text-align: left;
+}
+
+.Submitbutton{
+    position: absolute;
+    right: 40%;
+    display: inline-flex;
+    height: 40px;
+    width: 200px;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: .8em;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}

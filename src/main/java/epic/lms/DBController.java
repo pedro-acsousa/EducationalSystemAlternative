@@ -36,8 +36,7 @@ public class DBController {
     @PostMapping(value = "/login")
     public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException, InvalidKeySpecException, NoSuchAlgorithmException {
         found = 0;
-        Hash hash = new Hash();
-        String HashedPassword = hash.HashString(password)[1];
+        String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);
         List<User> users = firebaseService.getUser();
         for (User user : users) {
             if (user.getUsername().equals(username) && user.getPassword().equals(HashedPassword)) {
@@ -85,7 +84,7 @@ public class DBController {
     public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
         User newUser = new User();
         Hash hash = new Hash();
-        String HashedPassword = hash.HashString(password)[1];
+        String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);
         mv.setViewName("PublicUser.html");
         newUser.setFirstname(firstname);
         newUser.setSurname(lastname);

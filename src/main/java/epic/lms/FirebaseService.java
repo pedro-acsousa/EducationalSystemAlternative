@@ -10,6 +10,7 @@ import com.google.firestore.v1.Document;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -431,4 +432,54 @@ public class FirebaseService {
         mv.setViewName("errorPage.html");
         return mv;
     }
+
+    public ModelAndView createContent(String module, String contentTitle, String videoUrl, String imageUrl, String content, HttpSession session) throws ExecutionException, InterruptedException {
+        ModelAndView x = new ModelAndView();
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = db.collection("Content");
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
+
+        Map<String, Content> contentMap = new HashMap<>();
+        Content contentObj = new Content();
+
+        contentObj.setContentTitle(contentTitle);
+        contentObj.setModule(module);
+        contentObj.setVideoUrl(videoUrl);
+        contentObj.setImageUrl(imageUrl);
+        contentObj.setContent(content);
+
+
+
+        contentMap.put(contentTitle, contentObj);
+
+        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+            if (!doc.getId().equals(module)) {
+                db.collection("Content").document(module).create(contentMap);
+                x.setViewName("Success.html");
+                session.setAttribute("success", "Added to the DB!");
+                return x;
+            } else {
+                String contentTitleInDb = (String) doc.get(contentTitle+".contentTitle");
+                if (contentTitleInDb==null){
+                    contentTitleInDb="";
+                }
+                if((contentTitleInDb.equals(contentTitle))){
+                    x.setViewName("errorPage.html");
+                    session.setAttribute("error", "Error, value is already in the DB");
+                    return x;
+                } else{
+                    db.collection("Content").document(module).set(contentMap, SetOptions.merge());
+                    x.setViewName("Success.html");
+                    session.setAttribute("success", "Added to the DB!");
+                    return x;
+                }
+
+            }
+        }
+        x.setViewName("errorPage.html");
+        return x;
+
+    }
+
+
 }

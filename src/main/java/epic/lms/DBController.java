@@ -289,6 +289,17 @@ public class DBController {
         return mv;
     }
 
+    @PostMapping("/createContent")
+    public ModelAndView createContent(HttpSession session,@RequestParam("Class") String module,
+                                             @RequestParam("Title") String contentTitle, @RequestParam("URLText") String videoUrl,
+                                      @RequestParam("image") String imageUrl, @RequestParam("Content") String content, Model model)
+                                      throws InterruptedException, ExecutionException, JSONException, IOException {
+
+        //create call to the method to push content into DB
+        mv= firebaseService.createContent(module, contentTitle, videoUrl, imageUrl, content,session);
+        return mv;
+    }
+
 
 
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="LecturerReleaseContentStyle.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Release Content</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
+        <li class="nav-item">
+            <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
+    </ul>
+    </div>
+</nav>
+
+<header class="header">
+    <div class="overlay"></div>
+    <section class="sec-1">
+        <div class="welcome">
+            <h1>Release Content</h1>
+        </div>
+    </section>
+
+    <section class="sec-2">
+        <div class="boxwrap">
+            <div class = "innerwrap">
+
+                <form id="ReleaseContentForm" action="/createContent" method="POST">
+                    <label style="font-size: 28px; position: relative; left: 14.5%" for="Class" >Select Module (Required): &nbsp; </label>
+                    <select th:action="@{/getModules}" name="Class" id="Class" style="height: 50px; width: 50%; font-size: 24px; position: relative; left: 10%;" required>
+                        <option th:each="module : ${session.moduleList}" th:value="${module.getId()}" th:text="${module.getId() + ' - ' + module.getTitle()}"></option>
+                    </select><br><br>
+                    <label style="font-size: 28px; position: relative; left: 14.5%" for="Title" >Title (Required): &nbsp; </label>
+                    <input name="Title" id="Title" type="text" style="height: 50px; width: 50%; font-size: 24px; position: relative; left: 14.5%;" required><br><br>
+                    <label style="font-size: 28px; position: relative; left: 10%" for="URLText">Video URL (Optional): &nbsp; </label>
+                    <input name="URLText" id="URLText" type="text" style="height: 30px; width: 50%; font-size: 18px; position: relative; left: 5%;"><br><br>
+                    <label style="font-size: 28px; position: relative; left: 10%" for="image">Attach Image (Optional): &nbsp; </label>
+                    <input name="image" id="image" type="text" style="height: 50px; width: 50%; font-size: 24px; position: relative; left: 10%;">><br><br>
+                    <label id="ContentLabel" style="font-size: 28px; position: relative; left: 7%;bottom: 150px">Content Detail (Required):</label>
+                    <textarea name="Content" id="Content" style="font-size: 16px; position: relative; left: 8%; top: 5%; width: 50%; height: 200px" required></textarea><br>
+                    <input type="submit" class="Submitbutton">
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+</header>
+
+
+</body>
+</html>

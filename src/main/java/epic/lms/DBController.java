@@ -38,7 +38,7 @@ public class DBController {
     public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException, InvalidKeySpecException, NoSuchAlgorithmException {
         found = 0; // resets login valid check
         Hash hash = new Hash();
-        String HashedPassword = hash.HashString(password)[1]; // hash entered password in login screen
+        String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);; // hash entered password in login screen
         List<User> users = firebaseService.getUser(); // get users from firebase database
         // within the user list, if any username and password check is valid
         for (User user : users) {
@@ -79,7 +79,7 @@ public class DBController {
     public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
         User newUser = new User();
         Hash hash = new Hash();
-        String HashedPassword = hash.HashString(password)[1];
+        String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);
         mv.setViewName("PublicUser.html"); // redirects to public user page
         // saves credentials
         newUser.setFirstname(firstname);

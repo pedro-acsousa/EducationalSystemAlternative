@@ -213,9 +213,7 @@ public class FirebaseService {
 
     public Map<String, Map<String, Assessment>> getAssessments(String module, String student) throws ExecutionException, InterruptedException, JSONException, IOException {
 
-       List<Assessment> assessmentList = new ArrayList<Assessment>();
         Firestore db = FirestoreClient.getFirestore();
-        CollectionReference collectionReference = db.collection("Assignments");
         Map<String, Assessment> assessmentMap = new HashMap<>();
         Map<String, Map<String, Assessment>> studentModuleAssessmentMap = new HashMap<>();
         CollectionReference collection = db.collection("Assignments");
@@ -394,6 +392,24 @@ public class FirebaseService {
                 String simpleName = complexName.substring(0,complexName.indexOf(" "));
                 studentAssessments.put(simpleName, innerMap);
             }
+
+            if(session.getAttribute("userrole").toString().equals("Lecturer")){
+                studentAssessmentObject = doc.getData();
+                Map<String,Assessment> innerMap1 = new HashMap<>();
+                for (Map.Entry<String, Object> pair : studentAssessmentObject.entrySet()) {
+                    final ObjectMapper mapper = new ObjectMapper();
+                    final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
+
+                    innerMap1.put(pair.getKey(),pojo);
+                }
+                // save assessment names to a hashmap
+                String complexName = doc.getId();
+                String complexNameJsonValid= complexName.replace(":","^");
+                studentAssessments.put(complexNameJsonValid, innerMap1);
+
+            }
+
+
         }
         return studentAssessments;
     }
@@ -453,28 +469,30 @@ public class FirebaseService {
         contentMap.put(contentTitle, contentObj);
 
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            if (!doc.getId().equals(module)) {
-                db.collection("Content").document(module).create(contentMap);
-                x.setViewName("Success.html");
-                session.setAttribute("success", "Added to the DB!");
-                return x;
-            } else {
+            if(doc.getId().equals(module)){
                 String contentTitleInDb = (String) doc.get(contentTitle+".contentTitle");
                 if (contentTitleInDb==null){
                     contentTitleInDb="";
                 }
-                if((contentTitleInDb.equals(contentTitle))){
-                    x.setViewName("errorPage.html");
-                    session.setAttribute("error", "Error, value is already in the DB");
-                    return x;
-                } else{
+                if (!(contentTitle).equals(contentTitleInDb)) {
                     db.collection("Content").document(module).set(contentMap, SetOptions.merge());
                     x.setViewName("Success.html");
                     session.setAttribute("success", "Added to the DB!");
                     return x;
-                }
-
+                } else {
+                        x.setViewName("errorPage.html");
+                        session.setAttribute("error", "Error, value is already in the DB");
+                        return x;
+                    }
+            } else {
+                db.collection("Content").document(module).create(contentMap);
+                x.setViewName("Success.html");
+                session.setAttribute("success", "Added to the DB!");
+                return x;
             }
+
+
+
         }
         x.setViewName("errorPage.html");
         return x;

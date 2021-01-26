@@ -41,18 +41,18 @@
 
         <script>
             function checkLookupComplete(){
-                var ClassCheck = document.getElementById("Class")
-                var StudentCheck = document.getElementById("Student")
-                var AssessmentCheck = document.getElementById("Assessment")
-                if (!((ClassCheck.value == "Select a Class") || (StudentCheck.value == "Select a Student") || (AssessmentCheck.value == "Select Assessment"))){
+                var ClassCheck = document.getElementById("Class");
+                var StudentCheck = document.getElementById("Student");
+                var AssessmentCheck = document.getElementById("Assessment");
+                if (!((ClassCheck.value === "Select a Class") || (StudentCheck.value === "Select a Student") || (AssessmentCheck.value === "Select Assessment") || ClassCheck.value === "") || (StudentCheck.value === "") || (AssessmentCheck.value === "")){
                     document.getElementById("DownloadButton").style.display = "block";
-                    document.getElementById("SubmitButton").disabled = false
+                    document.getElementById("SubmitButton").disabled = false;
+                } else{
+                    document.getElementById("DownloadButton").style.display = "none";
+                    document.getElementById("SubmitButton").disabled = true;
                 }
             }
-            function DropChange(){
-                checkLookupComplete()
-                dynamicDrop()
-            }
+
         </script>
 
         <section class="sec-2">
@@ -69,8 +69,8 @@
                         <label for="Class">Select Class:</label>
 
 
-                        <select onchange="DropChange()" th:action="@{/getModules}" name="Class" id="Class">
-                            <option>Select a Class</option>
+                        <select onchange="dynamicDrop();" th:action="@{/getModules}" name="Class" id="Class">
+                            <option value="Select a Class">Select a Class</option>
                             <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
 
@@ -78,17 +78,15 @@
 
                         <label for="Student">Student: &nbsp; &nbsp; &nbsp;</label>
 
-                        <select onchange="DropChange()" th:action="@{/getStudents}"  name="Student" id="Student">
-                            <option>Select a Student</option>
-                            <option id="studentSelect" name="studentSelect"></option>
+                        <select onchange="dynamicAssessmentDrop();" th:action="@{/getStudents}"  name="Student" id="Student">
+                            <option value="Select a Student">Select a Student</option>
                         </select>
 
                         <br><br>
 
                         <label for="Assessment">Assessment: </label>
-                        <select onchange="DropChange()" name="Assessment" id="Assessment">
-                            <option>Select Assessment</option>
-                            <option>Assessment 1</option>
+                        <select name="Assessment" id="Assessment">
+                            <option value="Select Assessment">Select Assessment</option>
                         </select>
 
                         <br><br>
@@ -97,7 +95,7 @@
                         <script>
 
                             function dynamicDrop(){
-                                dynamicAssessmentDrop();
+
                                 var students = [];
                                 var x = "[[${studentsInModule}]]";
                                 var changed2 = x.split('\=').join('\:');
@@ -123,6 +121,7 @@
 
                                     select.appendChild(el);
                                 }
+                                checkLookupComplete();
 
                             }
 
@@ -161,6 +160,7 @@
 
                                 select.appendChild(el);
                             }
+                            checkLookupComplete();
 
                         }
                     </script>

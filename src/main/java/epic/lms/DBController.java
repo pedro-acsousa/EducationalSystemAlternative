@@ -159,8 +159,6 @@ public class DBController {
         String unPrepared = gson.toJson(studentsInModule.asMap());
         String replaceString=unPrepared.replace('\"','#');
         String replaceString1=replaceString.replace(',','~');
-
-        mv.setViewName("LecturerMarkAssessment.html"); // set redirect page
         session.setAttribute("studentsInModule", replaceString1);
     }
     // page redirect to contact students for lecturers
@@ -169,6 +167,15 @@ public class DBController {
         mv.setViewName("LecturerContactStudents.html");
         return mv;
     }
+
+    // page redirect to releaseContent
+    @RequestMapping("/redirect-releaseContent")
+    public ModelAndView redirectReleaseContent() {
+        mv.setViewName("LecturerReleaseContent.html");
+        return mv;
+    }
+
+
     // page redirect to setup assessments for lecturers
     @RequestMapping("/redirect-setupAssessments")
     public ModelAndView redirectSetupAssessments() {
@@ -218,6 +225,21 @@ public class DBController {
         mv.setViewName("LecturerEnrollStudents.html");
         return mv;
     }
+
+    // page redirect for viewing student progress (lecturers)
+    @RequestMapping("/redirect-lecturerViewProgress")
+    public ModelAndView lecturerViewProgressRedirect(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        getStudents(session);
+        getModules(session, response, model);
+        getAssessmentStudent(session);
+        model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
+        model.addAttribute("studentsInModule", session.getAttribute("studentsInModule"));
+        model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
+        mv.setViewName("LecturerViewProgress.html");
+        return mv;
+    }
+
+
     // page redirect for students viewing assignments
     @RequestMapping("/redirect-studentViewAssignment")
     public ModelAndView studendentViewAssignmentRedirect(HttpSession session, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
@@ -299,6 +321,7 @@ public class DBController {
         mv= firebaseService.createContent(module, contentTitle, videoUrl, imageUrl, content,session);
         return mv;
     }
+
 
 
 

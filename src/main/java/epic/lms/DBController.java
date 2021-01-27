@@ -61,22 +61,24 @@ public class DBController {
             // get Users to session
             session.setAttribute("usersList", users);
             // page redirects according to user
-            if(session.getAttribute("userrole").equals("Public")){
+            if (session.getAttribute("userrole").equals("Public")) {
                 mv.setViewName("PublicUser.html");
-            } else if (session.getAttribute("userrole").equals("Student")){
+            } else if (session.getAttribute("userrole").equals("Student")) {
                 mv.setViewName("StudentDashboard.html");
-            } else if (session.getAttribute("userrole").equals("Lecturer")){
+            } else if (session.getAttribute("userrole").equals("Lecturer")) {
                 mv.setViewName("Lecturer Dashboard.html");
+            } else if (session.getAttribute("userrole").equals("Admin")){
+                mv.setViewName("AdminCreateStudent.html");
+            } else{
+                // returns error page
+                mv.setViewName("errorPage.html");
             }
-        } else {
-            // returns error page
-            mv.setViewName("errorPage.html");
         }
         return mv;
     }
     // Performs account creation credential inject to database and redirects to public page
     @PostMapping(value = "/createAccount")
-    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
+    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role, HttpSession session) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
         User newUser = new User();
         Hash hash = new Hash();
         String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);
@@ -90,6 +92,9 @@ public class DBController {
         newUser.setEmail(email);
         // add credentials to the database
         firebaseService.addUser(newUser);
+        if(session.getAttribute("userrole").equals("Admin")){
+            mv.setViewName("Success.html");
+        }
     return mv;
     }
 
@@ -283,6 +288,8 @@ public class DBController {
             mv.setViewName("Lecturer Dashboard.html");
         } else if (session.getAttribute("userrole").equals("Public")){
             mv.setViewName("PublicUser.html");
+        }else if (session.getAttribute("userrole").equals("Admin")){
+            mv.setViewName("AdminCreateStudent.html");
         } else {
             mv.setViewName("errorPage.html");
             model.addAttribute("error","Your session is invalid!");

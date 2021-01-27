@@ -62,14 +62,12 @@
                     function userType(){
 
                         var selector = document.getElementById('StudentRole');
-                        var value = selector[selector.selectedIndex].value;
                         var selector1 = document.getElementById('LecturerRole');
-                        var value1 = selector1[selector1.selectedIndex].value;
-                        if (value==null && value1!=null){
-                            document.getElementById("role").value = value1;
+                        if (selector.checked===true && selector1.checked===false){
+                            document.getElementById("role").value = document.getElementById('StudentRole').value;
                             document.getElementById("form1").submit();
-                        } else if (value!=null && value1==null){
-                            document.getElementById("role").value = value1;
+                        } else if (selector.checked===false && selector1.checked===true){
+                            document.getElementById("role").value = document.getElementById('LecturerRole').value;
                             document.getElementById("form1").submit();
                         } else{
                             alert("You did not specify a user type!")

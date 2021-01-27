@@ -77,7 +77,7 @@
             <div class="notifications">
                 <form action="/getNotifications" method="post" name="notifForm" id="notifForm">
                     <h1>Notifications</h1>
-                    <input name="getNotifs" id="getNotifs" type="submit">
+                    <input value="Get Notifications" name="getNotifs" id="getNotifs" type="submit">
                     <ul th:each="notification : ${session.notifications}">
                         <li id="notifid" th:text="${notification.getContent() + ' Time:' + notification.getDate() + ' By:' + notification.getRecipient()}"></li>
                         <a th:value="${notification.getId()}" th:href="@{/dismissNotification(id=${notification.getId()})}">Dismiss</a>

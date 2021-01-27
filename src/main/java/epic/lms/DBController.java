@@ -116,6 +116,11 @@ public class DBController {
     @PostMapping("/getNotifications")
     public ModelAndView getNotifs(HttpSession session) throws ExecutionException, InterruptedException {
         session.setAttribute("notifications",firebaseService.getAllNotifications(session)); //gets notifications
+        if(session.getAttribute("userrole").equals("Lecturer")){
+            mv.setViewName("Lecturer Dashboard.html");
+        }else if(session.getAttribute("userrole").equals("Student")){
+            mv.setViewName("StudentDashboard.html");
+        }
         return mv;
     }
     // sends notifications to all students

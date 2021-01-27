@@ -10,6 +10,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            alert(userRole);
+            if (userRole !== "Student" ){
+                console.log("not student1");
+                window.location.replace("errorPage.html");
+            }
+            console.log("shit");
+        }
+    </script>
 </head>
 
 <header id="header">
@@ -36,38 +47,36 @@
         </div>
     </nav>
 </header>
-<body id="body">
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
 <form class="container" id="myForm" method="post" action="/assessmentSubmission">
     <main class="main">
         <div class="container">
             <h4 class="container">Assignment Submission</h4><br>
             <div class="container row">
-
-                    <div class="form-row">
-                        <select onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                    <div class="container form-row">
+                        <select onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-auto mr-3 mb-2" name="courseSelect" id="courseSelect">
                             <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                             <option  id="ClassOption" name="ClassOption" th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
-                        <select onchange="updateDetails()" class="custom-select col-md-3 mr-3 mb-2" name="assignmentSelect" id="assignmentSelect" disabled>
+                        <select onchange="updateDetails()" class="custom-select col-auto mr-3 mb-2" name="assignmentSelect" id="assignmentSelect" disabled>
                             <option selected value="defaultAssignment">&nbsp;&nbsp;Select Assignment</option>
                         </select>
                     </div>
-
             </div>
             <div class="col-12" id="assignmentSubmission" style="opacity: 0;">
                 <hr/>
                 <h4 class="d-inline" id="courseTitle"></h4><h4 class="d-inline">:&nbsp;</h4><h4 class="d-inline" id="asmTitle"></h4>
                     <div class="row">
                         <div class="col-sm-5">
-                            <p style="font-weight: bold;">&nbsp;Assessment submission link:</p>
+                            <br><p style="font-weight: bold;">&nbsp;Assessment submission link:</p>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="submitLink" name="submitLink" placeholder="Paste Webpage here...">
                             </div>
                         </div>
                     </div>
-                    <br><br>
+                    <br>
                     <button type="button" onclick="submitForm()"  class="btn btn-primary mb-2" id="submitButton">Submit</button>
-
             </div>
         </div>
     </main>

@@ -10,6 +10,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            alert(userRole);
+            if (userRole !== "Student" ){
+                console.log("not student");
+                window.location.replace("errorPage.html");
+            }
+            console.log("shit");
+        }
+    </script>
 </head>
 
 <header id="header">
@@ -36,7 +47,8 @@
         </div>
     </nav>
 </header>
-<body id="body">
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
     <main class="main">
         <div class="container">
             <h4 class="container">Assignment Submission</h4><br>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Create Student</title>
+    <link rel="stylesheet" type="text/css" href="AdminCreateStudentStyle.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body class="Background">
+
+<nav class="navbar navbar-expand-lg fixed-top ">
+    <a class="navbar-brand" href="#">Admin Page</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+
+        <li class="nav-item">
+            <a class="nav-link " style="color: white" data-value="Log Out">Log Out</a>       </li>
+    </ul>
+    </div>
+</nav>
+<div class="overlay"></div>
+
+<div class="main">
+    <div class="innerborder">
+
+        <form action="/adminCreateAccount" method="post" style="border:1px solid #ccc">
+            <div class="container">
+
+                <h1>Create Account</h1>
+                <p>Add Student or Lecturer account to the system</p>
+                <hr>
+
+                <label for="firstname"><b>Firstname</b></label>
+                <input type="text" placeholder="Enter Firstname" name="firstname" id="firstname" required>
+
+                <label for="lastname"><b>Lastname</b></label>
+                <input type="text" placeholder="Enter Firstname" name="lastname" id="lastname" required>
+
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" id="username" required>
+
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Enter Email" name="email" id="email" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+
+                <label for="psw-repeat"><b>Repeat Password</b></label>
+                <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+
+                <label for="StudentRole"><b>Student: &nbsp;</b></label>
+                <input type="radio" name="Role" value="Student" id ="StudentRole"/><br>
+                <label for="LecturerRole"><b>Lecturer: &nbsp;</b></label>
+                <input type="radio" name="Role" value="Lecturer" id ="LecturerRole"/><br><br>
+
+
+
+
+
+                <div class="clearfix">
+                    <button type="button" class="cancelbtn">Cancel</button>
+                    <button type="submit" class="signupbtn">Sign Up</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+
+</header>
+
+
+
+</body>
+</html>

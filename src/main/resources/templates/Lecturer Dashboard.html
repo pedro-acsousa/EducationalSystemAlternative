@@ -39,7 +39,7 @@
     <div class="overlay"></div>
     <section class="sec-1">
         <div class="welcome">
-            <h1>Welcome Back</h1><h1 th:text="${session.firstName}" ></h1>
+            <h1 th:text="'Welcome back ' + ${session.firstName}"></h1>
         </div>
     </section>
 

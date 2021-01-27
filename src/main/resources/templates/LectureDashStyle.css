@@ -56,17 +56,15 @@
     right: 5%;
     left: 5%;
     top: 10%;
-    padding: 2em;
+    padding: 1em;
     box-shadow: 5px 5px 8px 5px #888888;
     background: rgba(244, 244, 244, 1);
-    margin: auto
-
-
+    clear: both;
 }
 .welcome h1{
     position: relative;
-    left: 40%;
-    color: #4CAF50;
+    left: 36%;
+    color: red;
 
 }
 
@@ -79,7 +77,6 @@
     padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
-    margin: auto;
     height:100%;
     width: 33%;
 
@@ -93,7 +90,6 @@
     padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
-    margin: auto;
     height:100%;
     width: 33%;
 
@@ -108,7 +104,6 @@
     padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
-    margin: auto;
     height:100%;
     width: 33%;
 

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.DataInput;
 import java.io.IOException;
@@ -198,16 +200,34 @@ public class FirebaseService {
     }
 
 
-    public List<Modules> getModules() throws ExecutionException, InterruptedException {
+    public List<Modules> getModules(HttpSession session) throws ExecutionException, InterruptedException {
         List<Modules> moduleList = new ArrayList<Modules>();
 
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference collectionReference = db.collection("Modules"); // get modules json
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get module details from json
         // read every module from json and import to local arraylist
-        for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            moduleList.add(doc.toObject(Modules.class));
+        if (session.getAttribute("userrole").equals("Lecturer")){
+            for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+                moduleList.add(doc.toObject(Modules.class));
+            }
+        } else{
+            //if the session user is a student it will only display the modules the student is registered in
+            for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+                List<String> studentsInModule = new ArrayList<>();
+                studentsInModule = (List<String>) doc.get("students");
+                for(String student : studentsInModule){
+                    if (session.getAttribute("userid").equals(student)){
+                        moduleList.add(doc.toObject(Modules.class));
+                    }
+
+                }
+
+            }
         }
+
+
+
         return moduleList;
     }
 
@@ -246,7 +266,7 @@ public class FirebaseService {
 
         Firestore db = FirestoreClient.getFirestore();
         // find the right module to add the assessment to
-        for (Modules moduleiter : getModules()) {
+        for (Modules moduleiter : getModules(session)) {
             List<String> studentsInModule = moduleiter.getStudents();
             if (module.equals(moduleiter.getId())) {
                 Assessment assessmentObject = new Assessment();
@@ -372,7 +392,7 @@ public class FirebaseService {
         Firestore db = FirestoreClient.getFirestore();
         Multimap<String, Map<String,Assessment>> studentAssessments = ArrayListMultimap.create();
         Map<String, Object> studentAssessmentObject;
-        Map<String,Assessment> innerMap = new HashMap<>();
+
 
         //get assessments list from database
         CollectionReference collectionReference = db.collection("Assignments");
@@ -382,6 +402,7 @@ public class FirebaseService {
             // if assessments title contain userid
             if(doc.getId().contains((CharSequence) session.getAttribute("userid"))){
                 studentAssessmentObject = doc.getData();
+                Map<String,Assessment> innerMap = new HashMap<>();
                 for (Map.Entry<String, Object> pair : studentAssessmentObject.entrySet()) {
                     final ObjectMapper mapper = new ObjectMapper();
                     final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);

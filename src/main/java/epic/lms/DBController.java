@@ -137,7 +137,7 @@ public class DBController {
     // gets modules for students
     @PostMapping("/getModules")
     public void getModules(HttpSession session, HttpServletResponse response, Model model ) throws ExecutionException, InterruptedException, JSONException, IOException {
-        List<Modules> moduleList = firebaseService.getModules();
+        List<Modules> moduleList = firebaseService.getModules(session);
         session.setAttribute("moduleList", moduleList);
         getStudents(session);
         getAssessments(session);
@@ -248,6 +248,18 @@ public class DBController {
         model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
         return mv;
     }
+
+    @RequestMapping("/redirect-studentViewProgress")
+    public ModelAndView studendentViewProgressRedirect(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        mv.setViewName("StudentCourseProgress.html");
+        getModules(session, response, model);
+        //controller to get the assignments for that student and model attribute
+        getAssessmentStudent(session);
+        model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
+        return mv;
+    }
+
+
     // viewing all students
     @RequestMapping("/allStudents")
     public void allStudents(Model model) throws ExecutionException, InterruptedException {

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Progress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+</head>
+
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">EPiC Learning for Students</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Home" href="#">Assignments</a>       </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-value="Assignments" href="#">Assignment Submission </a>        </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="View Progress"href="#">Learning Progress</a>          </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Check Contents" href="#">Lecture Contents</a>         </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body id="body">
+<main class="main">
+    <div class="container">
+        <div class="container">
+            <h4 id="courseText" class="">Course Progress</h4><br>
+            <div class="row">
+                <form class="container" action="#">
+                    <select onchange="fillList()" class="custom-select col-md-3" name="courseSelect" id="courseSelect" th:action="@{/getModules}">
+                        <option selected value="defaultCourse" id="defCourse">&nbsp;Select Course</option>
+                        <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}" selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                    </select>
+                </form>
+            </div>
+            <div id="courseProgress" style="opacity: 0;">
+                <hr/>
+                <div class="container row no-gutters">
+                    <ul ID="assignmentTitle" class="list-group list-group-flush d-inline col" style="text-align: left;">
+
+                    </ul>
+                    <vr></vr>
+                    <ul id="assignmentScore" class="list-group list-group-flush d-inline col" style="text-align: left;">
+                    </ul>
+                </div>
+                <div>
+                    <hr/>
+                    <div class="row align-items-center">
+                        <div class="col" id="courseScoreText">
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fillList(){
+            var selectedCourse=document.getElementById("courseSelect").value;
+            var assessment = [];
+            var y = "[[${studentAssessments}]]";
+            document.getElementById("assignmentTitle").innerHTML = '';
+            document.getElementById("assignmentScore").innerHTML = '';
+            document.getElementById("courseScoreText").innerHTML = '';
+
+            var changed2 = y.split('\=').join('\:');
+            var changed3 = changed2.split('~').join(',');
+            var changed4 = changed3.split('#').join('\"');
+            var changed5 = JSON.parse(changed4);
+            var assessmentSum=0;
+            var assessmentCount=0;
+            var assessmentAvg=0;
+
+            for (var value in changed5) {
+                if (value === selectedCourse) {
+                    for(var value1 in changed5[value]){
+                        for (var value2 in changed5[value][value1]){
+                            //add to javascript variables for assignment text here
+                            if(changed5[value][value1][value2]["mark"]==undefined){
+                                changed5[value][value1][value2]["mark"]=0;
+                                assessmentSum=assessmentSum+changed5[value][value1][value2]["mark"];
+                                assessmentCount++;
+                                changed5[value][value1][value2]["mark"]="TBR";
+                            }
+                            assessmentSum=assessmentSum+changed5[value][value1][value2]["mark"];
+                            assessmentCount++;
+
+                            document.getElementById("assignmentTitle").innerHTML +=
+                                '<li class="list-group-item">'+ value2 + '</li>';
+                            document.getElementById("assignmentScore").innerHTML +=
+                                '<li class="list-group-item">'+ changed5[value][value1][value2]["mark"] + '</li>';
+
+                        }
+
+                    }
+                }
+            }
+            assessmentAvg= assessmentSum/assessmentCount;
+            if (isNaN(assessmentAvg)){
+                assessmentAvg="Some marks are to be released - Unavailable";
+            }
+            document.getElementById("courseScoreText").innerHTML +='<h5 class="d-inline">Course Overall Score (Simple Avg):&nbsp;</h5><h5 class="d-inline" id="courseScore">'+ assessmentAvg +'</h5>'
+
+
+        }
+    </script>
+
+
+</main>
+</body>
+
+<script>
+
+    //variable initalization
+    const selCourse = document.getElementById('courseSelect');
+    const courseProg = document.getElementById('courseProgress');
+    let selCount = 0;
+
+    // event listener for animations
+    selCourse.addEventListener('change', function() {
+        selCount++;
+        if (selCourse.value === "defaultCourse" && selCount !== 1){
+            courseProg.classList.add('slide-down');
+            courseProg.style.opacity = 0;
+            setTimeout(function(){ courseProg.classList.remove('slide-down'); }, 200);
+            selCount = 0;
+        } else {
+            if (selCount > 1){
+                courseProg.classList.add('content-refresh');
+                setTimeout(function(){ courseProg.classList.remove('content-refresh'); }, 500);
+                return;
+            }
+            courseProg.classList.add('slide-up');
+            courseProg.style.opacity = 1;
+            setTimeout(function(){ courseProg.classList.remove('slide-up'); }, 200);
+        }
+    });
+
+</script>
+
+</html>

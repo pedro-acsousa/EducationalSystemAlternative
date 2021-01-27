@@ -47,6 +47,13 @@
         <div class="boxwrap">
             <div class = "notifications">
                 <h1>Notifications Sent:</h1>
+                <form action="/getNotifications" method="post" name="notifForm" id="notifForm">
+                    <input value="Get Notifications" name="getNotifs" id="getNotifs" type="submit">
+                    <ul th:each="notification : ${session.notifications}">
+                        <li id="notifid" th:text="${notification.getContent() + ' Time:' + notification.getDate() + ' To:' + notification.getRecipient()}"></li>
+                        <br>
+                    </ul>
+                </form>
             </div>
             <div class = "assignments">
                 <h1>Still struggling?</h1>

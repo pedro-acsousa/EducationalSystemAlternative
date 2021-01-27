@@ -52,7 +52,7 @@ public class FirebaseService {
         newUser.put("username", userAdded.getUsername());
         newUser.put("password", userAdded.getPassword());
         newUser.put("firstname", userAdded.getFirstname());
-        newUser.put("lastname", userAdded.getSurname());
+        newUser.put("surname", userAdded.getSurname());
         newUser.put("email", userAdded.getEmail());
         newUser.put("role", userAdded.getRole());
 
@@ -71,9 +71,16 @@ public class FirebaseService {
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get notifications from json file
         // save all available notifications to the database
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
-                notifications.add(doc.toObject(Notifications.class));
+            if(session.getAttribute("userrole").equals("Student")){
+                if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
+                    notifications.add(doc.toObject(Notifications.class));
+                }
+            } else if(session.getAttribute("userrole").equals("Lecturer")){
+                if (doc.get("sender").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
+                    notifications.add(doc.toObject(Notifications.class));
+                }
             }
+
         }
         return notifications;
     }

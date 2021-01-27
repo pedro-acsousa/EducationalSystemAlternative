@@ -161,7 +161,7 @@ public class DBController {
         String replaceString1=replaceString.replace(',','~');
         session.setAttribute("studentsInModule", replaceString1);
     }
-    // page redirect to contact students for lecturers
+    // page redirect to contact students for lecturers (Send Notifications to students)
     @RequestMapping("/redirect-contactStudents")
     public ModelAndView redirectContactStudents() {
         mv.setViewName("LecturerContactStudents.html");
@@ -258,6 +258,17 @@ public class DBController {
         model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
         return mv;
     }
+    @RequestMapping("/redirect-studentViewContents")
+    public ModelAndView studendentViewContents(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        mv.setViewName("StudentCourseContents.html");
+        getModules(session, response, model);
+        getContent(session, model);
+
+        //puts the content into a model attribute
+        model.addAttribute("contentInModule",session.getAttribute("contentInModule"));
+        return mv;
+    }
+
 
 
     // viewing all students
@@ -332,6 +343,17 @@ public class DBController {
         //create call to the method to push content into DB
         mv= firebaseService.createContent(module, contentTitle, videoUrl, imageUrl, content,session);
         return mv;
+    }
+
+    @RequestMapping("/getContent")
+    public void getContent(HttpSession session, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        Map<String, Map<String,Content>> contentInModule= firebaseService.getContent();
+        // retrieve json value of assessment
+        Gson gson = new Gson();
+        String unPrepared = gson.toJson(contentInModule);
+        String replaceString=unPrepared.replace('\"','#');
+        String replaceString1=replaceString.replace(',','~');
+        session.setAttribute("contentInModule", replaceString1);
     }
 
 

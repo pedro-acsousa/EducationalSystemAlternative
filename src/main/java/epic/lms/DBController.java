@@ -269,6 +269,23 @@ public class DBController {
         return mv;
     }
 
+    @RequestMapping("/redirect-rightDashboard")
+    public ModelAndView redirectDashboard(HttpSession session, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
+        if(session.getAttribute("userrole").equals("Student")){
+            mv.setViewName("StudentDashboard.html");
+        } else if(session.getAttribute("userrole").equals("Lecturer")){
+            mv.setViewName("Lecturer Dashboard.html");
+        } else if (session.getAttribute("userrole").equals("Public")){
+            mv.setViewName("PublicUser.html");
+        } else {
+            mv.setViewName("errorPage.html");
+            model.addAttribute("error","Your session is invalid!");
+        }
+
+
+        return mv;
+    }
+
 
 
     // viewing all students

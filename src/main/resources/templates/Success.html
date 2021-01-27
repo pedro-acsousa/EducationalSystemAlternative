@@ -15,7 +15,9 @@
         <div class="MessageWrap">
             <h3 th:text="${session.success}"></h3>
         </div>
-        <button class="BackButton">Return</button>
+        <form action="/redirect-rightDashboard">
+        <input value="Return" type="submit" class="BackButton">
+        </form>
     </div>
 
 

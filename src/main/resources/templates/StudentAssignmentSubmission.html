@@ -21,18 +21,18 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
-            <ul class="nav navbar-nav mr-4">
+            <div class="collapse navbar-collapse " id="navbarSupportedContent"><ul class="navbar-nav mr-4">
                 <li class="nav-item">
-                    <a class="nav-link " data-value="Home" href="#">Assignments</a>       </li>
+                    <a class="nav-link" data-value="View Assessments" th:href="@{redirect-studentViewAssignment}">View Assessments</a>        </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-value="Assignments" href="#">Assignment Submission </a>        </li>
+                    <a class="nav-link " data-value="View Progress " th:href="@{redirect-studentViewProgress}">View Progress</a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="View Progress"href="#">Learning Progress</a>          </li>
+                    <a class="nav-link " data-value="View Course Contents" th:href="@{redirect-studentViewContents}">View Course Contents</a>       </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="Check Contents" href="#">Lecture Contents</a>         </li>
-                <li class="nav-item">
-                    <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
+                    <a class="nav-link " data-value="Submit Assessments" th:href="@{redirect-studentSubmitAssessment}">Submit Assessments</a>       </li>
             </ul>
+            </div>
         </div>
     </nav>
 </header>

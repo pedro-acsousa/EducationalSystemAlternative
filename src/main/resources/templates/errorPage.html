@@ -11,7 +11,9 @@
 <img class="ErrorImage" src="error.JPG" alt="Oops, There has been an error">
 <div class="MessageWrap">
     <h3 th:text="${session.error}"></h3>
-    <button class="BackButton">Return</button>
+    <form action="/redirect-rightDashboard">
+        <input value="Return" type="submit" class="BackButton">
+    </form>
 
 </div>
 

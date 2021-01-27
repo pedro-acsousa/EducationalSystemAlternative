@@ -45,18 +45,22 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
-        <li class="nav-item">
-            <a class="nav-link" data-value="Set Assignments" href="#">Set Assignments</a>        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="View Student Progress"href="#">View Student Progress</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
-        <li class="nav-item">
-            <a class="nav-link " data-value="Contact Students" href="#">Contact Students</a>       </li>
-    </ul>
-    </div>
+    <<div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
+    <li class="nav-item">
+        <a class="nav-link" data-value="Set Assignments" th:href="@{redirect-setupAssessments}">Set Assignments</a>        </li>
+    <li class="nav-item">
+        <a class="nav-link " data-value="View Student Progress" th:href="@{redirect-lecturerViewProgress}">View Student Progress</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " data-value="Release Contents" th:href="@{redirect-releaseContent}">Release Contents</a>         </li>
+    <li class="nav-item">
+        <a class="nav-link " data-value="Contact Students" th:href="@{redirect-contactStudents}">Contact Students</a>       </li>
+    <li class="nav-item">
+        <a class="nav-link " data-value="Mark Assessments" th:href="@{redirect-markAssessments}">Mark Assessments</a>       </li>
+    <li class="nav-item">
+        <a class="nav-link " data-value="Enroll Students" th:href="@{redirect-enrollStudents}">Enroll Students</a>       </li>
+</ul>
+</div>
 </nav>
 
 <header class="header">

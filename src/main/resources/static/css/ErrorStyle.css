@@ -1,0 +1,15 @@
+.ErrorImage{
+    position: absolute;
+    left: 37%;
+    top: 10%;
+}
+.MessageWrap{
+    position: absolute;
+    width: 50%;
+    height: 20%;
+    bottom: 15%;
+    left: 25%;
+    border:1px solid #ccc;
+    text-align: center;
+
+}

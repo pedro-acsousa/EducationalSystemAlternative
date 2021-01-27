@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -19,18 +19,18 @@
     </button>
     <div class="collapse navbar-collapse " id="navbarSupportedContent">     <ul class="navbar-nav mr-4">
         <li class="nav-item">
-            <a class="nav-link" data-value="Set Assignments" th:href="@{redirect-}">Set Assignments</a>        </li>
+            <a class="nav-link" data-value="Set Assignments" th:href="@{redirect-setupAssessments}">Set Assignments</a>        </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="View Student Progress" href="#">View Student Progress</a>
+            <a class="nav-link " data-value="View Student Progress" th:href="@{redirect-lecturerViewProgress}">View Student Progress</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="Release Contents" href="#">Release Contents</a>         </li>
+            <a class="nav-link " data-value="Release Contents" th:href="@{redirect-releaseContent}">Release Contents</a>         </li>
         <li class="nav-item">
             <a class="nav-link " data-value="Contact Students" th:href="@{redirect-contactStudents}">Contact Students</a>       </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="Mark Assessments">Mark Assessments</a>       </li>
+            <a class="nav-link " data-value="Mark Assessments" th:href="@{redirect-markAssessments}">Mark Assessments</a>       </li>
         <li class="nav-item">
-            <a class="nav-link " data-value="Enrol Students">Enroll Students</a>       </li>
+            <a class="nav-link " data-value="Enroll Students" th:href="@{redirect-enrollStudents}">Enroll Students</a>       </li>
     </ul>
     </div>
 </nav>
@@ -39,7 +39,7 @@
     <div class="overlay"></div>
     <section class="sec-1">
         <div class="welcome">
-            <h1>Welcome</h1><h1 th:text="${session.firstName}" ></h1>
+            <h1 th:text="'Welcome back ' + ${session.firstName}"></h1>
         </div>
     </section>
 
@@ -47,12 +47,44 @@
         <div class="boxwrap">
             <div class = "notifications">
                 <h1>Notifications Sent:</h1>
+                <form action="/getNotifications" method="post" name="notifForm" id="notifForm">
+                    <input value="Get Notifications" name="getNotifs" id="getNotifs" type="submit">
+                    <ul th:each="notification : ${session.notifications}">
+                        <li id="notifid" th:text="${notification.getContent() + ' Time:' + notification.getDate() + ' To:' + notification.getRecipient()}"></li>
+                        <br>
+                    </ul>
+                </form>
             </div>
             <div class = "assignments">
-                <h1>Assignments Set:</h1>
+                <h1>Still struggling?</h1><br>
+                <h6>If you're having any trouble with your account or</h6>
+                <h6>you think that you're missing students that you </h6>
+                <h6>teach don't hesitate to get in contact with a member</h6>
+                <h6>of the support team who can help resolve any of these</h6>
+                <h6>issues!</h6><br>
+                <h6><p style="text-align: left">Account Support:</p></h6>
+                <ul>
+                    <li><p style="text-align: left">accountsupport@epic.co.uk</p></li>
+                </ul>
+                <h6><p style="text-align: left">Assessment Support:</p></h6>
+                <ul>
+                    <li><p style="text-align: left">assessmentsupport@epic.co.uk</p></li>
+                </ul>
             </div>
             <div class = "modules">
-                <h1>Modules:</h1>
+                <h1>What can you do?</h1><br>
+                <h6>The EPiC Learning Web Application for Staff brings online education closer to classroom than
+                you might think and here at EPiC we make that a reality with easy to use features that bring you
+                closer to students.</h6>
+                <h6><p style="text-align: left">As a staff member you are able to:</p></h6>
+                <ul>
+                    <li><p style="text-align: left">Set Assignments</p></li>
+                    <li><p style="text-align: left">View Student Progress</p></li>
+                    <li><p style="text-align: left">Release New Content</p></li>
+                    <li><p style="text-align: left">Contact Students</p></li>
+                    <li><p style="text-align: left">Mark Assessments</p></li>
+                    <li><p style="text-align: left">Enroll New Students</p></li>
+                </ul>
             </div>
         </div>
 

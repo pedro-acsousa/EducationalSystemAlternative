@@ -19,11 +19,11 @@
     min-width: 100%;
     left: 0;
     top: 0;
-    background: rgba(244, 244, 244, 0.5);
+    background: rgba(244, 244, 244, 0.1);
 }
 
 .header{
-    background-image: url('background.jpg');
+    background-image: url('PublicBackground.jpg');
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
@@ -37,42 +37,86 @@
     float: top;
     padding: 2em;
     top: 10%;
-    bottom: 5%;
     left: 5%;
     right: 5%;
-    height: 80%;
+    height: 87%;
     border-radius: 25px;
-    background: rgba(244, 244, 244, 0.9);
+    background: rgba(244, 244, 244, 0.95);
     box-shadow: 10px 10px 8px 10px #888888;
 }
-
-.dashboardwrap{
-    position: absolute;
-    overflow: hidden;
-    min-width: 69%;
-    top: 40%;
-    left: 13%;
-    padding: 2em;
-    border: 5px dotted #bbb;
-}
-
 .news{
-    position: relative;
-    float: left;
-    left: 20%;
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 2%;
+    right: 2%;
+    border: 2px solid red;
 }
-.outreach{
-    position: relative;
-    float: right;
-    right: 20%;
+.Title{
+    position: absolute;
+    top: 2%;
+    left: 1%;
+    right: 1%;
+    height: 8%;
+    border: 1px solid gray;
+    text-align: center;
+}
+.NewsArea{
+    position: absolute;
+    top: 12%;
+    left: 40%;
+    right: 1%;
+    bottom: 1%;
+    border: 1px solid black;
+    padding: 2em;
+    overflow-y: scroll;
+}
+.SelectSection{
+    position: absolute;
+    top: 12%;
+    left: 1%;
+    right: 61%;
+    bottom: 1%;
+    border: 1px solid black;
+    padding: 2em;
+    overflow-y: scroll;
 }
 
-.vl {
-    border-left: 6px solid red;
-    bottom: 0%;
+.Dropdown{
+    display: inline-flex;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    font-size: 16px;
+    width: 80%;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.Submitbutton {
     position: absolute;
-    left: 50%;
-    margin-left: -3px;
-    top: 0%;
+    left: 20%;
+    display: inline-flex;
+    height: 40px;
+    width: 300px;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: .8em;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.info{
+    margin-bottom: 10px;
+    background-color: lightgray;
+    width: 90%;
+    padding: 5px;
 }
 

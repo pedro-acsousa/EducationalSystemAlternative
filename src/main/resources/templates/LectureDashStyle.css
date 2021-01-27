@@ -34,7 +34,7 @@
     float: top;
     padding: 2em;
     text-align: center;
-    top: 35%;
+    top: 25%;
     bottom: 5%;
     left: 5%;
     right: 5%;
@@ -56,17 +56,15 @@
     right: 5%;
     left: 5%;
     top: 10%;
-    padding: 4em;
+    padding: 1em;
     box-shadow: 5px 5px 8px 5px #888888;
     background: rgba(244, 244, 244, 1);
-    margin: auto
-
-
+    clear: both;
 }
 .welcome h1{
     position: relative;
-    left: 45%;
-    color: #4CAF50;
+    left: 36%;
+    color: red;
 
 }
 
@@ -74,22 +72,28 @@
     position: relative;
     float: left;
     color: #4CAF50;
-    padding: 4em;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
-    margin: auto;
     height:100%;
+    width: 33%;
+    overflow-y: scroll;
 
 }
 .assignments{
     position: relative;
     float: right;
     color: #4CAF50;
-    padding: 4em;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
-    margin: auto;
     height:100%;
+    width: 33%;
+    overflow-y: scroll;
 
 }
 
@@ -97,12 +101,14 @@
     position: relative;
     display: inline-block;
     color: #4CAF50;
-    padding: 4em;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
-    margin: auto;
     height:100%;
-    width: 30%;
+    width: 33%;
+    overflow-y: scroll;
 
 }
 

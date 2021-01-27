@@ -1,4 +1,4 @@
-.navbar{ background: #fa0808;}
+.navbar{ background: green;}
 
 .nav-link , .navbar-brand{ color: #f4f4f4; cursor: pointer;}
 
@@ -19,78 +19,104 @@
     min-width: 100%;
     left: 0;
     top: 0;
-    background: rgba(244, 244, 244, 0.1);
+    background: rgba(244, 244, 244, 0.5);
 }
 
 .header{
-    background-image: url('PublicBackground.jpg');
+    background-image: url('background.jpg');
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
 }
-.dashboard h1{
-    color:#1a8cff ;
-    font-size: 60px;
-}
-.assignments{
+
+.boxwrap{
     position: absolute;
     float: top;
     padding: 2em;
-    top: 10%;
+    top: 25%;
+    bottom: 5%;
     left: 5%;
     right: 5%;
-    height: 87%;
     border-radius: 25px;
-    background: rgba(244, 244, 244, 0.95);
+    background: rgba(244, 244, 244, 0.9);
     box-shadow: 10px 10px 8px 10px #888888;
 }
-.news{
+
+.vl {
+    border-left: 6px solid red;
+    bottom: 0%;
     position: absolute;
-    top: 5%;
-    bottom: 5%;
-    left: 2%;
-    right: 2%;
-    border: 2px solid red;
+    left: 50%;
+    margin-left: -3px;
+    top: 0%;
 }
-.Title{
+.welcome{
     position: absolute;
-    top: 2%;
-    left: 1%;
-    right: 1%;
-    height: 8%;
-    border: 1px solid gray;
-    text-align: center;
+    right: 5%;
+    left: 5%;
+    top: 10%;
+    padding: 2em;
+    box-shadow: 5px 5px 8px 5px #888888;
+    background: rgba(244, 244, 244, 1);
+    margin: auto
+
+
 }
-.NewsArea{
-    position: absolute;
-    top: 12%;
+.welcome h1{
+    position: relative;
     left: 40%;
-    right: 1%;
-    bottom: 1%;
-    border: 1px solid black;
-    padding: 2em;
-    overflow-y: scroll;
-}
-.SelectSection{
-    position: absolute;
-    top: 12%;
-    left: 1%;
-    right: 61%;
-    bottom: 1%;
-    border: 1px solid black;
-    padding: 2em;
-    overflow-y: scroll;
+    color: #4CAF50;
+
 }
 
-.Dropdown{
+.innerwrap{
+    position: relative;
+    color: #4CAF50;
+    padding: 4em;
+    border-style:solid;
+    background: rgba(244, 244, 244, 1);
+    margin: auto;
+    height:100%;
+    width: 100%;
+
+}
+
+.StudentSelect{
+    position: relative;
+    width: 30%;
+    height: 80%;
     display: inline-flex;
     border: 2px solid #BFC0C0;
     margin: 20px 20px 20px 20px;
-    font-size: 16px;
-    width: 80%;
     color: black;
     text-transform: uppercase;
     text-decoration: none;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+
+}
+.MidWrap{
+    position: absolute;
+    top: 10%;
+    left:40%;
+    height: 80%;
+    width: 30%;
+
+
+}
+.CourseSelect{
+    position: relative;
+    width: 90%;
+    height: 80%;
+    display: inline-flex;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 18px;
     letter-spacing: 1.5px;
     align-items: center;
     justify-content: center;
@@ -98,13 +124,13 @@
 
 .Submitbutton {
     position: absolute;
-    left: 20%;
+    right: 5%;
     display: inline-flex;
     height: 40px;
-    width: 300px;
+    width: 200px;
     border: 2px solid #BFC0C0;
     margin: 20px 20px 20px 20px;
-    color: black;
+    color: #BFC0C0;
     text-transform: uppercase;
     text-decoration: none;
     font-size: .8em;
@@ -113,10 +139,3 @@
     justify-content: center;
     overflow: hidden;
 }
-.info{
-    margin-bottom: 10px;
-    background-color: lightgray;
-    width: 90%;
-    padding: 5px;
-}
-

@@ -33,7 +33,6 @@
     position: absolute;
     float: top;
     padding: 2em;
-    text-align: center;
     top: 25%;
     bottom: 5%;
     left: 5%;
@@ -56,59 +55,46 @@
     right: 5%;
     left: 5%;
     top: 10%;
-    padding: 1em;
+    padding: 2em;
     box-shadow: 5px 5px 8px 5px #888888;
     background: rgba(244, 244, 244, 1);
-    clear: both;
+    margin: auto
+
+
 }
 .welcome h1{
     position: relative;
-    left: 36%;
-    color: red;
-
-}
-
-.notifications{
-    position: relative;
-    float: left;
+    left: 40%;
     color: #4CAF50;
-    padding-top: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    border-style:solid;
-    background: rgba(244, 244, 244, 1);
-    height:100%;
-    width: 33%;
-    overflow-y: scroll;
 
 }
-.assignments{
+
+.innerwrap {
     position: relative;
-    float: right;
     color: #4CAF50;
-    padding-top: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    border-style:solid;
+    padding: 4em;
+    border-style: solid;
     background: rgba(244, 244, 244, 1);
-    height:100%;
-    width: 33%;
-    overflow-y: scroll;
-
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    text-align: left;
 }
 
-.modules{
-    position: relative;
-    display: inline-block;
-    color: #4CAF50;
-    padding-top: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    border-style:solid;
-    background: rgba(244, 244, 244, 1);
-    height:100%;
-    width: 33%;
-    overflow-y: scroll;
-
+.Submitbutton{
+    position: absolute;
+    right: 40%;
+    display: inline-flex;
+    height: 40px;
+    width: 200px;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: .8em;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
-

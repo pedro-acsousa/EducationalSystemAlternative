@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Contents</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+</head>
+
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">EPiC Learning for Students</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Home" href="#">Assignments</a>       </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-value="Assignments" href="#">Assignment Submission </a>        </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="View Progress"href="#">Learning Progress</a>          </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Check Contents" href="#">Lecture Contents</a>         </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="Contact Lecturer" href="#">Contact Lecturer</a>         </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body id="body">
+<main class="main">
+    <div class="container">
+        <h4 class="container">Course Contents</h4><br>
+        <div class="container row">
+            <form class="container" action="#">
+                <div class="form-row">
+                    <select  onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                        <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                        <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}" selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
+                    </select>
+                    <select onchange="fillContent()" class="custom-select col-md-3 mr-3 mb-2" name="materialSelect" id="materialSelect" disabled>
+                        <option selected value="defaultMaterial">&nbsp;&nbsp;Select Material</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div id="courseContent" style="opacity: 0;">
+            <hr class="mt-3">
+            <div class="container row">
+                <div class="col-sm-7" id="courseMedia">
+
+                </div>
+                <div class="col-sm-5 mt-2">
+                    <h5 class="d-inline" id="courseTitle"></h5><h5 class="d-inline">&nbsp;-&nbsp;</h5><h5 class="d-inline" id="materialTitle"></h5>
+                    <br>
+                    <div id="courseMaterialDesc" class="mt-3">
+                    </div>
+                    <br>
+                    <div id="courseMaterialImg" class="mt-3">
+                        <img id="imgId" src="" height="100" width="100">
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<script>
+    function dynamicDrop(){
+
+        var contentList = [];
+        var x = "[[${contentInModule}]]";
+
+        var changed2 = x.split('\=').join('\:');
+        var changed3 = changed2.split('~').join(',');
+        var changed4 = changed3.split('#').join('\"');
+        var changed5 = JSON.parse(changed4);
+        for (var value in changed5) {
+            if (value === document.getElementById("courseSelect").value) {
+                for(var value1 in changed5[value]){
+                    contentList.push(value1);
+                }
+            }
+        }
+
+        var select = document.getElementById("materialSelect");
+        while (select.firstChild) {
+            var el = document.createElement("option");
+            select.removeChild(select.lastChild);
+        }
+
+        el = document.createElement("option");
+        el.textContent = 'Select an option';
+        el.value = null;
+        select.appendChild(el);
+        for(var i = 0; i < contentList.length; i++) {
+            var opt = contentList[i];
+            el1 = document.createElement("option");
+            el1.textContent = opt;
+            el1.value = opt;
+            select.appendChild(el1);
+        }
+
+    }
+    function fillContent() {
+
+        var x = "[[${contentInModule}]]";
+
+        var changed3 = x.split('~').join(',');
+        var changed4 = changed3.split('#').join('\"');
+        var changed5 = JSON.parse(changed4);
+        var moddedYTURL = "";
+        for (var value in changed5) {
+            if (value === document.getElementById("courseSelect").value) {
+                for (var value1 in changed5[value]) {
+                    if (value1 === document.getElementById("materialSelect").value) {
+                        document.getElementById("courseTitle").innerText = value;
+                        document.getElementById("materialTitle").innerText = value1;
+                        if (changed5[value][value1]["videoUrl"] !== "") {
+
+                            var str =
+                                '<iframe width="420" height="315" src="' + changed5[value][value1]["videoUrl"] + '">' +
+                                '</iframe>'
+
+                            document.getElementById("courseMedia").style.display = "block";
+                            document.getElementById("courseMedia").innerHTML = str;
+                        } else {
+                            document.getElementById("courseMedia").style.display = "none"
+                        }
+                        document.getElementById("courseMaterialDesc").innerText = changed5[value][value1]["content"];
+                        if (changed5[value][value1]["imageUrl"] !== "") {
+                            document.getElementById("imgId").style.display = "block";
+                            document.getElementById("imgId").src = changed5[value][value1]["imageUrl"];
+                        } else {
+                            document.getElementById("imgId").style.display = "none"
+                        }
+
+                    }
+                }
+            }
+
+        }
+    }
+
+</script>
+
+
+<script>
+
+    const selCourse = document.getElementById('courseSelect');
+    const selMaterial = document.getElementById('materialSelect');
+    const courseContent = document.getElementById('courseContent');
+    let selCourseCount = 0;
+    let selMaterialCount = 0;
+
+    // Assignment Dropdown Animation
+    selCourse.addEventListener("change", function() {
+        selCourseCount++;
+        if (selCourse.value === 'defaultCourse'){
+            if (selMaterialCount >= 1){
+                selMaterialCount = 0;
+                courseContent.classList.add('slide-down');
+                courseContent.style.opacity = 0;
+                setTimeout(function(){ courseContent.classList.remove('slide-down'); }, 200);
+            }
+            selMaterial.selectedIndex = 0;
+            selMaterial.disabled = true;
+            selCourseCount = 0;
+        } else {
+            if (selCourseCount > 1) {
+                selMaterial.selectedIndex = 0;
+                if (selMaterialCount >= 1) {
+                    selMaterialCount = 0;
+                    courseContent.classList.add('slide-down');
+                    courseContent.style.opacity = 0;
+                    setTimeout(function(){ courseContent.classList.remove('slide-down'); }, 200);
+                }
+                return;
+            }
+            selMaterial.disabled = false;
+        }
+    });
+
+    // Assignment Content Visiblity
+    selMaterial.addEventListener("change", function() {
+        selMaterialCount++;
+        if (selMaterial.value === 'defaultMaterial'){
+            courseContent.classList.add('slide-down');
+            courseContent.style.opacity = 0;
+            setTimeout(function(){ courseContent.classList.remove('slide-down'); }, 200);
+            selMaterialCount = 0;
+        } else {
+            if (selMaterialCount > 1) {
+                courseContent.classList.add('content-refresh');
+                setTimeout(function(){ courseContent.classList.remove('content-refresh'); }, 600);
+                return;
+            }
+            courseContent.classList.add('slide-up');
+            courseContent.style.opacity = 1;
+            setTimeout(function(){ courseContent.classList.remove('slide-up'); }, 200);
+        }
+    });
+
+</script>
+
+</html>

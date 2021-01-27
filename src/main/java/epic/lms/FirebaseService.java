@@ -520,5 +520,38 @@ public class FirebaseService {
 
     }
 
+    public Map<String, Map<String, Content>> getContent() throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        Map<String, Map<String, Content>> contentMap = new HashMap<>();
+        CollectionReference collection = db.collection("Content");
+
+        for (DocumentReference document : collection.listDocuments()) {
+            // extract content from the DB and placing them in an nested map object structure
+            DocumentReference docRef = db.collection("Content").document(document.getId());
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot doc = future.get();
+
+            Map<String, Object> contentMapObject;
+
+            contentMapObject = doc.getData();
+            // save map to hashmap
+            Map<String, Content> innerContentMap = new HashMap<>();
+            for (Map.Entry<String, Object> pair : contentMapObject.entrySet()) {
+                final ObjectMapper mapper = new ObjectMapper();
+                final Content pojo = mapper.convertValue(pair.getValue(), Content.class);
+
+                innerContentMap.put(pair.getKey(), pojo);
+
+            }
+            contentMap.put(document.getId(), innerContentMap);
+
+        }
+        return contentMap;
+
+    }
+
+
+
 
 }

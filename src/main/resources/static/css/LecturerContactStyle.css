@@ -33,7 +33,6 @@
     position: absolute;
     float: top;
     padding: 2em;
-    text-align: center;
     top: 25%;
     bottom: 5%;
     left: 5%;
@@ -56,15 +55,17 @@
     right: 5%;
     left: 5%;
     top: 10%;
-    padding: 1em;
+    padding: 2em;
     box-shadow: 5px 5px 8px 5px #888888;
     background: rgba(244, 244, 244, 1);
-    clear: both;
+    margin: auto
+
+
 }
 .welcome h1{
     position: relative;
-    left: 36%;
-    color: red;
+    left: 40%;
+    color: #4CAF50;
 
 }
 
@@ -72,43 +73,78 @@
     position: relative;
     float: left;
     color: #4CAF50;
-    padding-top: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
+    padding: 4em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
+    margin: auto;
     height:100%;
-    width: 33%;
-    overflow-y: scroll;
 
 }
 .assignments{
     position: relative;
     float: right;
     color: #4CAF50;
-    padding-top: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
+    padding: 4em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
+    margin: auto;
     height:100%;
-    width: 33%;
-    overflow-y: scroll;
 
 }
 
-.modules{
+.innerwrap{
     position: relative;
-    display: inline-block;
     color: #4CAF50;
-    padding-top: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
+    padding: 4em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
+    margin: auto;
     height:100%;
-    width: 33%;
-    overflow-y: scroll;
+    width: 100%;
 
 }
+.SpecStudForm{
+    position: relative;
+    width: 100%;
+}
+.typedrop{
+    position: relative;
+    width: 80%;
+    text-align: left;
+}
+.textarea{
+    position: absolute;
+    float: right;
+    top: 25%;
+    right: 5%;
+    width: 40%;
+    height: 60%;
 
+}
+.dropdownswrap{
+    position: relative;
+    border:1px solid #ccc;
+    top: 9%;
+    width: 50%;
+    height: 75%;
+    padding: 1em;
+}
+.headerwrap{
+    position: relative;
+    top: 0%;
+    height: 10%;
+
+}
+.rightheader{
+    position: relative;
+    float: right;
+    right: 13%;
+}
+.vl {
+    border-left: 6px solid red;
+    bottom: 0%;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+    top: 0%;
+}

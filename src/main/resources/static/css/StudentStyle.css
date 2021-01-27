@@ -1,0 +1,75 @@
+.navbar{ background:#1a8cff;}
+
+.nav-link , .navbar-brand{ color: #f4f4f4; cursor: pointer;}
+
+.nav-link{ margin-right: 1em !important;}
+
+.nav-link:hover{ background: #f4f4f4; color: #f97300; }
+
+.navbar-collapse{ justify-content: flex-end;}
+
+.navbar-toggler{  background:#fff !important;}
+
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+main {
+    padding-top: 35px;
+}
+
+@media (max-width: 979px) {
+    main {
+        padding-top: 0px;
+    }
+}
+
+video {
+    width: 100%;
+}
+
+/*** Fade / slide animations ***/
+
+@keyframes slideUp{
+    0% {
+        transform: translatey(250px);
+        opacity: 0;
+    }
+    100% {
+        transform: translatey(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown{
+    0% {
+        transform: translatey(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translatey(250px);
+        opacity: 0;
+    }
+}
+
+@keyframes refreshFade{
+    0% {opacity: 1;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+.slide-up {
+    animation: slideUp 250ms ease;
+}
+
+.slide-down {
+    animation: slideDown 250ms ease-in;
+}
+
+.content-refresh {
+    animation: refreshFade 500ms ease;
+}

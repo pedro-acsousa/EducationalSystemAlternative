@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -39,7 +39,7 @@
     <div class="overlay"></div>
     <section class="sec-1">
         <div class="welcome">
-            <h1>Welcome</h1><h1 th:text="${session.firstName}" ></h1>
+            <h1>Welcome Back</h1><h1 th:text="${session.firstName}" ></h1>
         </div>
     </section>
 
@@ -49,10 +49,35 @@
                 <h1>Notifications Sent:</h1>
             </div>
             <div class = "assignments">
-                <h1>Assignments Set:</h1>
+                <h1>Still struggling?</h1>
+                <h6>If you're having any trouble with your account or</h6>
+                <h6>you think that you're missing students that you </h6>
+                <h6>teach don't hesitate to get in contact with a member</h6>
+                <h6>of the support team who can help resolve any of these</h6>
+                <h6>issues!</h6><br>
+                <h6><p style="text-align: left">Account Support:</p></h6>
+                <ul>
+                    <li><p style="text-align: left">accountsupport@epic.co.uk</p></li>
+                </ul>
+                <h6><p style="text-align: left">Assessment Support:</p></h6>
+                <ul>
+                    <li><p style="text-align: left">assessmentsupport@epic.co.uk</p></li>
+                </ul>
             </div>
             <div class = "modules">
-                <h1>Modules:</h1>
+                <h1>What can you do?</h1>
+                <h6>The EPiC Learning Web Application for Staff brings online education closer to classroom than
+                you might think and here at EPiC we make that a reality with easy to use features that bring you
+                closer to students.</h6>
+                <h6><p style="text-align: left">As a staff member you are able to:</p></h6>
+                <ul>
+                    <li><p style="text-align: left">Set Assignments</p></li>
+                    <li><p style="text-align: left">View Student Progress</p></li>
+                    <li><p style="text-align: left">Release New Content</p></li>
+                    <li><p style="text-align: left">Contact Students</p></li>
+                    <li><p style="text-align: left">Mark Assessments</p></li>
+                    <li><p style="text-align: left">Enroll New Students</p></li>
+                </ul>
             </div>
         </div>
 

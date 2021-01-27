@@ -268,6 +268,12 @@ public class DBController {
         model.addAttribute("contentInModule",session.getAttribute("contentInModule"));
         return mv;
     }
+    // error page redirect
+    @RequestMapping("/redirect-errorPage")
+    public ModelAndView errorRedirect() {
+        mv.setViewName("errorPage.html");
+        return mv;
+    }
 
 
 

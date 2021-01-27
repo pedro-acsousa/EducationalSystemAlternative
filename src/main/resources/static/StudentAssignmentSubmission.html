@@ -13,12 +13,9 @@
     <script>
         function checkUserRole(){
             var userRole = document.getElementById("userAuth").textContent;
-            alert(userRole);
             if (userRole !== "Student" ){
-                console.log("not student");
-                window.location.replace("errorPage.html");
+                document.errorRedirect.submit();
             }
-            console.log("shit");
         }
     </script>
 </head>
@@ -49,6 +46,9 @@
 </header>
 <body id="body" onload="checkUserRole();">
 <span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
     <main class="main">
         <div class="container">
             <h4 class="container">Assignment Submission</h4><br>

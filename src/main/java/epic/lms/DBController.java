@@ -33,9 +33,17 @@ public class DBController {
     @Autowired
     FirebaseService firebaseService;
 
+    @RequestMapping (value = "/invalidate")
+        public ModelAndView invalidate(HttpSession session){
+        session.invalidate();
+        mv.setViewName("index.html");
+        return mv;
+        }
+
     // validates user password and hashed value in the database and redirects to their respective pages with response to the user's role
     @PostMapping(value = "/login")
     public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException, InvalidKeySpecException, NoSuchAlgorithmException {
+        invalidate(session);
         found = 0; // resets login valid check
         Hash hash = new Hash();
         String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);; // hash entered password in login screen
@@ -51,6 +59,8 @@ public class DBController {
                 break;
             } else {
                 found = 0; // set login as not successful
+                mv.setViewName("errorPage.html");
+                session.setAttribute("error","Username not found!");
             }
         }
         if (found == 1) {
@@ -74,11 +84,16 @@ public class DBController {
                 mv.setViewName("errorPage.html");
             }
         }
+
         return mv;
     }
     // Performs account creation credential inject to database and redirects to public page
     @PostMapping(value = "/createAccount")
     public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role, HttpSession session) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
+        if(!(session.getAttribute("userrole").equals("Admin"))){
+            invalidate(session);
+        }
+
         User newUser = new User();
         Hash hash = new Hash();
         String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);
@@ -95,6 +110,7 @@ public class DBController {
         if(session.getAttribute("userrole").equals("Admin")){
             mv.setViewName("Success.html");
         }
+
     return mv;
     }
 

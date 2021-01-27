@@ -34,7 +34,7 @@
     float: top;
     padding: 2em;
     text-align: center;
-    top: 35%;
+    top: 25%;
     bottom: 5%;
     left: 5%;
     right: 5%;
@@ -56,7 +56,7 @@
     right: 5%;
     left: 5%;
     top: 10%;
-    padding: 4em;
+    padding: 2em;
     box-shadow: 5px 5px 8px 5px #888888;
     background: rgba(244, 244, 244, 1);
     margin: auto
@@ -65,7 +65,7 @@
 }
 .welcome h1{
     position: relative;
-    left: 45%;
+    left: 40%;
     color: #4CAF50;
 
 }
@@ -74,22 +74,28 @@
     position: relative;
     float: left;
     color: #4CAF50;
-    padding: 4em;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
     margin: auto;
     height:100%;
+    width: 33%;
 
 }
 .assignments{
     position: relative;
     float: right;
     color: #4CAF50;
-    padding: 4em;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
     margin: auto;
     height:100%;
+    width: 33%;
 
 }
 
@@ -97,12 +103,14 @@
     position: relative;
     display: inline-block;
     color: #4CAF50;
-    padding: 4em;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     border-style:solid;
     background: rgba(244, 244, 244, 1);
     margin: auto;
     height:100%;
-    width: 30%;
+    width: 33%;
 
 }
 

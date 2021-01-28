@@ -4,6 +4,7 @@ import ch.qos.logback.core.pattern.util.IEscapeUtil;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
+import org.apache.catalina.Session;
 import org.apache.catalina.connector.Response;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.script.ScriptException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -34,19 +36,17 @@ public class DBController {
     FirebaseService firebaseService;
 
     @RequestMapping (value = "/invalidate")
-        public ModelAndView invalidate(HttpSession session){
-        session.invalidate();
+        public ModelAndView invalidate(HttpSession session, HttpServletRequest request){
         mv.setViewName("index.html");
         return mv;
         }
 
     // validates user password and hashed value in the database and redirects to their respective pages with response to the user's role
     @PostMapping(value = "/login")
-    public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException, InvalidKeySpecException, NoSuchAlgorithmException {
-        invalidate(session);
+    public ModelAndView login( HttpServletResponse response, HttpSession session, @RequestParam("login") String username, @RequestParam("password") String password, Model model, HttpServletRequest request) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, JSONException, InvalidKeySpecException, NoSuchAlgorithmException {
         found = 0; // resets login valid check
         Hash hash = new Hash();
-        String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);; // hash entered password in login screen
+        String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20); // hash entered password in login screen
         List<User> users = firebaseService.getUser(); // get users from firebase database
         // within the user list, if any username and password check is valid
         for (User user : users) {
@@ -72,6 +72,14 @@ public class DBController {
             session.setAttribute("usersList", users);
             // page redirects according to user
             if (session.getAttribute("userrole").equals("Public")) {
+
+                Map<String,News> newsMap= firebaseService.getNews();
+                Gson gson = new Gson();
+                String unPrepared = gson.toJson(newsMap);
+                String replaceString=unPrepared.replace('\"','#');
+                model.addAttribute("newsContent", replaceString);
+
+
                 mv.setViewName("PublicUser.html");
             } else if (session.getAttribute("userrole").equals("Student")) {
                 mv.setViewName("StudentDashboard.html");
@@ -89,10 +97,7 @@ public class DBController {
     }
     // Performs account creation credential inject to database and redirects to public page
     @PostMapping(value = "/createAccount")
-    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role, HttpSession session) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
-        if(!(session.getAttribute("userrole").equals("Admin"))){
-            invalidate(session);
-        }
+    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role, HttpSession session, HttpServletRequest request) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
 
         User newUser = new User();
         Hash hash = new Hash();
@@ -225,7 +230,6 @@ public class DBController {
         mv.setViewName("LecturerMarkAssessment.html");
         getStudents(session);
         getAssessments(session);
-
         model.addAttribute("studentsInModule",session.getAttribute("studentsInModule"));
         model.addAttribute("assessmentsInModule",session.getAttribute("assessmentsInModule"));
         return mv;

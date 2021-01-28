@@ -71,11 +71,11 @@ public class FirebaseService {
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get notifications from json file
         // save all available notifications to the database
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            if(session.getAttribute("userrole").equals("Student")){
+            if (session.getAttribute("userrole").equals("Student")) {
                 if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
                     notifications.add(doc.toObject(Notifications.class));
                 }
-            } else if(session.getAttribute("userrole").equals("Lecturer")){
+            } else if (session.getAttribute("userrole").equals("Lecturer")) {
                 if (doc.get("sender").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
                     notifications.add(doc.toObject(Notifications.class));
                 }
@@ -214,17 +214,17 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Modules"); // get modules json
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get module details from json
         // read every module from json and import to local arraylist
-        if (session.getAttribute("userrole").equals("Lecturer")){
+        if (session.getAttribute("userrole").equals("Lecturer")) {
             for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
                 moduleList.add(doc.toObject(Modules.class));
             }
-        } else{
+        } else {
             //if the session user is a student it will only display the modules the student is registered in
             for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
                 List<String> studentsInModule = new ArrayList<>();
                 studentsInModule = (List<String>) doc.get("students");
-                for(String student : studentsInModule){
-                    if (session.getAttribute("userid").equals(student)){
+                for (String student : studentsInModule) {
+                    if (session.getAttribute("userid").equals(student)) {
                         moduleList.add(doc.toObject(Modules.class));
                     }
 
@@ -232,7 +232,6 @@ public class FirebaseService {
 
             }
         }
-
 
 
         return moduleList;
@@ -312,12 +311,12 @@ public class FirebaseService {
             List<String> currentAssessment = new ArrayList<>();
             currentAssessment.add(assessmentName);
             if (!doc1.getId().equals(module)) {
-                db.collection("Modules").document(module).update("assignments",FieldValue.arrayUnion(assessmentName));
+                db.collection("Modules").document(module).update("assignments", FieldValue.arrayUnion(assessmentName));
             }
         }
     }
 
-    public Map<String,List<String>> getAssessmentsList(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
+    public Map<String, List<String>> getAssessmentsList(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
 
         Firestore db = FirestoreClient.getFirestore();
         List<String> assessmentsInModule = new ArrayList<>();
@@ -326,10 +325,10 @@ public class FirebaseService {
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         // get assignments from the modules json
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            assessmentsInModule= (List<String>) doc.get("assignments");
+            assessmentsInModule = (List<String>) doc.get("assignments");
             allAssessments.put(doc.getId(), assessmentsInModule);
         }
-       return allAssessments;
+        return allAssessments;
     }
 
     public String gradeAssessment(HttpSession session, String feedback, String grade, String assessment, String student,
@@ -340,11 +339,11 @@ public class FirebaseService {
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         // select student with student id, and recording grade and feedback
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            if (doc.getId().equals(module + " : " + student)){
+            if (doc.getId().equals(module + " : " + student)) {
                 Map<String, Object> updates = new HashMap<>();
 
-                updates.put(assessment+".mark", grade);
-                updates.put(assessment+".feedback", feedback);
+                updates.put(assessment + ".mark", grade);
+                updates.put(assessment + ".feedback", feedback);
 
                 DocumentReference DocRef = db.collection("Assignments").document(module + " : " + student);
                 ApiFuture<WriteResult> writeResult = DocRef.update(updates);
@@ -360,13 +359,14 @@ public class FirebaseService {
         List<User> students = new ArrayList<>();
         // gets list of all students
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            if(Objects.equals(doc.get("role"), "Student")){
+            if (Objects.equals(doc.get("role"), "Student")) {
                 students.add(doc.toObject(User.class));
             }
         }
-      return students;
+        return students;
     }
-    public ModelAndView enroll(HttpSession session,String student,String course) throws ExecutionException, InterruptedException {
+
+    public ModelAndView enroll(HttpSession session, String student, String course) throws ExecutionException, InterruptedException {
         ModelAndView x = new ModelAndView();
         Firestore db = FirestoreClient.getFirestore();
         // retrieves all modules from database
@@ -375,11 +375,11 @@ public class FirebaseService {
         // if course is found then enroll student to the course
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             // checks if student is already enrolls in the course
-            if(doc.getId().equals(course)){
-                List<String> studentsinModule= (List<String>) doc.get("students");
-                for(String studentModule: studentsinModule){
+            if (doc.getId().equals(course)) {
+                List<String> studentsinModule = (List<String>) doc.get("students");
+                for (String studentModule : studentsinModule) {
                     // if student is in course than send to error page
-                    if(student.equals(studentModule)) {
+                    if (student.equals(studentModule)) {
                         x.setViewName("errorPage.html");
                         session.setAttribute("error", "Student is already in the module");
                         return x;
@@ -387,17 +387,17 @@ public class FirebaseService {
                 }
             }
             // enrolls student to the course
-            db.collection("Modules").document(course).update("students",FieldValue.arrayUnion(student));
+            db.collection("Modules").document(course).update("students", FieldValue.arrayUnion(student));
             x.setViewName("Success.html");
             session.setAttribute("success", "Student is now enrolled in the module!");
         }
         return x;
     }
 
-    public Multimap<String, Map<String,Assessment>> getAssessmentsStudent(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
+    public Multimap<String, Map<String, Assessment>> getAssessmentsStudent(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
 
         Firestore db = FirestoreClient.getFirestore();
-        Multimap<String, Map<String,Assessment>> studentAssessments = ArrayListMultimap.create();
+        Multimap<String, Map<String, Assessment>> studentAssessments = ArrayListMultimap.create();
         Map<String, Object> studentAssessmentObject;
 
 
@@ -407,32 +407,32 @@ public class FirebaseService {
 
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             // if assessments title contain userid
-            if(doc.getId().contains((CharSequence) session.getAttribute("userid"))){
+            if (doc.getId().contains((CharSequence) session.getAttribute("userid"))) {
                 studentAssessmentObject = doc.getData();
-                Map<String,Assessment> innerMap = new HashMap<>();
+                Map<String, Assessment> innerMap = new HashMap<>();
                 for (Map.Entry<String, Object> pair : studentAssessmentObject.entrySet()) {
                     final ObjectMapper mapper = new ObjectMapper();
                     final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
-                    innerMap.put(pair.getKey(),pojo);
+                    innerMap.put(pair.getKey(), pojo);
                 }
                 // save assessment names to a hashmap
                 String complexName = doc.getId();
-                String simpleName = complexName.substring(0,complexName.indexOf(" "));
+                String simpleName = complexName.substring(0, complexName.indexOf(" "));
                 studentAssessments.put(simpleName, innerMap);
             }
 
-            if(session.getAttribute("userrole").toString().equals("Lecturer")){
+            if (session.getAttribute("userrole").toString().equals("Lecturer")) {
                 studentAssessmentObject = doc.getData();
-                Map<String,Assessment> innerMap1 = new HashMap<>();
+                Map<String, Assessment> innerMap1 = new HashMap<>();
                 for (Map.Entry<String, Object> pair : studentAssessmentObject.entrySet()) {
                     final ObjectMapper mapper = new ObjectMapper();
                     final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
 
-                    innerMap1.put(pair.getKey(),pojo);
+                    innerMap1.put(pair.getKey(), pojo);
                 }
                 // save assessment names to a hashmap
                 String complexName = doc.getId();
-                String complexNameJsonValid= complexName.replace(":","^");
+                String complexNameJsonValid = complexName.replace(":", "^");
                 studentAssessments.put(complexNameJsonValid, innerMap1);
 
             }
@@ -450,11 +450,11 @@ public class FirebaseService {
         // for every entry from assignment json
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             // if assignments name equal module and student id in title
-            if (doc.getId().equals(module + " : " + student)){
+            if (doc.getId().equals(module + " : " + student)) {
                 // get submission status
-                boolean submitted = doc.getBoolean(assessment +".submitted");
+                boolean submitted = doc.getBoolean(assessment + ".submitted");
                 // if hw not submitted
-                if(!(submitted)) {
+                if (!(submitted)) {
                     Map<String, Object> updates = new HashMap<>();
                     // get current date
                     LocalDateTime dateTime = LocalDateTime.now();
@@ -493,14 +493,13 @@ public class FirebaseService {
         contentObj.setContent(content);
 
 
-
         contentMap.put(contentTitle, contentObj);
 
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            if(doc.getId().equals(module)){
-                String contentTitleInDb = (String) doc.get(contentTitle+".contentTitle");
-                if (contentTitleInDb==null){
-                    contentTitleInDb="";
+            if (doc.getId().equals(module)) {
+                String contentTitleInDb = (String) doc.get(contentTitle + ".contentTitle");
+                if (contentTitleInDb == null) {
+                    contentTitleInDb = "";
                 }
                 if (!(contentTitle).equals(contentTitleInDb)) {
                     db.collection("Content").document(module).set(contentMap, SetOptions.merge());
@@ -508,17 +507,16 @@ public class FirebaseService {
                     session.setAttribute("success", "Added to the DB!");
                     return x;
                 } else {
-                        x.setViewName("errorPage.html");
-                        session.setAttribute("error", "Error, value is already in the DB");
-                        return x;
-                    }
+                    x.setViewName("errorPage.html");
+                    session.setAttribute("error", "Error, value is already in the DB");
+                    return x;
+                }
             } else {
                 db.collection("Content").document(module).create(contentMap);
                 x.setViewName("Success.html");
                 session.setAttribute("success", "Added to the DB!");
                 return x;
             }
-
 
 
         }
@@ -558,7 +556,30 @@ public class FirebaseService {
 
     }
 
+    public Map<String, News> getNews() throws ExecutionException, InterruptedException {
+
+
+        Firestore db = FirestoreClient.getFirestore();
+
+        Map<String, News> mapNews = new HashMap<>();
+        CollectionReference collection = db.collection("News");
+
+        for (DocumentReference document : collection.listDocuments()) {
+            // extract content from the DB and placing them in a map object structure
+            DocumentReference docRef = db.collection("News").document(document.getId());
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot doc = future.get();
+
+
+            News newNews = doc.toObject(News.class);
+
+            mapNews.put(document.getId(), newNews);
+
+        }
 
 
 
+
+        return mapNews;
+    }
 }

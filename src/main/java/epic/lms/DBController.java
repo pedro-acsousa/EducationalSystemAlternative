@@ -97,7 +97,7 @@ public class DBController {
     }
     // Performs account creation credential inject to database and redirects to public page
     @PostMapping(value = "/createAccount")
-    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role, HttpSession session, HttpServletRequest request) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
+    public ModelAndView createAccount( @RequestParam("username") String username, @RequestParam("psw") String password, @RequestParam("email") String email, @RequestParam("firstname") String firstname,@RequestParam("lastname") String lastname , @RequestParam("role") String role, HttpSession session, Model model) throws InterruptedException, ExecutionException, IOException, ScriptException, ServletException, InvalidKeySpecException, NoSuchAlgorithmException {
 
         User newUser = new User();
         Hash hash = new Hash();
@@ -112,11 +112,20 @@ public class DBController {
         newUser.setEmail(email);
         // add credentials to the database
         firebaseService.addUser(newUser);
-        if(session.getAttribute("userrole").equals("Admin")){
-            mv.setViewName("Success.html");
+        if (session.getAttribute("userrole") != null) {
+            if(session.getAttribute("userrole").equals("Admin")){
+                mv.setViewName("Success.html");
+            }
         }
 
-    return mv;
+        Map<String,News> newsMap= firebaseService.getNews();
+        Gson gson = new Gson();
+        String unPrepared = gson.toJson(newsMap);
+        String replaceString=unPrepared.replace('\"','#');
+        model.addAttribute("newsContent", replaceString);
+
+
+        return mv;
     }
 
     // removing read notifications from students

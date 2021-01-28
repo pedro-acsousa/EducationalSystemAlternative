@@ -37,6 +37,7 @@ public class DBController {
 
     @RequestMapping (value = "/invalidate")
         public ModelAndView invalidate(HttpSession session, HttpServletRequest request){
+        session.invalidate();
         mv.setViewName("index.html");
         return mv;
         }

@@ -78,12 +78,22 @@ body{
     background-color: #4CAF50; /* Green */
     color: white;
 }
-.righthalf{
+.lefthalf{
     position: relative;
     height: 100%;
     width: 50%;
     left: 0%;
     border-right: 2px solid rgba(0,0,0,0.1);
+}
+.righthalf{
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    width: 46%;
+    height: 90%;
+    padding: 20px;
+
+
 }
 .header3{
     color: white;
@@ -91,6 +101,21 @@ body{
     font-size: 28px; font-weight: 300;
     line-height: 32px;
     margin: 0 0 14px;
+}
+.MobileIcon{
+    position: absolute;
+    top: 25%;
+    left: -2%;
+
+}
+.MobileTextWrap{
+    position: absolute;
+    right: 10%;
+    width: 60%;
+    top: 25%;
+    border: 1px solid rgba(0,0,0,0.1);
+    height: 50%;
+    padding-left: 10px;
 }
 
 p{
@@ -100,6 +125,8 @@ p{
 
 ul{
     font-family: 'Open sans', sans-serif;
-    color: #888888;
+    color: #bbbbbb;
     font-size: 18px; }
+
+
 

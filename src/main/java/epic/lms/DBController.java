@@ -1,21 +1,15 @@
 package epic.lms;
 
-import ch.qos.logback.core.pattern.util.IEscapeUtil;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
-import org.apache.catalina.Session;
-import org.apache.catalina.connector.Response;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.script.ScriptException;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,7 +19,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-import static java.lang.Integer.valueOf;
 
 @RestController
 public class DBController {
@@ -35,6 +28,7 @@ public class DBController {
     @Autowired
     FirebaseService firebaseService;
 
+    //invalidates the session
     @RequestMapping (value = "/invalidate")
         public ModelAndView invalidate(HttpSession session, HttpServletRequest request){
         session.invalidate();
@@ -59,28 +53,27 @@ public class DBController {
                 session.setAttribute("userrole", user.getRole());
                 break;
             } else {
-                found = 0; // set login as not successful
+                found = 0; // set login as not successful and redirects to error page
                 mv.setViewName("errorPage.html");
                 session.setAttribute("error","Username not found!");
             }
         }
         if (found == 1) {
-            //set the rest of the session dont forget
+            // Gets firstname to session
             session.setAttribute("firstName", firstname);
             // Gets Modules to session
             getModules(session, response, model);
             // get Users to session
             session.setAttribute("usersList", users);
+
             // page redirects according to user
             if (session.getAttribute("userrole").equals("Public")) {
-
+                //Prepares news contents string to show on the page.
                 Map<String,News> newsMap= firebaseService.getNews();
                 Gson gson = new Gson();
                 String unPrepared = gson.toJson(newsMap);
                 String replaceString=unPrepared.replace('\"','#');
                 model.addAttribute("newsContent", replaceString);
-
-
                 mv.setViewName("PublicUser.html");
             } else if (session.getAttribute("userrole").equals("Student")) {
                 mv.setViewName("StudentDashboard.html");
@@ -104,7 +97,7 @@ public class DBController {
         Hash hash = new Hash();
         String HashedPassword = Hash.pbkdf2(password, "salt", 5000, 20);
         mv.setViewName("PublicUser.html"); // redirects to public user page
-        // saves credentials
+        // sets credentials
         newUser.setFirstname(firstname);
         newUser.setSurname(lastname);
         newUser.setRole(role);
@@ -119,12 +112,12 @@ public class DBController {
             }
         }
 
+        //Get news and escapes them to pass the Json String
         Map<String,News> newsMap= firebaseService.getNews();
         Gson gson = new Gson();
         String unPrepared = gson.toJson(newsMap);
         String replaceString=unPrepared.replace('\"','#');
         model.addAttribute("newsContent", replaceString);
-
 
         return mv;
     }
@@ -140,13 +133,14 @@ public class DBController {
         newListNotifs = firebaseService.deleteNotification(notifs, Integer.parseInt(id), session); // removes read notifications
         mv.setViewName("StudentDashboard.html");
 
-        session.setAttribute("notifications", newListNotifs); // removes dismissed notification and setup a new notification list
+        session.setAttribute("notifications", newListNotifs); // updates the session notifications for the user
         return mv;
     }
     // for students getting notifications
     @PostMapping("/getNotifications")
     public ModelAndView getNotifs(HttpSession session) throws ExecutionException, InterruptedException {
         session.setAttribute("notifications",firebaseService.getAllNotifications(session)); //gets notifications
+        //redirects to the page itself depending on the session
         if(session.getAttribute("userrole").equals("Lecturer")){
             mv.setViewName("Lecturer Dashboard.html");
         }else if(session.getAttribute("userrole").equals("Student")){
@@ -154,28 +148,28 @@ public class DBController {
         }
         return mv;
     }
-    // sends notifications to all students
+    // sends notifications to all users
     @PostMapping("/sendNotificationAll")
     public ModelAndView SendNotificationAll(HttpSession session, @RequestParam("AllStudentsTextArea") String text) throws ExecutionException, InterruptedException, IOException {
         mv.setViewName("LecturerContactStudents.html");
         String sent = firebaseService.sendNotificationAll(text, session);
         return mv;
     }
-    // sends notifications to whole class grouped by modules
+    // sends notifications to all students in a class
     @PostMapping("/sendNotificationModule")
     public ModelAndView SendNotificationModule(HttpSession session, @RequestParam("ClassWideTextArea") String text, @RequestParam("Classname") String module) throws ExecutionException, InterruptedException, IOException {
         mv.setViewName("LecturerContactStudents.html");
         String sent = firebaseService.sendNotificationModule(text, session, module);
         return mv;
     }
-    // sends notifications by individual students
+    // sends notifications by individual users (students and non students)
     @PostMapping("/sendNotificationStudent")
     public ModelAndView SendNotificationStudent(HttpSession session, @RequestParam("SpecStudTextArea") String text, @RequestParam("StudName") String user) throws ExecutionException, InterruptedException, IOException {
         mv.setViewName("LecturerContactStudents.html");
         String sent = firebaseService.sendNotificationStudent(text, session, user);
         return mv;
     }
-    // gets modules for students
+    // gets modules and places them in the session
     @PostMapping("/getModules")
     public void getModules(HttpSession session, HttpServletResponse response, Model model ) throws ExecutionException, InterruptedException, JSONException, IOException {
         List<Modules> moduleList = firebaseService.getModules(session);
@@ -183,19 +177,19 @@ public class DBController {
         getStudents(session);
         getAssessments(session);
     }
-    // lecturer mark assessments
+    // gets the students in all the modules
     @PostMapping("/getStudents")
     public void getStudents(HttpSession session) throws ExecutionException, InterruptedException {
         List<Modules> moduleList = (List<Modules>) session.getAttribute("moduleList");
         Multimap<String, String> studentsInModule = ArrayListMultimap.create();
-        // filtering students of the right course to show up on teacher's dashboard
+        // filtering students of the right course and adding them to the right module in the hashmap
         for(Modules modules: moduleList){
             List<String>students = modules.getStudents();
             for (String student: students){
                 studentsInModule.put(modules.getId(),student);
             }
         }
-        // unpacking json map from database
+        // escaping json map from database and placing it in the session
         Gson gson = new Gson();
         String unPrepared = gson.toJson(studentsInModule.asMap());
         String replaceString=unPrepared.replace('\"','#');
@@ -223,7 +217,7 @@ public class DBController {
         mv.setViewName("LecturerSetUpAssessment.html");
         return mv;
     }
-    // page redirect to submit assessments for students
+    // page redirect to submit assessments for students. Also gets the students, assessments and adds them as a model attribute
     @RequestMapping("/redirect-studentSubmitAssessment")
     public ModelAndView redirectSubmitAssessment(Model model,HttpSession session) throws ExecutionException, InterruptedException, IOException, JSONException {
         getStudents(session);
@@ -234,7 +228,7 @@ public class DBController {
         mv.setViewName("StudentAssignmentSubmission.html");
         return mv;
     }
-    // page redirect to mark assessments for lecturers
+    // page redirect to mark assessments for lecturers. Adds students and assessments as a model attribute
     @RequestMapping("/redirect-markAssessments")
     public ModelAndView redirectMarkAssessments(Model model,HttpSession session) throws ExecutionException, InterruptedException, IOException, JSONException {
         mv.setViewName("LecturerMarkAssessment.html");
@@ -259,7 +253,7 @@ public class DBController {
     // page redirect for enrolling students
     @RequestMapping("/redirect-enrollStudents")
     public ModelAndView enrollStudentsRedirect(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
-
+        //Gets a students list and adds it as a model attribute
         List<User> studentList = firebaseService.usersStudent();
         model.addAttribute("students", studentList);
         mv.setViewName("LecturerEnrollStudents.html");
@@ -289,6 +283,7 @@ public class DBController {
         return mv;
     }
 
+    //page redirect to Student View Progress
     @RequestMapping("/redirect-studentViewProgress")
     public ModelAndView studendentViewProgressRedirect(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
         mv.setViewName("StudentCourseProgress.html");
@@ -298,6 +293,8 @@ public class DBController {
         model.addAttribute("studentAssessments", session.getAttribute("studentAssessments"));
         return mv;
     }
+
+    //page redirect to Student View Content
     @RequestMapping("/redirect-studentViewContents")
     public ModelAndView studendentViewContents(HttpSession session, HttpServletResponse response, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
         mv.setViewName("StudentCourseContents.html");
@@ -315,6 +312,7 @@ public class DBController {
         return mv;
     }
 
+    //Redirects the user to the right dashboard based on the session or to the error page
     @RequestMapping("/redirect-rightDashboard")
     public ModelAndView redirectDashboard(HttpSession session, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
         if(session.getAttribute("userrole").equals("Student")){
@@ -340,7 +338,7 @@ public class DBController {
     @RequestMapping("/allStudents")
     public void allStudents(Model model) throws ExecutionException, InterruptedException {
         List<User> studentList = firebaseService.usersStudent(); // get students
-        model.addAttribute("students", studentList); // save to session
+        model.addAttribute("students", studentList); // save to model
     }
     // lecturer creating assessments
     @PostMapping("/createAssessment")
@@ -355,31 +353,34 @@ public class DBController {
     // retrieving assessments
     public void getAssessments(HttpSession session) throws ExecutionException, InterruptedException, JSONException, IOException {
         Map<String,List<String>> assessmentMap= firebaseService.getAssessmentsList(session);
-        // unpack json map
+        // escape json map
         Gson gson = new Gson();
         String unPrepared = gson.toJson(assessmentMap);
         String replaceString=unPrepared.replace('\"','#');
         String replaceString1=replaceString.replace(',','~');
         session.setAttribute("assessmentsInModule", replaceString1);
     }
+
     //lecturer grade assessments
     @PostMapping("/gradeAssessment")
     public ModelAndView gradeAssessment(HttpSession session, @RequestParam("Feedback") String feedback,
                                          @RequestParam("Grade") String grade, @RequestParam("Assessment") String assessment,
                                         @RequestParam("Student") String student, @RequestParam("Class") String module) throws InterruptedException, ExecutionException, IOException, JSONException {
-        String success= firebaseService.gradeAssessment(session, feedback,grade, assessment, student, module);
+        String success= firebaseService.gradeAssessment(session, feedback,grade, assessment, student, module); //assessment Grading
         mv.setViewName("Success.html"); // redirect successful confirmation page
         return mv;
     }
+
     // enrolling assessments
     @PostMapping("/enroll")
     public ModelAndView enroll(HttpSession session,@RequestParam("StudentSelect") String student,
                                         @RequestParam("CourseSelect") String course) throws InterruptedException, ExecutionException, IOException, JSONException {
-        ModelAndView x= firebaseService.enroll(session, student,course);
 
+        ModelAndView x= firebaseService.enroll(session, student,course); //enrolls the student
         return x;
     }
-    // get assessments
+
+    // get assessments for the students and escapes the Json String, Adds it to the session
     @RequestMapping("/getAssessmentStudent")
     public void getAssessmentStudent(HttpSession session) throws InterruptedException, ExecutionException, JSONException, IOException {
         Multimap<String, Map<String,Assessment>> studentAssessments= firebaseService.getAssessmentsStudent(session);
@@ -395,10 +396,11 @@ public class DBController {
     public ModelAndView assessmentSubmission(HttpSession session,@RequestParam("assignmentSelect") String assessment,
                                       @RequestParam("courseSelect") String module, @RequestParam("submitLink") String assessmentURL, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
         String student = (String) session.getAttribute("userid"); // retrieve student name from session
-        mv = firebaseService.submitAssessment(student,assessment, module, assessmentURL);
+        mv = firebaseService.submitAssessment(student,assessment, module, assessmentURL); //call to submit the assessment
         return mv;
     }
 
+    //Creates a new content in a Module
     @PostMapping("/createContent")
     public ModelAndView createContent(HttpSession session,@RequestParam("Class") String module,
                                              @RequestParam("Title") String contentTitle, @RequestParam("URLText") String videoUrl,
@@ -410,10 +412,10 @@ public class DBController {
         return mv;
     }
 
+    //Gets the content for the modules and escapes the Json String
     @RequestMapping("/getContent")
     public void getContent(HttpSession session, Model model) throws InterruptedException, ExecutionException, JSONException, IOException {
         Map<String, Map<String,Content>> contentInModule= firebaseService.getContent();
-        // retrieve json value of assessment
         Gson gson = new Gson();
         String unPrepared = gson.toJson(contentInModule);
         String replaceString=unPrepared.replace('\"','#');

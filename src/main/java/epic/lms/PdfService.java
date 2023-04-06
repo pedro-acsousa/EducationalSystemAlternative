@@ -65,7 +65,7 @@ public class PdfService {
         img.setAlignment(1);
         img.scaleToFit(70,70);
         document.add(img); // adding image
-        // innsert current date
+        // insert current date
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         Paragraph p = new Paragraph("Student Assignment report ("+ dtf.format(now) +")" );
@@ -111,7 +111,7 @@ public class PdfService {
             // check grading status of assignment
             if(currentAssessment.getMark()==null) { // if not graded
                 Font f1 = new Font(Font.FontFamily.HELVETICA, 15.0f, Font.UNDERLINE+ Font.BOLD, BaseColor.ORANGE); // text format
-                Paragraph p2 = new Paragraph("--This assignment is awaiting grading--", f1); // pring awaiting grading message
+                Paragraph p2 = new Paragraph("--This assignment is awaiting grading--", f1); // print awaiting grading message
                 p2.setAlignment(Element.ALIGN_CENTER); // text alignment
                 document.add(p2);
                 // formatting
@@ -150,7 +150,7 @@ public class PdfService {
         @GetMapping("/online")
         public void generatePdf(HttpServletResponse response, @RequestParam("Class") String module, @RequestParam("Student") String student, @RequestParam("Assessment") String assessment) throws Exception {
             response.setContentType("application/pdf"); // set file format
-            response.setHeader("Content-Disposition", "attachment; filename=\"document.pdf\""); // set file location
+            response.setHeader("Content-Disposition", "attachment; filename=\"document.pdf\""); // set file name
             InputStream pdf = pdfService.createPdf(module, student, assessment); // pdf generation process
             org.apache.commons.io.IOUtils.copy(pdf, response.getOutputStream());
             response.flushBuffer();

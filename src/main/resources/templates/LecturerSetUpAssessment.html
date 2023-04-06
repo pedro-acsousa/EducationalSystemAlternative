@@ -2,16 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Setup Assessment</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerSetAssessmentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Lecturer" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
-<body>
-
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" th:href="@{redirect-rightDashboard}">Lecturer Assessment Set Up</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,26 +61,28 @@
         <div class="boxwrap">
 
             <div class = "innerwrap">
+                <form id="SetAssessmentForm" action="/createAssessment" method="post">
                 <div class = "headerwrap">
                     <h2 style="float: left">Create New Assessment</h2>
                 </div>
                 <div class="leftsidewrap">
 
-                    <form id="SetAssessmentForm" action="/createAssessment" method="post">
+
+                        <br>
                         <br>
                         <label for="AssessmentName">Assessment Name: </label>
-                        <input type="text" name = "AssessmentName" id ="AssessmentName">
+                        <input type="text" name = "AssessmentName" id ="AssessmentName" required>
                         <br><br>
                         <label for="DueDate">Due Date: </label>
-                        <input type="date" name = "DueDate" id="DueDate">
+                        <input type="date" name = "DueDate" id="DueDate" required>
                         <br><br>
                         <label for="Class">Class: </label>
-                        <select th:action="@{/getModules}" name="Class" id="Class">
+                        <select th:action="@{/getModules}" name="Class" id="Class" required>
                             <option th:each="module : ${session.moduleList}" th:value="${module.getId()}" th:text="${module.getId() + ' - ' + module.getTitle()}"></option>
                         </select>
                         <br><br>
                         <label for="Type">Assessment Type: </label>
-                        <select name="Type" id="Type">
+                        <select name="Type" id="Type" required>
                             <option value="test">Test</option>
                             <option value="assessment">Assessment</option>
                             <option value="essay">Essay</option>
@@ -77,12 +90,11 @@
 
                         <br><br>
                         <input type="submit" value="Set Assignment" style="width: 40%">
-                    </form>
+
                 </div>
 
-                <textarea class="AssessmentTextArea" name="AssessmentTextArea" id="AssessmentTextArea" form="SetAssessmentForm">Write assessment specification here...
-                </textarea>
-
+                <textarea class="AssessmentTextArea" name="AssessmentTextArea" id="AssessmentTextArea" form="SetAssessmentForm" placeholder="Write assessment specification here..." required></textarea>
+                </form>
             </div>
         </div>
 

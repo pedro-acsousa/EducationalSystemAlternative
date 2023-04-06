@@ -10,6 +10,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Student" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
 
 <header id="header">
@@ -36,20 +44,23 @@
         </div>
     </nav>
 </header>
-<body id="body">
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <main class="main">
     <div class="container">
         <h4 class="container">Course Contents</h4><br>
         <div class="container row">
             <form class="container" action="#">
                 <div class="form-row">
-                    
-                    <select class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                    <select class="custom-select col-auto mr-3 mb-2" name="courseSelect" id="courseSelect">
                         <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                         <option name="courseSelect" id="getCourse">&nbsp;&nbsp;Course X</option>
                         <option name="courseSelect" id="getCourseTest">&nbsp;&nbsp;Course Test</option>
                     </select>
-                    <select class="custom-select col-md-3 mr-3 mb-2" name="materialSelect" id="materialSelect" disabled>
+                    <select class="custom-select col-auto mr-3 mb-2" name="materialSelect" id="materialSelect" disabled>
                         <option selected value="defaultMaterial">&nbsp;&nbsp;Select Material</option>
                         <option name="materialSelect" id="getMaterial">&nbsp;&nbsp;Material X</option>
                         <option name="materialSelect" id="getMaterialTest">&nbsp;&nbsp;Material Test</option>
@@ -69,7 +80,6 @@
                     <h5 class="d-inline" id="courseTitle">Course X</h5><h5 class="d-inline">&nbsp;-&nbsp;</h5><h5 class="d-inline" id="materialTitle">Material X</h5>
                     <br>
                     <div id="courseMaterialDesc" class="mt-3">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
                     </div>
                     <br>
                 </div>

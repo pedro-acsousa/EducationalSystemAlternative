@@ -6,27 +6,17 @@ import com.google.cloud.firestore.*;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.firestore.v1.Document;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.DataInput;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 
 @Service
 public class FirebaseService {
@@ -48,7 +38,7 @@ public class FirebaseService {
         Firestore db = FirestoreClient.getFirestore();
 
         Map<String, String> newUser = new HashMap<String, String>();
-        // get account creation details from session
+        // get account creation details from the DBcontroller as a parameter and adds it as a user object
         newUser.put("username", userAdded.getUsername());
         newUser.put("password", userAdded.getPassword());
         newUser.put("firstname", userAdded.getFirstname());
@@ -67,9 +57,9 @@ public class FirebaseService {
         Firestore db = FirestoreClient.getFirestore();
 
         List<Notifications> notifications = new ArrayList<>();
-        CollectionReference collectionReference = db.collection("Notifications"); // get notifications json from database
-        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get notifications from json file
-        // save all available notifications to the database
+        CollectionReference collectionReference = db.collection("Notifications"); // get the DB path
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // query the DB for notifications
+        // retrieves all the notifications from the db that are not read and that have been set by the lecturer in session or have been received by the student in session
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             if (session.getAttribute("userrole").equals("Student")) {
                 if (doc.get("recipient").equals(session.getAttribute("userid")) && (Boolean) doc.get("read") == false) {
@@ -86,7 +76,7 @@ public class FirebaseService {
     }
 
     public List<Notifications> deleteNotification(List<Notifications> allNotifications, int id, HttpSession session) throws ExecutionException, InterruptedException {
-        // delete notifications if selected id matches
+        // delete notifications (set them to read true) if selected id matches. Returns a new Notification list (Updated)
         for (Notifications notification : allNotifications) {
             if (notification.getId() == id) {
                 Firestore db = FirestoreClient.getFirestore();
@@ -104,8 +94,8 @@ public class FirebaseService {
         List<User> users = getUser();
         Firestore db = FirestoreClient.getFirestore();
 
-        CollectionReference collectionReference = db.collection("Notifications"); // get notifications json
-        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get json contents
+        CollectionReference collectionReference = db.collection("Notifications"); // get DB path
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get contents from the DB collection reference
         //increment id so id is unique
         int id = 0;
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
@@ -113,7 +103,7 @@ public class FirebaseService {
                 id = Integer.parseInt(String.valueOf(doc.get("id")));
             }
         }
-        // for all users add notifications to their notification list
+        // for all users add notifications to their notification list with all the necessary information added to a new notification Object
         for (User user : users) {
             id = id + 1;
             Notifications newNotification = new Notifications();
@@ -128,6 +118,8 @@ public class FirebaseService {
             newNotification.setSender(String.valueOf(session.getAttribute("userid")));
             newNotification.setId(id);
             newNotification.setRead(false);
+
+            //Update the DB for notification creation
             db.collection("Notifications").document("" + id + " " + user.getUsername()).create(newNotification);
         }
         return "Sent Successfully";
@@ -137,8 +129,8 @@ public class FirebaseService {
         List<String> studentsModule;
         Firestore db = FirestoreClient.getFirestore();
 
-        CollectionReference collectionReference = db.collection("Notifications"); // get notifications json
-        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get data from json
+        CollectionReference collectionReference = db.collection("Notifications"); // get DB path
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get contents from the DB collection reference
         //increment id so id is unique
         int id = 0;
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
@@ -168,6 +160,8 @@ public class FirebaseService {
             newNotification.setSender(String.valueOf(session.getAttribute("userid")));
             newNotification.setId(id);
             newNotification.setRead(false);
+
+            //Update the DB for notification creation
             db.collection("Notifications").document("" + id + " " + student).create(newNotification);
         }
         return "Sent Successfully";
@@ -200,6 +194,8 @@ public class FirebaseService {
                 newNotification.setSender(String.valueOf(session.getAttribute("userid")));
                 newNotification.setId(id);
                 newNotification.setRead(false);
+
+                //Update the DB for notification creation
                 db.collection("Notifications").document("" + id + " " + studentId).create(newNotification);
             }
         }
@@ -211,8 +207,8 @@ public class FirebaseService {
         List<Modules> moduleList = new ArrayList<Modules>();
 
         Firestore db = FirestoreClient.getFirestore();
-        CollectionReference collectionReference = db.collection("Modules"); // get modules json
-        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get module details from json
+        CollectionReference collectionReference = db.collection("Modules"); // get DB Path
+        ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get(); // get module details from the DB path
         // read every module from json and import to local arraylist
         if (session.getAttribute("userrole").equals("Lecturer")) {
             for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
@@ -244,9 +240,6 @@ public class FirebaseService {
         Map<String, Map<String, Assessment>> studentModuleAssessmentMap = new HashMap<>();
         CollectionReference collection = db.collection("Assignments");
 
-        //CREATE CONDITION TO CHECK IF THE MARK IS NULL. IF IT IS NULL GRADE THE ASSESSMENT, IF IT IS ALREADY DEFINED
-        //REDIRECT TO ERROR PAGE WITH ALREADY GRADED MESSAGE
-
         for (DocumentReference document : collection.listDocuments()) {
             // extract assignments details from json
             DocumentReference docRef = db.collection("Assignments").document(module + " : " + student);
@@ -256,7 +249,7 @@ public class FirebaseService {
             Map<String, Object> assessmentMapObject;
 
             assessmentMapObject = doc.getData();
-            // save map to hashmap
+            // save map to hashmap (this creates a nested map structure to have the same structure as the Json in the database).
             for (Map.Entry<String, Object> pair : assessmentMapObject.entrySet()) {
                 final ObjectMapper mapper = new ObjectMapper();
                 final Assessment pojo = mapper.convertValue(pair.getValue(), Assessment.class);
@@ -287,16 +280,18 @@ public class FirebaseService {
                 Map<String, Assessment> newAssessmentDetail = new HashMap<String, Assessment>();
                 newAssessmentDetail.put(assessmentName, assessmentObject);
 
-                //Creates document before writing if non existent
-                CollectionReference collectionReference = db.collection("Assignments");
+
+                CollectionReference collectionReference = db.collection("Assignments"); //Get DB Path
                 ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
 
                 // for each student in each module, add the assessment to their collection
                 for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
                     for (String user : studentsInModule) {
                         if (!doc.getId().equals(module + " : " + user)) {
+                            //Creates document and writes if non existent
                             db.collection("Assignments").document(module + " : " + user).create(newAssessmentDetail);
                         } else {
+                            //Updates document and merges content if existent
                             db.collection("Assignments").document(module + " : " + user).set(newAssessmentDetail, SetOptions.merge());
                         }
                     }
@@ -304,7 +299,7 @@ public class FirebaseService {
             }
         }
 
-        // Updates Modules Collection to contain an Array of the Assignment names
+        // Updates Modules Collection to add the assessment to an Array of the assessment names
         CollectionReference collectionReference1 = db.collection("Modules");
         ApiFuture<QuerySnapshot> querySnapshot1 = collectionReference1.get();
         for (DocumentSnapshot doc1 : querySnapshot1.get().getDocuments()) {
@@ -323,7 +318,7 @@ public class FirebaseService {
         Map<String, List<String>> allAssessments = new HashMap<>();
         CollectionReference collectionReference = db.collection("Modules");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
-        // get assignments from the modules json
+        // get assignments names list from the modules collection
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             assessmentsInModule = (List<String>) doc.get("assignments");
             allAssessments.put(doc.getId(), assessmentsInModule);
@@ -337,7 +332,7 @@ public class FirebaseService {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference collectionReference = db.collection("Assignments");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
-        // select student with student id, and recording grade and feedback
+        // select student and module with student id and module id, and updates grade and feedback
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             if (doc.getId().equals(module + " : " + student)) {
                 Map<String, Object> updates = new HashMap<>();
@@ -357,7 +352,7 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Users");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         List<User> students = new ArrayList<>();
-        // gets list of all students
+        // gets list of all users that are students
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             if (Objects.equals(doc.get("role"), "Student")) {
                 students.add(doc.toObject(User.class));
@@ -378,7 +373,7 @@ public class FirebaseService {
             if (doc.getId().equals(course)) {
                 List<String> studentsinModule = (List<String>) doc.get("students");
                 for (String studentModule : studentsinModule) {
-                    // if student is in course than send to error page
+                    // if student is in course then send to error page
                     if (student.equals(studentModule)) {
                         x.setViewName("errorPage.html");
                         session.setAttribute("error", "Student is already in the module");
@@ -406,7 +401,7 @@ public class FirebaseService {
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
 
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
-            // if assessments title contain userid
+            // if assessments title contain userid adds the assessments to a Nested map, converting them to a POJO
             if (doc.getId().contains((CharSequence) session.getAttribute("userid"))) {
                 studentAssessmentObject = doc.getData();
                 Map<String, Assessment> innerMap = new HashMap<>();
@@ -420,7 +415,7 @@ public class FirebaseService {
                 String simpleName = complexName.substring(0, complexName.indexOf(" "));
                 studentAssessments.put(simpleName, innerMap);
             }
-
+            //if it is a lecturer get the assessments for all students in all modules
             if (session.getAttribute("userrole").toString().equals("Lecturer")) {
                 studentAssessmentObject = doc.getData();
                 Map<String, Assessment> innerMap1 = new HashMap<>();
@@ -447,7 +442,7 @@ public class FirebaseService {
         CollectionReference collectionReference = db.collection("Assignments");
         ApiFuture<QuerySnapshot> querySnapshot = collectionReference.get();
         ModelAndView mv = new ModelAndView();
-        // for every entry from assignment json
+        // for every entry from assignment in the DB
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             // if assignments name equal module and student id in title
             if (doc.getId().equals(module + " : " + student)) {
@@ -486,15 +481,17 @@ public class FirebaseService {
         Map<String, Content> contentMap = new HashMap<>();
         Content contentObj = new Content();
 
+        //populates new content object with parameters obtained in the page form
         contentObj.setContentTitle(contentTitle);
         contentObj.setModule(module);
         contentObj.setVideoUrl(videoUrl);
         contentObj.setImageUrl(imageUrl);
         contentObj.setContent(content);
 
-
+        //places content details in a hashmap structure
         contentMap.put(contentTitle, contentObj);
 
+        //Checks if the content with that tile already exists in the DB, and if so redirects to the error page. If the content is new it redirects to success page. Also checks if there is a document for that module and student in the DB, if yes appends, if not creates
         for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
             if (doc.getId().equals(module)) {
                 String contentTitleInDb = (String) doc.get(contentTitle + ".contentTitle");
@@ -520,6 +517,7 @@ public class FirebaseService {
 
 
         }
+        //if it has not returned yet will return the error page
         x.setViewName("errorPage.html");
         return x;
 
@@ -540,7 +538,7 @@ public class FirebaseService {
             Map<String, Object> contentMapObject;
 
             contentMapObject = doc.getData();
-            // save map to hashmap
+            // save map to hashmap and converts content to POJO
             Map<String, Content> innerContentMap = new HashMap<>();
             for (Map.Entry<String, Object> pair : contentMapObject.entrySet()) {
                 final ObjectMapper mapper = new ObjectMapper();
@@ -570,7 +568,7 @@ public class FirebaseService {
             ApiFuture<DocumentSnapshot> future = docRef.get();
             DocumentSnapshot doc = future.get();
 
-
+            //converts News articles to POJO
             News newNews = doc.toObject(News.class);
 
             mapNews.put(document.getId(), newNews);

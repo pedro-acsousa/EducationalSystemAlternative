@@ -2,16 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Release Content</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerReleaseContentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Lecturer" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
-<body>
-
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" th:href="@{redirect-rightDashboard}">Release Content</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,23 +59,24 @@
 
     <section class="sec-2">
         <div class="boxwrap">
-            <div class = "innerwrap">
+            <div class="innerwrap">
 
                 <form id="ReleaseContentForm" action="/createContent" method="POST">
-                    <label style="font-size: 28px; position: relative; left: 14.5%" for="Class" >Select Module (Required): &nbsp; </label>
+                    <label style="font-size: 28px; position: relative; left: 10%" for="Class" >Select Module (Required): &nbsp; </label>
                     <select th:action="@{/getModules}" name="Class" id="Class" style="height: 50px; width: 50%; font-size: 24px; position: relative; left: 10%;" required>
                         <option th:each="module : ${session.moduleList}" th:value="${module.getId()}" th:text="${module.getId() + ' - ' + module.getTitle()}"></option>
                     </select><br><br>
                     <label style="font-size: 28px; position: relative; left: 14.5%" for="Title" >Title (Required): &nbsp; </label>
                     <input name="Title" id="Title" type="text" style="height: 50px; width: 50%; font-size: 24px; position: relative; left: 14.5%;" required><br><br>
                     <label style="font-size: 28px; position: relative; left: 10%" for="URLText">Video URL (Optional): &nbsp; </label>
-                    <input name="URLText" id="URLText" type="text" style="height: 30px; width: 50%; font-size: 18px; position: relative; left: 5%;"><br><br>
+                    <input name="URLText" id="URLText" type="text" style="height: 30px; width: 50%; font-size: 18px; position: relative; left: 10%;"><br><br>
                     <label style="font-size: 28px; position: relative; left: 10%" for="image">Attach Image (Optional): &nbsp; </label>
                     <input name="image" id="image" type="text" style="height: 50px; width: 50%; font-size: 24px; position: relative; left: 10%;">><br><br>
                     <label id="ContentLabel" style="font-size: 28px; position: relative; left: 7%;bottom: 150px">Content Detail (Required):</label>
                     <textarea name="Content" id="Content" style="font-size: 16px; position: relative; left: 8%; top: 5%; width: 50%; height: 200px" required></textarea><br>
                     <input type="submit" class="Submitbutton">
                 </form>
+
             </div>
         </div>
 

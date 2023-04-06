@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:href="/maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" th:rel="stylesheet" th:id="bootstrap-css">
-    <script th:src="/maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script th:src="/cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script th:type="text/javascript" th:src='windowfit.js'></script>
-    <link th:rel="stylesheet" th:type="text/css" th:href="indexStyle.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src='windowfit.js'></script>
+    <link rel="stylesheet" type="text/css" href="indexStyle.css">
     <link rel="stylesheet" type="text/css" href="indexStyle.css">
 
 </head>
 
 
-<body>
+<body th:action="@{invalidate}">
 
 <header class="header">
     <div class="overlay"></div>
@@ -27,7 +27,7 @@
                 <br>
                 <h3 class="header3">Delivering Accessible Education To All</h3>
                 <p>The Educational Practice in Computing are a group set on providing educational tools for everyone to
-                access. We aim to give everyone the opportunity for proper education no matter their background, location or situation.
+                    access. We aim to give everyone the opportunity for proper education no matter their background, location or situation.
                 </p>
                 <h3 class="header3">What our Platform Provides</h3>
                 <p>The EPiC learning environment provides tools to:</p>
@@ -56,6 +56,8 @@
 
             </div>
         </div>
+
+    </div>
 
     </div>
 

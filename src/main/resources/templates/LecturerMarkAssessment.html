@@ -2,15 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mark Assessments</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerMarkAssessmentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Lecturer" ){
+                document.errorRedirect.submit();
+                return;
+            }
+            checkLookupComplete();
+        }
+    </script>
 </head>
-<body onload="checkLookupComplete()">
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <form id="StudLookupForm" method="POST">
     <nav class="navbar navbar-expand-lg fixed-top ">
         <a class="navbar-brand" th:href="@{redirect-rightDashboard}">Lecturer Assessment Marking</a>
@@ -51,13 +65,19 @@
                 var ClassCheck = document.getElementById("Class");
                 var StudentCheck = document.getElementById("Student");
                 var AssessmentCheck = document.getElementById("Assessment");
-                if (!((ClassCheck.value === "Select a Class") || (StudentCheck.value === "Select a Student") || (AssessmentCheck.value === "Select Assessment") || ClassCheck.value === "") || (StudentCheck.value === "") || (AssessmentCheck.value === "")){
+                if (!((ClassCheck.value === "Select a Class") || (StudentCheck.value === "Select a Student") || (AssessmentCheck.value === "Select Assessment") || (ClassCheck.value === "") || (StudentCheck.value === "") || (AssessmentCheck.value === ""))){
                     document.getElementById("DownloadButton").style.display = "block";
-                    document.getElementById("SubmitButton").disabled = false;
                 } else{
                     document.getElementById("DownloadButton").style.display = "none";
+                }
+
+                if(!((document.getElementById("Feedback").value === "") || (document.getElementById("Grade").value === "") || (ClassCheck.value === "Select a Class") || (StudentCheck.value === "Select a Student") || (AssessmentCheck.value === "Select Assessment") || (ClassCheck.value === "") || (StudentCheck.value === "") || (AssessmentCheck.value === ""))){
+                    document.getElementById("SubmitButton").disabled = false;
+                } else{
                     document.getElementById("SubmitButton").disabled = true;
                 }
+
+
             }
 
         </script>
@@ -92,7 +112,7 @@
                         <br><br>
 
                         <label for="Assessment">Assessment: </label>
-                        <select name="Assessment" id="Assessment">
+                        <select onchange="checkLookupComplete();" name="Assessment" id="Assessment">
                             <option value="Select Assessment">Select Assessment</option>
                         </select>
 
@@ -120,6 +140,13 @@
                                 while (select.firstChild) {
                                     select.removeChild(select.lastChild);
                                 }
+
+                                var el1 = document.createElement("option");
+                                el1.textContent = 'Select a Student';
+                                el1.value = 'Select a Student';
+
+                                select.appendChild(el1);
+
                                 for(var i = 0; i < students.length; i++) {
                                     var opt = students[i];
                                     var el = document.createElement("option");
@@ -159,6 +186,13 @@
                             while (select.firstChild) {
                                 select.removeChild(select.lastChild);
                             }
+
+                            var el1 = document.createElement("option");
+                            el1.textContent = 'Select Assessment';
+                            el1.value = 'Select Assessment';
+
+                            select.appendChild(el1);
+
                             for(var i = 0; i < assessment.length; i++) {
                                 var opt = assessment[i];
                                 var el = document.createElement("option");
@@ -177,13 +211,13 @@
                     <h2 class="RightHeader">Feedback Area</h2>
                     <div class="FeedbackAreaWrap">
                         <h3 class="FeedbackHeader">Write feedback on the student's work:</h3>
-                        <textarea class="FeedbackArea" name="Feedback" id="Feedback" ></textarea>
+                        <textarea onchange="checkLookupComplete()" class="FeedbackArea" name="Feedback" id="Feedback" placeholder="Write some marking feedback..." ></textarea>
                     </div>
                     <div class="MarkingSection">
 
                         <div class="GradePos">
                             <label for="Grade">Grade: </label>
-                            <input type="number" max="100" min="0" id="Grade" name="Grade" ></input>
+                            <input onchange="checkLookupComplete()" type="number" max="100" min="0" id="Grade" name="Grade" ></input>
                         </div>
                         <input id="SubmitButton" formaction="/gradeAssessment" disabled="disabled" class="SubmitMark" type="submit" value="Submit Marking">
 

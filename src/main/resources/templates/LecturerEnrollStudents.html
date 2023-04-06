@@ -2,16 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Enroll Students</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerEnrollStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Lecturer" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
-<body>
-
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <nav class="navbar navbar-expand-lg fixed-top ">
     <a class="navbar-brand" th:href="@{redirect-rightDashboard}">Enroll Students</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,14 +66,14 @@
 
                 <form id="EnrollForm" action="/enroll" method="post">
 
-                    <select th:action="@{/allStudents}" name="StudentSelect" id="StudentSelect" class="StudentSelect" size="15">
+                    <select th:action="@{/allStudents}" name="StudentSelect" id="StudentSelect" class="StudentSelect" size="15" required>
                         <option th:each="student : ${students}" th:value="${student.getUsername()}" th:text="${student.getUsername() + ' - ' + student.getFirstname() + ' ' + student.getSurname()}"></option>
                     </select>
 
                     <div class="MidWrap">
                         <h4>Select course to Enroll into</h4>
 
-                        <select th:action="@{/getModules}" name="CourseSelect" id="CourseSelect" class="CourseSelect" size="15">
+                        <select th:action="@{/getModules}" name="CourseSelect" id="CourseSelect" class="CourseSelect" size="15" required>
                             <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}"></option>
                         </select>
 

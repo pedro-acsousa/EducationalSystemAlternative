@@ -9,8 +9,20 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerContactStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Lecturer" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
-<body>
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <script>
     function changeForm(){
         var contactType = document.getElementById('typedropbox').selectedOptions[0].value;
@@ -89,10 +101,6 @@
                     </div>
                     <br>
 
-                    <!-- Below are the 3 seperate forms for: message student, message class, and send notification to all
-                    Below the forms is the html is the text areas. Although they are not within the forms, they are linked and the text data
-                    will still be sent in the form (in theory)-->
-
                     <form class="SpecStudForm" id="SpecStudForm" action="/PedroPutThingHere" method="post" style="display:block">
                         <label for="StudName">Student Name: </label>
                         <select name="StudName" id="StudName">
@@ -105,8 +113,7 @@
                         <input type="submit" value="Send Message" style="width: 40%">
                     </form>
                     <br>
-                    <!-- Not sure what support we have for classes and notification sending per class but you can always remove if you dont
-                    think its possible-->
+
                     <form  class="ClassWideForm" id="ClassWideForm" action="/sendNotificationModule" method="post" style="display:none">
                         <label for="StudName">Class ID: </label>
                         <select  name="Classname" id="Classname" >

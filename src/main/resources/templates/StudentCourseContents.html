@@ -10,6 +10,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="StudentStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Student" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
 
 <header id="header">
@@ -39,14 +47,18 @@
         </div>
     </nav>
 </header>
-<body id="body">
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <main class="main">
     <div class="container">
         <h4 class="container">Course Contents</h4><br>
         <div class="container row">
             <form class="container" action="#">
                 <div class="form-row">
-                    <select  onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-md-3 mr-3 mb-2" name="courseSelect" id="courseSelect">
+                    <select  onchange="dynamicDrop()" th:action="@{/getModules}" class="custom-select col-auto mr-3 mb-2" name="courseSelect" id="courseSelect">
                         <option selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                         <option th:each="modules : ${session.moduleList}" th:value="${modules.getId()}" th:text="${modules.getId() + ' - ' + modules.getTitle()}" selected value="defaultCourse">&nbsp;&nbsp;Select Course</option>
                     </select>

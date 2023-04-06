@@ -2,15 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Contact Students</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src='windowfit.js'></script>
     <link rel="stylesheet" type="text/css" href="LecturerContactStyle.css">
+    <script>
+        function checkUserRole(){
+            var userRole = document.getElementById("userAuth").textContent;
+            if (userRole !== "Lecturer" ){
+                document.errorRedirect.submit();
+            }
+        }
+    </script>
 </head>
-<body>
+<body id="body" onload="checkUserRole();">
+<span th:text="${session.userrole}" id="userAuth" style="display: none;"></span>
+<form action="/redirect-errorPage" id="errorRedirect" name="errorRedirect">
+    <input type="hidden">
+</form>
 <script>
     function changeForm(){
         var contactType = document.getElementById('typedropbox').selectedOptions[0].value;
@@ -87,16 +99,12 @@
                     <div class="typedrop">
                         <label for="typedropbox">Choose contact Type: &nbsp &nbsp </label>
                         <select name="typedropbox" id="typedropbox" onchange="changeForm()">
-                            <option value="ContactStud">Contact Specific Student</option>
+                            <option value="ContactStud">Contact Specific User</option>
                             <option value="ContactClass">Send Class Wide Notification</option>
                             <option value="ContactAll">Send Notification To All</option>
                         </select>
                     </div>
                     <br>
-
-                    <!-- Below are the 3 seperate forms for: message student, message class, and send notification to all
-                    Below the forms is the html is the text areas. Although they are not within the forms, they are linked and the text data
-                    will still be sent in the form (in theory)-->
 
                     <form class="SpecStudForm" id="SpecStudForm" action="/sendNotificationStudent" method="post" style="display:block">
                         <label for="StudName">Student Name: </label>
@@ -108,8 +116,6 @@
                         <input type="submit" value="Send Message" style="width: 40%">
                     </form>
                     <br>
-                    <!-- Not sure what support we have for classes and notification sending per class but you can always remove if you dont
-                    think its possible-->
                     <form  class="ClassWideForm" id="ClassWideForm" action="/sendNotificationModule" method="post" style="display:none">
                         <label for="StudName">Class ID: </label>
                         <select  name="Classname" id="Classname" >
@@ -128,12 +134,9 @@
 
 
                 </div>
-                <textarea class="textarea" name="SpecStudTextArea" id="SpecStudTextArea" form="SpecStudForm" style="display: block">Text area for the specific student form
-                </textarea>
-                <textarea class="textarea" name="ClassWideTextArea" id="ClassWideTextArea" form="ClassWideForm" style="display: none">Text area for the class wide form
-                </textarea>
-                <textarea class="textarea" name="AllStudentsTextArea" id="AllStudentsTextArea" form="AllStudForm" style="display: none">Text area for all students form
-                </textarea>
+                <textarea class="textarea" name="SpecStudTextArea" id="SpecStudTextArea" form="SpecStudForm" style="display: block" placeholder="Text area for the specific user form" required></textarea>
+                <textarea class="textarea" name="ClassWideTextArea" id="ClassWideTextArea" form="ClassWideForm" style="display: none" placeholder="Text area for the class wide form" required></textarea>
+                <textarea class="textarea" name="AllStudentsTextArea" id="AllStudentsTextArea" form="AllStudForm" style="display: none" placeholder="Text area for all users form" required></textarea>
             </div>
         </div>
 

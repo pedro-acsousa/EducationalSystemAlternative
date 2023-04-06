@@ -61,19 +61,24 @@
                 <input type="hidden" name="role" value="" id ="role"/>
                 <script>
                     function userType(){
+                        if(document.getElementById("firstname").value!=="" && document.getElementById("lastname").value!=="" &&
+                            document.getElementById("username").value!=="" && document.getElementById("email").value!=="" &&
+                            document.getElementById("psw").value!=="" && document.getElementById("psw-repeat").value!==""){
 
-                        var selector = document.getElementById('StudentRole');
-                        var selector1 = document.getElementById('LecturerRole');
-                        if (selector.checked===true && selector1.checked===false){
-                            document.getElementById("role").value = document.getElementById('StudentRole').value;
-                            document.getElementById("form1").submit();
-                        } else if (selector.checked===false && selector1.checked===true){
-                            document.getElementById("role").value = document.getElementById('LecturerRole').value;
-                            document.getElementById("form1").submit();
+                            var selector = document.getElementById('StudentRole');
+                            var selector1 = document.getElementById('LecturerRole');
+                            if (selector.checked===true && selector1.checked===false){
+                                document.getElementById("role").value = document.getElementById('StudentRole').value;
+                                document.getElementById("form1").submit();
+                            } else if (selector.checked===false && selector1.checked===true){
+                                document.getElementById("role").value = document.getElementById('LecturerRole').value;
+                                document.getElementById("form1").submit();
+                            } else{
+                                alert("You did not specify a user type!")
+                            }
                         } else{
-                            alert("You did not specify a user type!")
+                            alert("Some fields are empty!");
                         }
-
 
                     }
 
@@ -81,7 +86,6 @@
 
 
                 <div class="clearfix">
-                    <button type="button" class="cancelbtn">Cancel</button>
                     <button onclick="userType()" type="button" class="signupbtn">Sign Up</button>
                 </div>
             </div>
